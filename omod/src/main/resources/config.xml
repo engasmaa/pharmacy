@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<module configVersion="1.2">
+
+	<!-- Module Properties -->
+	<id>${project.parent.artifactId}</id>
+	<name>${project.parent.name}</name>
+	<version>${project.parent.version}</version>
+	<package>${project.parent.groupId}.${project.parent.artifactId}</package>
+	<author>ICChange</author>
+	<description>
+		${project.parent.description}
+	</description>
+	<updateURL>https://modules.openmrs.org/modules/download/${project.parent.artifactId}/update.rdf</updateURL>
+	<require_version>${openMRSVersion}</require_version>
+	<!-- / Module Properties -->
+
+	
+	<!-- Module Activator -->
+	<activator>${project.parent.groupId}.${project.parent.artifactId}.ICChangePharmacyActivator</activator>
+	
+	
+	<!-- Adds link to admin page -->
+	<extension>
+		<point>org.openmrs.admin.list</point>
+		<class>${project.parent.groupId}.${project.parent.artifactId}.extension.html.AdminList</class>
+	</extension>
+	
+	<!-- Adds a menu item -->
+	<extension>
+		<point>org.openmrs.gutter.tools</point>
+		<class>${project.parent.groupId}.${project.parent.artifactId}.extension.html.PharmacyMenu</class>
+	</extension>
+	
+	<!-- Maps hibernate file's, if present -->
+	<mappingFiles>
+				
+		PharmacyOrder.hbm.xml
+				
+	</mappingFiles>
+
+
+	<!-- Data remote access -->
+	
+	<dwr>
+		<allow>
+			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.model.DWRBaseOpenmrsData" javascript="DWRBaseOpenmrsData"/>
+			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.model.DWROrder" javascript="DWROrder" />
+			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.model.DWRPharmacyOrder" javascript="DWRPharmacyOrder" />
+			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.model.DWRDrugOrder" javascript="DWRDrugOrder" />
+			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.model.DWRDrugOrderHeader" javascript="DWRDrugOrderHeader" />
+			<create creator="new" javascript="DWRPharmacyOrderService">
+				<param name="class" value="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRPharmacyOrderService"/>
+				<include method="createPharmacyOrder"/>
+				<include method="getAllPharmacyOrdersByPatient"/>
+				<include method="getDrugOrdersHeaders" />
+				<include method="getDrugOrder" />
+			</create>
+		</allow>
+		<signatures>
+			<![CDATA[
+				import java.util.Date;
+				import java.util.List;
+				import java.util.Map;
+				import ${project.parent.groupId}.${project.parent.artifactId}.web.model.DWRBaseOpenmrsData;
+				import ${project.parent.groupId}.${project.parent.artifactId}.web.model.DWROrder;
+				import ${project.parent.groupId}.${project.parent.artifactId}.web.model.DWRPharmacyOrder;
+				import ${project.parent.groupId}.${project.parent.artifactId}.web.model.DWRDrugOrder;
+				import ${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRPharmacyOrderService;
+			]]>
+		</signatures>	
+	</dwr>
+
+	<!-- Internationalization -->
+	<!-- All message codes should start with ${project.parent.artifactId}. -->
+	<messages>
+		<lang>en</lang>
+		<file>messages.properties</file>
+	</messages>
+	<messages>
+		<lang>fr</lang>
+		<file>messages_fr.properties</file>
+	</messages>
+	<messages>
+		<lang>es</lang>
+		<file>messages_es.properties</file>
+	</messages>
+	<!-- /Internationalization -->
+
+	<privilege>
+		<name>View Prescriptions</name>
+		<description>Able to view prescriptions.</description>
+	</privilege>
+
+	<privilege>
+		<name>Add Prescriptions</name>
+		<description>Able to add prescriptions.</description>
+	</privilege>
+
+	<privilege>
+		<name>Edit Prescriptions</name>
+		<description>Able to edit prescriptions.</description>
+	</privilege>
+
+	<privilege>
+		<name>Delete Prescriptions</name>
+		<description>Able to delete prescriptions.</description>
+	</privilege>
+</module>
+

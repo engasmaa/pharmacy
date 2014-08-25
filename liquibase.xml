@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+                  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+	<!-- See http://www.liquibase.org/manual/home#available_database_refactorings 
+		for a list of supported elements and attributes -->
+
+	<changeSet id="icchange.pharmacy-v1.0" author="icchange">
+	
+		<sql>
+			INSERT INTO openmrs.order_type (name, description, creator, date_created, retired, uuid)
+				SELECT * FROM (SELECT 'Pharmacy Order', 'Order type for dispensing on ICChange pharmacy module', '1', '2014-08-14 00:00:00', '0', UUID()) AS tmp
+				WHERE NOT EXISTS ( SELECT name FROM openmrs.order_type WHERE name = 'Pharmacy Order' ) LIMIT 1;						
+		</sql>
+
+		<createTable tableName="pharmacy_pharmacyorder">            
+			<column defaultValueNumeric="0" name="order_id" type="int">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+			<column name="drugorder_id" type="int"><constraints nullable="false" /></column>
+		</createTable>
+		
+		<addForeignKeyConstraint 
+			constraintName="extends_order" 
+			baseTableName="pharmacy_pharmacyorder" baseColumnNames="order_id"
+			referencedTableName="orders" referencedColumnNames="order_id"
+			deferrable="false" initiallyDeferred="false" />
+		
+		
+		<addForeignKeyConstraint 
+			constraintName="pharmacyorder_drugorder_fk"
+			baseTableName="pharmacy_pharmacyorder" baseColumnNames="drugorder_id" 
+			referencedTableName="drug_order" referencedColumnNames="order_id" 
+			deferrable="false" initiallyDeferred="false" />
+
+		<createTable tableName="pharmacy_pharmacyitem">
+			<column name="pharmacyitem_id" autoIncrement="true" type="int"><constraints nullable="false" primaryKey="true" /></column>
+			<column name="pharmacyorder_id" type="int"><constraints nullable="false" /></column>
+			<column name="item_id" type="int"><constraints nullable="false" /></column>
+			<column name="quanity" type="int"></column>
+			<column name="unit" type="varchar(255)"></column>
+			<column name="creator" type="int"><constraints nullable="false"/></column>
+			<column name="date_created" type="datetime"><constraints nullable="false"/></column>
+			<column name="changed_by" type="int"/>
+			<column name="date_changed" type="datetime" />
+			<column name="voided" type="boolean" defaultValueBoolean="false"><constraints nullable="false"/></column>
+			<column name="voided_by" type="int" />
+			<column name="retired" type="boolean" defaultValueBoolean="false"><constraints nullable="false"/></column>
+			<column name="retired_by" type="int" />			
+			<column name="date_voided" type="datetime" />
+			<column name="void_reason" type="varchar(255)" defaultValue="null"/>
+			<column name="uuid" type="char(38)"><constraints nullable="false" unique="true" /></column>			
+		</createTable>
+			
+		<addForeignKeyConstraint 
+			constraintName="pharmacyitem_pharmacyorder_fk"
+			baseTableName="pharmacy_pharmacyitem" baseColumnNames="pharmacyorder_id" 
+			referencedTableName="pharmacy_pharmacyorder" referencedColumnNames="order_id" 
+			deferrable="false" initiallyDeferred="false" />
+
+		<addForeignKeyConstraint 
+			constraintName="pharmacyitem_creator_fk"
+			baseTableName="pharmacy_pharmacyitem" baseColumnNames="creator"
+			referencedTableName="users" referencedColumnNames="user_id"
+			deferrable="false" initiallyDeferred="false" />
+		
+		<addForeignKeyConstraint
+			constraintName="pharmacyitem_changed_by_fk"
+			baseTableName="pharmacy_pharmacyitem" baseColumnNames="changed_by"
+			referencedTableName="users" referencedColumnNames="user_id"
+			deferrable="false" initiallyDeferred="false" />
+		
+		<addForeignKeyConstraint 
+		constraintName="pharmacyitem_retired_by_fk"
+			baseTableName="pharmacy_pharmacyitem" baseColumnNames="retired_by"
+			referencedTableName="users" referencedColumnNames="user_id"
+			deferrable="false" initiallyDeferred="false" />
+
+	</changeSet>
+</databaseChangeLog>
