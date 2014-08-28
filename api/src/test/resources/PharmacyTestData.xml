@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<drug drug_id="2" concept_id="792" name="Triomune-30" combination="true" dose_strength="1.0" units="tab(s)" creator="1" date_created="2005-02-24 00:00:00.0" retired="false" uuid="3cfcf118-931c-46f7-8ff6-7b876f0d4202"/>
+	<drug drug_id="3" concept_id="88" name="Aspirin" combination="false" dose_strength="325.0" units="mg" creator="1" date_created="2005-02-24 00:00:00.0" retired="false" uuid="05ec820a-d297-44e3-be6e-698531d9dd3f"/>
+	<drug drug_id="11" concept_id="3" name="NYQUIL" combination="true" units="" creator="1" date_created="2008-08-15 15:34:03.0" retired="true" uuid="7e2323fa-0fa0-461f-9b59-6765997d849e"/>
+	
+	<global_property property="visits.assignmentHandler" property_value="org.openmrs.api.handler.ExistingVisitAssignmentHandler" uuid="99999000000000"/>
+	<user_property user_id="1" property="defaultLocation" property_value="3"/>
+	
+	 
+	<encounter_type encounter_type_id="18" name="Pharmacy Encounter" 
+					description="Pharmacy Encounter" creator="1" date_created="2008-08-15 15:49:04.0" retired="0" uuid="sdfsdfsdfsdf0000"/>	
+	
+	<order_type order_type_id="18" name="Pharmacy Order" description="Pharmacy Order" creator="1" date_created="2008-08-15 15:49:04.0" retired="0" uuid="0000"/>
+	<order_type order_type_id="1" name="Drug order" description="Order of medications for the patient" creator="1" date_created="2008-08-15 13:49:47.0" retired="false" uuid="84ce45a8-5e7c-48f7-a581-ca1d17d63a62"/>
+	
+	<encounter encounter_id="13" encounter_type="18" 
+		patient_id="2" location_id="1" form_id="1" encounter_datetime="2008-08-01 00:00:00.0" 
+		creator="1" date_created="2008-08-18 14:09:05.0" voided="false" uuid="asdasdasdasdasdasdasd"/>
+	
+	<orders order_id="200" order_type_id="1"
+		concept_id="792" orderer="1" instructions="1x daily with food" 
+		start_date="2008-08-08 00:00:00.0" discontinued="false" creator="1" 
+		date_created="2008-08-19 12:22:45.0" voided="false" patient_id="2" 
+		uuid="200"/>
+	<drug_order order_id="200" drug_inventory_id="11" dose="325.0" units="mg" frequency="1/day x 7 days/week" prn="false" complex="false"/>
+
+	<orders order_id="201" order_type_id="1"
+		concept_id="792" orderer="1" instructions="1x daily with food" 
+		start_date="2008-08-08 00:00:00.0" discontinued="false" creator="1" 
+		date_created="2008-08-19 12:22:45.0" voided="false" patient_id="2" 
+		uuid="201"/>
+	<drug_order order_id="201" drug_inventory_id="3" dose="325.0" units="mg" frequency="1/day x 7 days/week" prn="false" complex="false"/>
+
+	<orders order_id="202" order_type_id="1"
+		concept_id="792" orderer="1" instructions="1x daily with food" 
+		start_date="2008-08-08 00:00:00.0" discontinued="false" creator="1" 
+		date_created="2008-08-19 12:22:45.0" voided="false" patient_id="2" 
+		uuid="202"/>
+	<drug_order order_id="202" drug_inventory_id="2" dose="325.0" units="mg" frequency="1/day x 7 days/week" prn="false" complex="false"/>
+
+	<orders order_id="203" order_type_id="1"
+		concept_id="792" orderer="1" instructions="1x daily with food" 
+		start_date="2008-08-08 00:00:00.0" discontinued="false" creator="1" 
+		date_created="2008-08-19 12:22:45.0" voided="false" patient_id="2" 
+		uuid="203"/>
+	<drug_order order_id="203" drug_inventory_id="2" dose="325.0" units="mg" frequency="1/day x 7 days/week" prn="false" complex="false"/>
+
+	<orders order_id="299" order_type_id="1"
+		concept_id="792" orderer="1" instructions="1x daily with food" 
+		start_date="2008-08-08 00:00:00.0" discontinued="false" creator="1" 
+		date_created="2008-08-19 12:22:45.0" voided="false" patient_id="999" 
+		uuid="299"/>
+	<drug_order order_id="299" drug_inventory_id="2" dose="325.0" units="mg" frequency="1/day x 7 days/week" prn="false" complex="false"/>
+
+	<orders order_id="298" order_type_id="1"
+		concept_id="792" orderer="1" instructions="1x daily with food" 
+		start_date="2008-08-08 00:00:00.0" discontinued="false" creator="1" 
+		date_created="2008-08-19 12:22:45.0" voided="false" patient_id="999" 
+		uuid="298"/>
+	<drug_order order_id="298" drug_inventory_id="2" dose="325.0" units="mg" frequency="1/day x 7 days/week" prn="false" complex="false"/>
+
+
+	<orders order_id="300" order_type_id="18" orderer="1" encounter_id="13"
+			concept_id="792" start_date="2008-08-08 00:00:00.0" discontinued="false" 
+			creator="1" date_created="2008-08-19 12:20:22.0" 
+			voided="false" patient_id="2" uuid="300"/>
+	<pharmacy_pharmacyorder order_id="300" drugorder_id="200"/>
+
+	<orders order_id="301" order_type_id="18" orderer="1"
+			concept_id="792" start_date="2008-08-08 00:00:00.0" discontinued="false" 
+			creator="1" date_created="2008-08-19 12:20:22.0" 
+			voided="false" patient_id="2" uuid="301"/>
+	<pharmacy_pharmacyorder order_id="301" drugorder_id="200"/>
+	
+	<orders order_id="302" order_type_id="18" orderer="1"
+			concept_id="792" start_date="2008-08-08 00:00:00.0" discontinued="false" 
+			creator="1" date_created="2008-08-19 12:20:22.0" 
+			voided="false" patient_id="2" uuid="302"/>
+	<pharmacy_pharmacyorder order_id="302" drugorder_id="201"/>
+
+	<orders order_id="398" order_type_id="18" orderer="1"
+			concept_id="792" start_date="2008-08-08 00:00:00.0" discontinued="false" 
+			creator="1" date_created="2008-08-19 12:20:22.0" 
+			voided="false" patient_id="999" uuid="398"/>
+	<pharmacy_pharmacyorder order_id="398" drugorder_id="299"/>
+
+	
+	<!-- 
+	<pharmacy_pharmacyorder order_id="20" drugorder_id="5"/>
+	 -->
+</dataset>

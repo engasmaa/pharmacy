@@ -5,14 +5,25 @@
 
 <hibernate-mapping package="org.openmrs.module.icchange.pharmacy">
 
+	<joined-subclass name="PharmacyOrder" table="pharmacy_pharmacyorder" extends="org.openmrs.Order">
+		<key column="order_id" />
+		<many-to-one name="drugOrder" class="org.openmrs.DrugOrder" column="drugorder_id"  not-null="true" />
+	</joined-subclass>
+
+	<!--  
 	<joined-subclass name="PharmacyOrder" table="pharmacy_pharmacyorder" catalog="openmrs" extends="org.openmrs.Order">
 		<key column="order_id" />
+		
+
 		<many-to-one name="drugOrder" class="org.openmrs.DrugOrder" column="drugorder_id"  not-null="true" />
 		<set name="items">
 			<key column="order_id"/>
 			<one-to-many class="PharmacyItem"/>
 		</set>
+	
 	</joined-subclass>
+		-->
+	<!-- 
 	<class name="PharmacyItem" table="pharmacy_pharmacyitem" catalog="openmrs">
 		<id name="id" type="int" column="pharmacyitem_id" unsaved-value="0">
 			<generator class="native" />
@@ -23,4 +34,5 @@
 		<property name="unit" type="java.lang.String" column="unit" length="255"/>
 		<property name="uuid" type="java.lang.String" column="uuid" length="38" unique="true" />
 	</class>
+	 -->
 </hibernate-mapping>

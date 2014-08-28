@@ -14,9 +14,12 @@
 package org.openmrs.module.icchange.pharmacy.api;
 
 import org.openmrs.DrugOrder;
+import org.openmrs.Encounter;
+import org.openmrs.EncounterType;
 import org.openmrs.OrderType;
 import org.openmrs.Patient;
 import org.openmrs.module.icchange.pharmacy.PharmacyOrder;
+import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -35,24 +38,39 @@ import java.util.Map;
 @Transactional
 public interface ICChangePharmacyService extends OpenmrsService {
      
-	/*
-	 * Add service methods here
-	 * 
-	 */
-
-	public PharmacyOrder savePharmacyOrder(PharmacyOrder pharmacyOrder);
 	
-	public List<PharmacyOrder> saveAllPharmacyOrders(List<PharmacyOrder> phamacyOrders);
+	/**
+	 * 
+	 * @return
+	 * @should return the Ordertype relative to PharmacyOrders
+	 */
+	public OrderType getPharmacyOrderType();
+
+	public EncounterType getPharmacyOrderEncounterType();
 	
 	public PharmacyOrder getPharmacyOrder(Integer pharmacyOrderId);
+
+	public PharmacyOrder getPharmacyOrderByUuid(String uuid);
 	
 	public List<PharmacyOrder> getPharmacyOrdersByPatient(Patient patient);
 
 	public List<PharmacyOrder> getPharmacyOrdersByDrugOrder(DrugOrder drugOrder);
 
-	public List<PharmacyOrder> getPharmacyOrdersByDrugOrders(List<DrugOrder> drugOrders);
+	public List<PharmacyOrder> getPharmacyOrdersByDrugOrders(List<DrugOrder> drugOrders);	
 	
 	public Map<DrugOrder, List<PharmacyOrder>> getPharmacyOrdersOrderedByDrugOrders(List<DrugOrder> drugOrders);
-		
-	//public OrderType getPharmacyOrderType();
+	
+	public PharmacyOrder savePharmacyOrder(PharmacyOrder pharmacyOrder) throws APIException;
+	
+	public List<PharmacyOrder> saveAllPharmacyOrders(List<PharmacyOrder> phamacyOrders);
+	
+	public List<PharmacyOrder> saveAllPharmacyOrdersOnSameEncounter(List<PharmacyOrder> pharmacyOrders);
+	
+	
+	public PharmacyOrder addPharmacyOrderToDrugOrder(DrugOrder drugOrder, PharmacyOrder pharmacyOrder) throws APIException;
+
+
+	
+
+
 }

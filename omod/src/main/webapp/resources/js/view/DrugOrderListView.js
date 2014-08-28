@@ -37,8 +37,6 @@ function createDrugOrderView (order, mode) {
 	default:
 		img = pharmacy_html_constants.img_unknown;
 	}
-
-	
 	
 	var ret = 
 		'<table id="%id" class="drugOrderBox" width="100%" >'.replace(/%id/g, "orderTable" + self.order.id) + 

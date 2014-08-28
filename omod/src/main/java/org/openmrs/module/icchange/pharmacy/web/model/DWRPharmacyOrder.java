@@ -2,7 +2,7 @@ package org.openmrs.module.icchange.pharmacy.web.model;
 
 import org.openmrs.module.icchange.pharmacy.PharmacyOrder;
 
-public class DWRPharmacyOrder extends DWRBaseOpenmrsData{
+public class DWRPharmacyOrder extends DWROrder {
 
 	private Integer orderId;
 	

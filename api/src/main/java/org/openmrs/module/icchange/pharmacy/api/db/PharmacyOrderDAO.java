@@ -15,6 +15,7 @@ package org.openmrs.module.icchange.pharmacy.api.db;
 
 import java.util.List;
 import org.openmrs.DrugOrder;
+import org.openmrs.Patient;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.module.icchange.pharmacy.PharmacyOrder;
 import org.openmrs.module.icchange.pharmacy.api.ICChangePharmacyService;
@@ -23,16 +24,24 @@ import org.openmrs.module.icchange.pharmacy.api.ICChangePharmacyService;
  *  Database methods for {@link ICChangePharmacyService}.
  */
 public interface PharmacyOrderDAO {
-	
-	public PharmacyOrder savePharmacyOrder(PharmacyOrder pharmacyOrder) throws DAOException;
-	
+
 	public PharmacyOrder getPharmacyOrder(Integer pharmacyOrderId) throws DAOException;
 	
 	public PharmacyOrder getPharmacyOrderByUuid(String uuid) throws DAOException;
+
+	public List<PharmacyOrder> getPharmacyOrderByPatient(Patient patient) throws DAOException;
 	
-	public List<PharmacyOrder> getPharmacyOrderByDrugOrder(Integer drugOrderId) throws DAOException;
+	public List<PharmacyOrder> getPharmacyOrderByDrugOrder(DrugOrder drugOrder) throws DAOException;
 	
 	public List<PharmacyOrder> getPharmacyOrdersByDrugOrders(List<DrugOrder> drugOrders) throws DAOException;
+	
+	
+	
+	
+	
+	
+	public PharmacyOrder savePharmacyOrder(PharmacyOrder pharmacyOrder) throws DAOException;
+	
 
 	public List<PharmacyOrder> saveAll(List<PharmacyOrder> phamacyOrders);
 }

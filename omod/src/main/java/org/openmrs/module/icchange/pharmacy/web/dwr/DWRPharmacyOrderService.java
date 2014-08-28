@@ -2,6 +2,7 @@ package org.openmrs.module.icchange.pharmacy.web.dwr;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +11,9 @@ import org.jfree.util.Log;
 import org.openmrs.Concept;
 import org.openmrs.ConceptSet;
 import org.openmrs.DrugOrder;
+import org.openmrs.Encounter;
 import org.openmrs.Patient;
+import org.openmrs.Visit;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.icchange.pharmacy.PharmacyOrder;
 import org.openmrs.module.icchange.pharmacy.api.ICChangePharmacyService;
@@ -22,6 +25,89 @@ import org.openmrs.util.OpenmrsUtil;
 public class DWRPharmacyOrderService {
 
 	private ICChangePharmacyService service = Context.getService(ICChangePharmacyService.class);
+	
+	public DWRPharmacyOrder savePharmacyOrder (DWRPharmacyOrder order) {
+		
+		if (order == null)
+			return null;
+		
+		PharmacyOrder porder = new PharmacyOrder();
+		Date now = new Date();
+		
+		
+		porder.setCreator(Context.getAuthenticatedUser());
+		porder.setDateCreated(now);
+		porder.setStartDate(now);
+		porder.setAutoExpireDate(null);
+		porder.setInstructions(order.getInstructions());
+		
+		if (order.getOrderId() == null)
+			return null;
+		
+		DrugOrder d = Context.getOrderService().getDrugOrder(order.getOrderId());
+		
+		if (d == null)
+			return null;
+		
+		porder.setDrugOrder(d);
+		
+		if (order.getPatientId() == null)
+			return null;
+		
+		Patient p = Context.getPatientService().getPatient(order.getPatientId());
+		
+		if (p == null)
+			return null;
+		
+		porder.setPatient(p);
+		
+		//porder.
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		String visitsEnabeled = Context.getAdministrationService().getGlobalProperty("visits.enabled");
+		
+		if (visitsEnabeled != null && visitsEnabeled.toLowerCase(null).equals("true")) {
+			
+			List<Visit> vlist = Context.getVisitService().getActiveVisitsByPatient(p);
+
+			if (vlist == null || vlist.size() == 0)
+				return null;
+			
+			if (vlist.size() > 1)
+				return null;
+			
+			Visit v  = vlist.get(0);			
+			
+			Encounter e = new Encounter();
+			
+			e.setVisit(v);
+			
+			//v.get
+		} else {
+			
+			
+			
+		}
+		
+		
+		
+		
+		
+//		porder.setEncounter(encounter);
+		
+		return null;		
+	}
+	
+	
+	
 	
 	public List<DWRDrugOrderHeader> getDrugOrdersHeaders (Integer patientId) {
 
@@ -164,7 +250,12 @@ public class DWRPharmacyOrderService {
 		return ret;
 	}
 	
-	public DWRDrugOrder getDrugOrder(Integer id) {
+	
+	private DWRDrugOrder getDrugOrder (Integer id) {
+		return null;//Context.getS
+	}
+	
+	public DWRDrugOrder getDrugOrderById(Integer id) {
 
 		DrugOrder d = Context.getOrderService().getDrugOrder(id);
 		
@@ -178,11 +269,11 @@ public class DWRPharmacyOrderService {
 		if (pList == null)
 			return dw;
 		
-		List<DWRPharmacyOrder> dwpliist = new ArrayList<DWRPharmacyOrder>();
+		List<DWRPharmacyOrder> dwplist = new ArrayList<DWRPharmacyOrder>();
 		for (PharmacyOrder p: pList)
-			dwpliist.add(new DWRPharmacyOrder(p));
+			dwplist.add(new DWRPharmacyOrder(p));
 		
-		dw.setDispenses(dwpliist);
+		dw.setDispenses(dwplist);
 		
 		return dw;
 	}
@@ -223,14 +314,7 @@ public class DWRPharmacyOrderService {
 		return dwrOrders;
 	}
 	
-	public DWRPharmacyOrder savePharmacyOrder (DWRPharmacyOrder order) {
-		
-		Log.debug("Saving pharmacy order.");
-		
-		//service.savePharmacyOrder(pharmacyOrder)
-		
-		return order;
-	}
+
 	
 	
 	

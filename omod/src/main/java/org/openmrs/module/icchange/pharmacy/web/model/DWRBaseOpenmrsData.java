@@ -28,11 +28,10 @@ public class DWRBaseOpenmrsData {
 	}
 
 	public DWRBaseOpenmrsData(BaseOpenmrsData data) {
-		this.fromBaseOpenmrsData(data);
+		this.buildDWR(data);
 	}
-
 	
-	public void fromBaseOpenmrsData (BaseOpenmrsData data) {
+	public void buildDWR (BaseOpenmrsData data) {
 		SimpleDateFormat sdf = Context.getDateFormat();
 		
 		this.id = data.getId();

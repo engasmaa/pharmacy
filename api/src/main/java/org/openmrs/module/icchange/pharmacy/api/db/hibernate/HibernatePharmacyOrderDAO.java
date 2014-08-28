@@ -23,6 +23,7 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.DrugOrder;
+import org.openmrs.Patient;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.module.icchange.pharmacy.PharmacyOrder;
 import org.openmrs.module.icchange.pharmacy.api.db.PharmacyOrderDAO;
@@ -31,10 +32,9 @@ import org.openmrs.module.icchange.pharmacy.api.db.PharmacyOrderDAO;
  * It is a default implementation of  {@link PharmacyOrderDAO}.
  */
 public class HibernatePharmacyOrderDAO implements PharmacyOrderDAO {
-	protected final Log log = LogFactory.getLog(this.getClass());
-	
+
+	protected final Log log = LogFactory.getLog(this.getClass());	
 	private SessionFactory sessionFactory;
-	
 	
 	public HibernatePharmacyOrderDAO() {}
 	
@@ -51,24 +51,14 @@ public class HibernatePharmacyOrderDAO implements PharmacyOrderDAO {
     public SessionFactory getSessionFactory() {
 	    return sessionFactory;
     }
-
-	@Override
-	public PharmacyOrder savePharmacyOrder(PharmacyOrder pharmacyOrder)
-			throws DAOException {
-
-		sessionFactory.getCurrentSession().saveOrUpdate(pharmacyOrder);
-		
-		return pharmacyOrder;
-	}
-
+    
 	@Override
 	public PharmacyOrder getPharmacyOrder(Integer pharmacyOrderId)
 			throws DAOException {
 
-		return (PharmacyOrder) sessionFactory.getCurrentSession().get(PharmacyOrder.class, pharmacyOrderId);
-		
+		return (PharmacyOrder) sessionFactory.getCurrentSession().get(PharmacyOrder.class, pharmacyOrderId);		
 	}
-
+    
 	@Override
 	public PharmacyOrder getPharmacyOrderByUuid(String uuid) throws DAOException {
 
@@ -80,14 +70,33 @@ public class HibernatePharmacyOrderDAO implements PharmacyOrderDAO {
 		
 		return (PharmacyOrder)crit.uniqueResult();
 	}
+    
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<PharmacyOrder> getPharmacyOrderByPatient(Patient patient) throws DAOException {
+		
+		if (patient == null)
+			return null;
+
+		Criteria crit = sessionFactory.getCurrentSession().createCriteria(PharmacyOrder.class);
+		crit.add(Restrictions.eq("patient", patient));		
+		return crit.list();
+	}
+
+	@Override
+	public List<PharmacyOrder> getPharmacyOrderByDrugOrder(DrugOrder drugOrder) throws DAOException {
+		List<DrugOrder> orders = new ArrayList<DrugOrder>();
+		orders.add(drugOrder);
+		
+		return getPharmacyOrdersByDrugOrders(orders);
+	}		
 
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PharmacyOrder> getPharmacyOrdersByDrugOrders(List<DrugOrder> drugOrders) throws DAOException {
-		
-		List<PharmacyOrder> list;
-		
+
 		if (drugOrders == null)
 			return null;
 		
@@ -96,37 +105,30 @@ public class HibernatePharmacyOrderDAO implements PharmacyOrderDAO {
 		
 		for (DrugOrder drugOrder : drugOrders)
 			if (drugOrder != null)
-			dis.add(Restrictions.eq("drugOrder", drugOrder));
+				dis.add(Restrictions.eq("drugOrder", drugOrder));
 		
 		crit.add(dis);
 		return crit.list();		
 	}
-
-	@SuppressWarnings("unchecked")
+    
+	
 	@Override
-	public List<PharmacyOrder> getPharmacyOrderByDrugOrder(Integer drugOrderId) throws DAOException {
-		
-		if (drugOrderId == null)
-			return new ArrayList<PharmacyOrder>();
-		
-		Criteria crit = sessionFactory.getCurrentSession().createCriteria(PharmacyOrder.class);
-		
-		crit.add(Restrictions.eq("drugOrder_id", drugOrderId));
-		
-		return crit.list();
+	public PharmacyOrder savePharmacyOrder(PharmacyOrder pharmacyOrder) throws DAOException {
+		sessionFactory.getCurrentSession().saveOrUpdate(pharmacyOrder);
+		return pharmacyOrder;
 	}
-
-
+	
 	@Override
-	public List<PharmacyOrder> saveAll(List<PharmacyOrder> phamacyOrders) {
-		
+	public List<PharmacyOrder> saveAll(List<PharmacyOrder> phamacyOrders) throws DAOException {
 		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
 
 		for (PharmacyOrder p: phamacyOrders)
 			sessionFactory.getCurrentSession().save(p);
+		
 		tx.commit();
-
 		return phamacyOrders;
-	}		
+	}
+
+
 
 }

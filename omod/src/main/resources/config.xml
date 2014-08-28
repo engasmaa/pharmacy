@@ -33,10 +33,8 @@
 	</extension>
 	
 	<!-- Maps hibernate file's, if present -->
-	<mappingFiles>
-				
+	<mappingFiles>		
 		PharmacyOrder.hbm.xml
-				
 	</mappingFiles>
 
 
@@ -55,6 +53,7 @@
 				<include method="getAllPharmacyOrdersByPatient"/>
 				<include method="getDrugOrdersHeaders" />
 				<include method="getDrugOrder" />
+				<include method="getDrugOrderById" />
 			</create>
 		</allow>
 		<signatures>

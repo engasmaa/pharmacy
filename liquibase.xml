@@ -37,7 +37,7 @@
 
 		<createTable tableName="pharmacy_pharmacyitem">
 			<column name="pharmacyitem_id" autoIncrement="true" type="int"><constraints nullable="false" primaryKey="true" /></column>
-			<column name="pharmacyorder_id" type="int"><constraints nullable="false" /></column>
+			<column name="order_id" type="int"><constraints nullable="false" /></column>
 			<column name="item_id" type="int"><constraints nullable="false" /></column>
 			<column name="quanity" type="int"></column>
 			<column name="unit" type="varchar(255)"></column>
@@ -56,7 +56,7 @@
 			
 		<addForeignKeyConstraint 
 			constraintName="pharmacyitem_pharmacyorder_fk"
-			baseTableName="pharmacy_pharmacyitem" baseColumnNames="pharmacyorder_id" 
+			baseTableName="pharmacy_pharmacyitem" baseColumnNames="order_id" 
 			referencedTableName="pharmacy_pharmacyorder" referencedColumnNames="order_id" 
 			deferrable="false" initiallyDeferred="false" />
 

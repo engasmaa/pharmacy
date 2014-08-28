@@ -62,7 +62,13 @@
 	<openmrs:htmlInclude file="/moduleResources/icchange/pharmacy/js/view/DrugOrderListView.js" />
 	<openmrs:htmlInclude file="/moduleResources/icchange/pharmacy/js/view/DrugOrderView.js" />
 	<openmrs:htmlInclude file="/moduleResources/icchange/pharmacy/js/PharmacyOrder.js" />
-		
+	
+	<div id="drugOrdersSection" class="drugOrders">
+	
+	
+	</div>
+	
+	
 	<div id="regimenPortletCurrent">
 		<div id="uhTheyCannotSeeme" style="display: none;">
 			<c:forEach var="drugOrder" items="${druglist}">
@@ -127,10 +133,11 @@
 
 <div id="drugOrdersListDiv">
 	<div id="drugOrdersListDivTop">
-		Order by
+		Major Group
 		<select>
-  			<option value="date">Date</option>
-  			<option value="name">Name</option>
+			<option value="pstatus">Prescription Status</option>
+  			<option value="dstatus">Dispensing Status</option>
+			<option value="none">none</option>
 		</select>
 		<div id="drugOrdersListSortOptions">
 			<input type="checkbox" id="drugOrdersListSplitBySet" name="splitOptions" value="bySet">Split by drug Set<br>
@@ -152,7 +159,7 @@
 	var drugordersListView;
 	
 	$j(document).ready(function () {
-		drugordersListView = new DrugOrderListView(${patient.id}, "drugOrdersList");
+		//drugordersListView = new DrugOrderListView(${patient.id}, "drugOrdersList");
 		
 	});
 	

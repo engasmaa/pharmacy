@@ -50,3 +50,4 @@ pom.xml.releaseBackup
 *.DS_Store
 *.swp
 *.out
+/org
