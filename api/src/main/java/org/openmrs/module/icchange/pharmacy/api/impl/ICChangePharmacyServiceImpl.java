@@ -176,18 +176,9 @@ public class ICChangePharmacyServiceImpl extends BaseOpenmrsService implements I
 		Encounter e = pharmacyOrder.getEncounter();
 		e.addOrder(pharmacyOrder);
 
-		Context.getEncounterService().saveEncounter(e);		
-		
+		Context.getEncounterService().saveEncounter(e);
 		PharmacyOrder p = dao.savePharmacyOrder(pharmacyOrder);
 		
-		/*
-		Encounter e = p.getEncounter();
-
-		if (e.getOrders() == null)
-			e.setOrders(new HashSet<Order>());
-
-		e.getOrders().add(pharmacyOrder);
-		 */
 		return p;
 	}
 	
@@ -223,27 +214,24 @@ public class ICChangePharmacyServiceImpl extends BaseOpenmrsService implements I
 		if (pharmacyOrders == null)
 			throw new APIException("Pharmacy Order cannot be null.");
 		
+		if (pharmacyOrders.size() == 0)
+			return pharmacyOrders;
+		
+		if (pharmacyOrders.get(0) == null)
+			throw new APIException("Pharmacy Order cannot be null.");
+				
 		for (PharmacyOrder p : pharmacyOrders) {
 			if (p.getDrugOrder() == null)
 				throw new APIException("Pharmacy Order must be associated to a drug order.");
 			
 			if (p.getEncounter() == null)
-				throw new APIException("Pharmacy Order must be associated to an encounter.");
-		}
+				p.setEncounter(PharmacyOrderUtil.createValidPharmacyEncounter(p.getPatient()));
 		
-		List<PharmacyOrder> porders = dao.saveAll(pharmacyOrders);
-		
-		for (PharmacyOrder p : porders) {
-			Encounter e = p.getEncounter();
-
-			if (e.getOrders() == null)
-				e.setOrders(new HashSet<Order>());
-
-			e.getOrders().add(p);
+			p.getEncounter().addOrder(p);
 			Context.getEncounterService().saveEncounter(p.getEncounter());
 		}
-		
-		return porders;
+				
+		return dao.saveAll(pharmacyOrders);
 	}
 
 
@@ -262,27 +250,17 @@ public class ICChangePharmacyServiceImpl extends BaseOpenmrsService implements I
 		Encounter e = pharmacyOrders.get(0).getEncounter();
 		
 		if (e == null)
-			throw new APIException("Pharmacy Order must be associated to an encounter.");
+			e = PharmacyOrderUtil.createValidPharmacyEncounter(pharmacyOrders.get(0).getPatient());
 		
 		for (PharmacyOrder p : pharmacyOrders) {
 			if (p.getDrugOrder() == null)
 				throw new APIException("Pharmacy Order must be associated to a drug order.");
 			
 			p.setEncounter(e);
+			e.addOrder(p);
 		}
-		
-		List<PharmacyOrder> porders = dao.saveAll(pharmacyOrders);
-		
-		if (e.getOrders() == null)
-			e.setOrders(new HashSet<Order>());
 
-		e.getOrders().addAll(porders);
 		Context.getEncounterService().saveEncounter(e);
-		
-		return porders;
+		return dao.saveAll(pharmacyOrders);		
 	}
-
-
-	
-
 }
