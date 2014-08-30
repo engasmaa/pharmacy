@@ -6,15 +6,38 @@
 <hibernate-mapping package="org.openmrs.module.icchange.pharmacy">
 	
 	<class name="DrugOrderStatus" table="pharmacy_druorderstatus" >
-		<id name="id" type="int" column="druorderstatus_id" unsaved-value="0">
-			<generator class="native">
-				<param name="sequence">pharmacy_druorderstatus_id_seq</param>
-			</generator>
+		
+		<id name="order_id" type="int" column="order_id" unsaved-value="0">
+			<generator class="foreign">
+				<param name="property">drugOrder</param>
+			</generator>		
 		</id>
+		<one-to-one name="drugOrder" class="org.openmrs.DrugOrder"></one-to-one>
+		
 		<discriminator column="id" insert="false" />
 		<property name="uuid" type="java.lang.String" column="uuid" length="38" unique="true" />
-		<one-to-one name="drugOrder" class="org.openmrs.DrugOrder" column="drug_order_id" />
+		
+		<property name="status" column="status">
+		    <type name="org.hibernate.type.EnumType">
+		        <param name="enumClass">DrugOrderStatus$Status</param>
+		        <param name="useNamed">true</param>
+		    </type>
+		</property>
+
+
+		<!-- 
+		<one-to-one name="drugOrder" class="org.openmrs.DrugOrder"> <column name="drug_order_id" /> </one-to-one>
+		
+		<property name="dateCreated" type="java.util.Date" column="date_created" not-null="true" length="19" />
+		<many-to-one name="creator" class="User" not-null="true"> <column name="creator" /> </many-to-one>
+	
+		<property name="retired" type="java.lang.Boolean" column="retired" length="1" not-null="true"/>
+		<property name="dateRetired" type="java.util.Date" column="date_retired" length="19" />
+		<many-to-one name="retiredBy" class="User"> <column name="retired_by" /> </many-to-one>
+		<property name="retireReason" type="java.lang.String" column="retire_reason" length="255" /> 
+		
+		<property name="dateChanged" type="java.util.Date" column="date_changed" length="19" />
+		<many-to-one name="changedBy" class="User" not-null="true"> <column name="changed_by" /> </many-to-one>
+		 -->
 	</class>
-
-
 </hibernate-mapping>
