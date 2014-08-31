@@ -14,6 +14,7 @@
 		<mapping resource="resourceName.hbm.xml" />
 		<mapping resource="testData.hbm.xml" />
 		 <mapping resource="PharmacyItem.hbm.xml" />
+		 <mapping resource="DrugOrderStatus.hbm.xml" />
 		 -->
 		 <mapping resource="PharmacyOrder.hbm.xml" />
 	</session-factory>

@@ -18,10 +18,10 @@ import org.openmrs.DrugOrder;
 import org.openmrs.Patient;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.module.icchange.pharmacy.PharmacyOrder;
-import org.openmrs.module.icchange.pharmacy.api.ICChangePharmacyService;
+import org.openmrs.module.icchange.pharmacy.api.PharmacyOrderService;
 
 /**
- *  Database methods for {@link ICChangePharmacyService}.
+ *  Database methods for {@link PharmacyOrderService}.
  */
 public interface PharmacyOrderDAO {
 

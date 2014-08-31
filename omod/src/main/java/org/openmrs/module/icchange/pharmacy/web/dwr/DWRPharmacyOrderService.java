@@ -16,7 +16,7 @@ import org.openmrs.Patient;
 import org.openmrs.Visit;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.icchange.pharmacy.PharmacyOrder;
-import org.openmrs.module.icchange.pharmacy.api.ICChangePharmacyService;
+import org.openmrs.module.icchange.pharmacy.api.PharmacyOrderService;
 import org.openmrs.module.icchange.pharmacy.web.model.DWRDrugOrder;
 import org.openmrs.module.icchange.pharmacy.web.model.DWRDrugOrderHeader;
 import org.openmrs.module.icchange.pharmacy.web.model.DWRPharmacyOrder;
@@ -24,7 +24,7 @@ import org.openmrs.util.OpenmrsUtil;
 
 public class DWRPharmacyOrderService {
 
-	private ICChangePharmacyService service = Context.getService(ICChangePharmacyService.class);
+	private PharmacyOrderService service = Context.getService(PharmacyOrderService.class);
 	
 	public DWRPharmacyOrder savePharmacyOrder (DWRPharmacyOrder order) {
 		
@@ -264,7 +264,7 @@ public class DWRPharmacyOrderService {
 		
 		DWRDrugOrder dw = new DWRDrugOrder(d);
 		
-		List<PharmacyOrder> pList = Context.getService(ICChangePharmacyService.class).getPharmacyOrdersByDrugOrder(d);
+		List<PharmacyOrder> pList = Context.getService(PharmacyOrderService.class).getPharmacyOrdersByDrugOrder(d);
 		
 		if (pList == null)
 			return dw;
@@ -293,7 +293,7 @@ public class DWRPharmacyOrderService {
 		if (dOrders == null)
 			return null;
 		
-		Map<DrugOrder, List<PharmacyOrder>> map = Context.getService(ICChangePharmacyService.class).getPharmacyOrdersOrderedByDrugOrders(dOrders);
+		Map<DrugOrder, List<PharmacyOrder>> map = Context.getService(PharmacyOrderService.class).getPharmacyOrdersOrderedByDrugOrders(dOrders);
 		
 		List<DWRDrugOrder> dwrOrders = new ArrayList<DWRDrugOrder>();
 		
@@ -334,7 +334,7 @@ public class DWRPharmacyOrderService {
 		//pharmacyOrder.setPatient(patient);
 		
 		try {
-			ICChangePharmacyService service = Context.getService(ICChangePharmacyService.class);
+			PharmacyOrderService service = Context.getService(PharmacyOrderService.class);
 			service.savePharmacyOrder(pharmacyOrder);
 		} catch (Exception e) {
 			throw new Exception(e);

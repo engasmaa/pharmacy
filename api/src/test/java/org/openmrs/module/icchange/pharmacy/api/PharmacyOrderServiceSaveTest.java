@@ -21,9 +21,9 @@ import org.openmrs.module.icchange.pharmacy.PharmacyOrder;
 import org.openmrs.module.icchange.pharmacy.util.PharmacyOrderUtil;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 
-public class ICChangePharmacyServiceSaveTest extends BaseModuleContextSensitiveTest {
+public class PharmacyOrderServiceSaveTest extends BaseModuleContextSensitiveTest {
 	
-	private ICChangePharmacyService service;
+	private PharmacyOrderService service;
 	private Patient testPatient;
 	private DrugOrder testDrugOrder;
 	
@@ -31,7 +31,7 @@ public class ICChangePharmacyServiceSaveTest extends BaseModuleContextSensitiveT
 	public void before() throws Exception {
 		initializeInMemoryDatabase();
 		executeDataSet("src/test/resources/PharmacyTestData.xml");
-		service = Context.getService(ICChangePharmacyService.class);
+		service = Context.getService(PharmacyOrderService.class);
 		testDrugOrder = Context.getOrderService().getOrder(200, DrugOrder.class);
 		testPatient = testDrugOrder.getPatient();
 		//User u = Context.getAuthenticatedUser();

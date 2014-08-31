@@ -33,15 +33,15 @@ import org.openmrs.test.BaseModuleContextSensitiveTest;
 /**
  * Tests {@link ${ICChangePharmacyService}}.
  */
-public class  ICChangePharmacyServiceTest extends BaseModuleContextSensitiveTest {
+public class  PharmacyOrderServiceTest extends BaseModuleContextSensitiveTest {
 	
-	private ICChangePharmacyService service;
+	private PharmacyOrderService service;
 	
 	@Before
 	public void before() throws Exception {
 		initializeInMemoryDatabase();
 		executeDataSet("src/test/resources/PharmacyTestData.xml");
-		service = Context.getService(ICChangePharmacyService.class);
+		service = Context.getService(PharmacyOrderService.class);
 	}
 	
 	

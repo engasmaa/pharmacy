@@ -36,7 +36,7 @@ import java.util.Map;
  * @see org.openmrs.api.context.Context
  */
 @Transactional
-public interface ICChangePharmacyService extends OpenmrsService {
+public interface PharmacyOrderService extends OpenmrsService {
      
 	
 	/**

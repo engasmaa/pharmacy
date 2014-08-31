@@ -17,7 +17,7 @@
 
 	
 	<!-- Module Activator -->
-	<activator>${project.parent.groupId}.${project.parent.artifactId}.ICChangePharmacyActivator</activator>
+	<activator>${project.parent.groupId}.${project.parent.artifactId}.PharmacyActivator</activator>
 	
 	
 	<!-- Adds link to admin page -->

@@ -35,7 +35,7 @@ import org.openmrs.api.OrderService;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.icchange.pharmacy.PharmacyOrder;
-import org.openmrs.module.icchange.pharmacy.api.ICChangePharmacyService;
+import org.openmrs.module.icchange.pharmacy.api.PharmacyOrderService;
 import org.openmrs.module.icchange.pharmacy.web.dwr.DWRPharmacyOrderService;
 import org.openmrs.module.icchange.pharmacy.web.model.DWRDrugOrderHeader;
 import org.openmrs.module.web.extension.ExtensionUtil;
@@ -180,7 +180,7 @@ public class  ICChangePharmacyManageController {
 		Map<Integer, List<PharmacyOrder>> orderlist = new HashMap<Integer, List<PharmacyOrder>>();
 		
 		for (DrugOrder drugOrder: dlist) {
-			orderlist.put(drugOrder.getId(), Context.getService(ICChangePharmacyService.class).getPharmacyOrdersByDrugOrder(drugOrder));
+			orderlist.put(drugOrder.getId(), Context.getService(PharmacyOrderService.class).getPharmacyOrdersByDrugOrder(drugOrder));
 		}
 		
 		map.put("pharmacyordermap", orderlist);

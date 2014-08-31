@@ -32,14 +32,14 @@ import org.openmrs.api.impl.BaseOpenmrsService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.module.icchange.pharmacy.PharmacyOrder;
-import org.openmrs.module.icchange.pharmacy.api.ICChangePharmacyService;
+import org.openmrs.module.icchange.pharmacy.api.PharmacyOrderService;
 import org.openmrs.module.icchange.pharmacy.api.db.PharmacyOrderDAO;
 import org.openmrs.module.icchange.pharmacy.util.PharmacyOrderUtil;
 
 /**
- * It is a default implementation of {@link ICChangePharmacyService}.
+ * It is a default implementation of {@link PharmacyOrderService}.
  */
-public class ICChangePharmacyServiceImpl extends BaseOpenmrsService implements ICChangePharmacyService {
+public class PharmacyOrderServiceImpl extends BaseOpenmrsService implements PharmacyOrderService {
 	
 	protected final Log log = LogFactory.getLog(this.getClass());
 	private PharmacyOrderDAO dao;

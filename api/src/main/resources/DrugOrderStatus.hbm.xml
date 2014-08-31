@@ -6,25 +6,24 @@
 <hibernate-mapping package="org.openmrs.module.icchange.pharmacy">
 	
 	<class name="DrugOrderStatus" table="pharmacy_druorderstatus" >
-		
-		<id name="order_id" type="int" column="order_id" unsaved-value="0">
-			<generator class="foreign">
-				<param name="property">drugOrder</param>
-			</generator>		
+
+		<id name="id" type="java.lang.Integer">
+			<column name="id" />
+			<generator class="identity" />
 		</id>
-		<one-to-one name="drugOrder" class="org.openmrs.DrugOrder"></one-to-one>
-		
-		<discriminator column="id" insert="false" />
-		<property name="uuid" type="java.lang.String" column="uuid" length="38" unique="true" />
+		<property name="drugOrder" type="org.openmrs.DrugOrder">
+			<column name="order_id" not-null="true" unique="true" />
+		</property>
 		
 		<property name="status" column="status">
-		    <type name="org.hibernate.type.EnumType">
-		        <param name="enumClass">DrugOrderStatus$Status</param>
-		        <param name="useNamed">true</param>
+		    <type name="org.openmrs.util.HibernateEnumType">
+		        <param name="enumClassName">org.openmrs.module.icchange.pharmacy.DrugOrderStatus$Status</param>
 		    </type>
 		</property>
-
-
+		<property name="noteToPharmacist" type="java.lang.String" column="note_to_pharmacist" />
+		<property name="noteToPhysicist" type="java.lang.String" column="note_to_physicist" />
+				
+		<property name="uuid" type="java.lang.String" column="uuid" length="38" unique="true" />
 		<!-- 
 		<one-to-one name="drugOrder" class="org.openmrs.DrugOrder"> <column name="drug_order_id" /> </one-to-one>
 		
