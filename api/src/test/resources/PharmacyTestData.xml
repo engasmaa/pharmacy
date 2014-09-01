@@ -23,11 +23,12 @@
 		start_date="2008-08-08 00:00:00.0" discontinued="false" creator="1" 
 		date_created="2008-08-19 12:22:45.0" voided="false" patient_id="2" 
 		uuid="200"/>
-	<drug_order order_id="200" drug_inventory_id="11" dose="325.0" units="mg" frequency="1/day x 7 days/week" prn="false" complex="false"/>
+	<drug_order order_id="200" drug_inventory_id="11" dose="325.0" units="mg" frequency="1/day x 7 days/week" prn="false" complex="false"/> 
+	<pharmacy_druorderstatus id="200" uuid="drugorderstatus_1"/>
 	<!-- 
-	<pharmacy_druorderstatus id="200" order_id="200" status="NO_DISPENSE" note_to_pharmacist="" note_to_physicist="" uuid="drugorderstatus_1"/>
-	 -->
-	 		
+	<pharmacy_druorderstatus id="200"  status="NO_DISPENSE" note_to_pharmacist="" note_to_physicist="" />
+	  -->
+	  	
 	<orders order_id="201" order_type_id="1"
 		concept_id="792" orderer="1" instructions="1x daily with food" 
 		start_date="2008-08-08 00:00:00.0" discontinued="false" creator="1" 

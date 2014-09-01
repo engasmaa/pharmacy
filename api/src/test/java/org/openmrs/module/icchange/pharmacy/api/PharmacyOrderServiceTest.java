@@ -52,12 +52,12 @@ public class  PharmacyOrderServiceTest extends BaseModuleContextSensitiveTest {
 	
 	@Test
 	public void shouldEnsurePharmacyOrderTypeExist () throws Exception {
-		logger.warn("Testing pharmacy order type");
+		logger.debug("Testing pharmacy order type");
 		
 		OrderType type = service.getPharmacyOrderType();
 		assertNotNull(type);
 		
-		logger.warn("id= " + type.getId() + " " + type.getName());
+		logger.debug("id= " + type.getId() + " " + type.getName());
 		
 		assertEquals(new Integer(18), type.getId());
 		assertEquals("Pharmacy Order", type.getName());
@@ -65,7 +65,7 @@ public class  PharmacyOrderServiceTest extends BaseModuleContextSensitiveTest {
 	
 	@Test
 	public void shouldEnsurePharmacyOrderExist () throws Exception {
-		logger.warn("Looking for test Pharmacy order");
+		logger.debug("Looking for test Pharmacy order");
 
 		PharmacyOrder order = service.getPharmacyOrder(300);
 		
@@ -77,7 +77,7 @@ public class  PharmacyOrderServiceTest extends BaseModuleContextSensitiveTest {
 	
 	@Test
 	public void shouldReturnPharmacyOrderByUuid () {
-		logger.warn("Looking for test Pharmacy order");
+		logger.debug("Looking for test Pharmacy order");
 		
 		PharmacyOrder order = service.getPharmacyOrderByUuid("300");
 		
@@ -93,7 +93,7 @@ public class  PharmacyOrderServiceTest extends BaseModuleContextSensitiveTest {
 	
 	@Test
 	public void shouldReturnNullPharmacyOrderByUuid () {
-		logger.warn("Looking for test Pharmacy order");
+		logger.debug("Looking for test Pharmacy order");
 		
 		PharmacyOrder order = service.getPharmacyOrderByUuid(null);
 		assertNull(order);
@@ -101,7 +101,7 @@ public class  PharmacyOrderServiceTest extends BaseModuleContextSensitiveTest {
 
 	@Test
 	public void shouldReturnNullPharmacyOrderByUuid2 () {
-		logger.warn("Looking for test Pharmacy order");
+		logger.debug("Looking for test Pharmacy order");
 		
 		PharmacyOrder order = service.getPharmacyOrderByUuid("");
 		
@@ -129,7 +129,7 @@ public class  PharmacyOrderServiceTest extends BaseModuleContextSensitiveTest {
 
 	@Test
 	public void shouldReturnPharmacyOrdersGivenTheDrugOrder() {
-		logger.warn("Looking for test Pharmacy order");
+		logger.debug("Looking for test Pharmacy order");
 		
 		DrugOrder dorder = Context.getOrderService().getOrder(200, DrugOrder.class);
 		assertNotNull(dorder);		
@@ -140,7 +140,7 @@ public class  PharmacyOrderServiceTest extends BaseModuleContextSensitiveTest {
 	
 	@Test
 	public void shouldReturnNoPharmacyOrdersGivenTheDrugOrder() {
-		logger.warn("Looking for test Pharmacy order");
+		logger.debug("Looking for test Pharmacy order");
 		
 		DrugOrder dorder = Context.getOrderService().getDrugOrder(298);
 		assertNotNull(dorder);		
@@ -152,7 +152,7 @@ public class  PharmacyOrderServiceTest extends BaseModuleContextSensitiveTest {
 
 	@Test
 	public void shouldReturnPharmacyOrdersGivenDrugOrderList() {
-		logger.warn("Looking for test Pharmacy order");
+		logger.debug("Looking for test Pharmacy order");
 		
 		DrugOrder dorder;
 		List<DrugOrder> dorders = new ArrayList<DrugOrder>();
@@ -172,7 +172,7 @@ public class  PharmacyOrderServiceTest extends BaseModuleContextSensitiveTest {
 
 	@Test
 	public void shouldReturnPharmacyOrdersInAMapGivenDrugOrderList() {
-		logger.warn("Looking for test Pharmacy order");
+		logger.debug("Looking for test Pharmacy order");
 		
 		List<DrugOrder> dorders = new ArrayList<DrugOrder>();
 		
@@ -195,7 +195,7 @@ public class  PharmacyOrderServiceTest extends BaseModuleContextSensitiveTest {
 
 	@Test
 	public void shouldReturnPharmacyOrdersInAMapGivenDrugOrderListWithNullOrders() {
-		logger.warn("Looking for test Pharmacy order");
+		logger.debug("Looking for test Pharmacy order");
 		
 		List<DrugOrder> dorders = new ArrayList<DrugOrder>();
 		
@@ -224,7 +224,7 @@ public class  PharmacyOrderServiceTest extends BaseModuleContextSensitiveTest {
 
 	@Test
 	public void shouldReturnPharmacyOrdersInAMapGivenDrugOrderListWithNullObject() {
-		logger.warn("Looking for test Pharmacy order");
+		logger.debug("Looking for test Pharmacy order");
 		
 		List<DrugOrder> dorders = new ArrayList<DrugOrder>();
 		

@@ -7,23 +7,36 @@
 	
 	<class name="DrugOrderStatus" table="pharmacy_druorderstatus" >
 
-		<id name="id" type="java.lang.Integer">
+		<id name="id" type="int">
 			<column name="id" />
-			<generator class="identity" />
+			<generator class="foreign">
+				<param name="property">drugOrder</param>
+			</generator>
 		</id>
-		<property name="drugOrder" type="org.openmrs.DrugOrder">
-			<column name="order_id" not-null="true" unique="true" />
-		</property>
-		
+		<one-to-one name="drugOrder" class="org.openmrs.DrugOrder" constrained="true"></one-to-one> 
 		<property name="status" column="status">
 		    <type name="org.openmrs.util.HibernateEnumType">
 		        <param name="enumClassName">org.openmrs.module.icchange.pharmacy.DrugOrderStatus$Status</param>
 		    </type>
 		</property>
+		<property name="uuid" type="java.lang.String" column="uuid" length="38" unique="true" />
+
+		<!-- 
+		
+		<discriminator column="id" insert="false" />
+		<id name="id" type="int" column="id" unsaved-value="0">
+			<generator class="native">
+				<param name="sequence">pharmacy_druorderstatus_id_seq</param>
+			</generator>
+		</id>
+
+
+		
 		<property name="noteToPharmacist" type="java.lang.String" column="note_to_pharmacist" />
 		<property name="noteToPhysicist" type="java.lang.String" column="note_to_physicist" />
 				
-		<property name="uuid" type="java.lang.String" column="uuid" length="38" unique="true" />
+
+		 -->
 		<!-- 
 		<one-to-one name="drugOrder" class="org.openmrs.DrugOrder"> <column name="drug_order_id" /> </one-to-one>
 		

@@ -25,25 +25,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 
-/**
- * This service exposes module's core functionality. It is a Spring managed bean which is configured in moduleApplicationContext.xml.
- * <p>
- * It can be accessed only via Context:<br>
- * <code>
- * Context.getService(ICChangePharmacyService.class).someMethod();
- * </code>
- * 
- * @see org.openmrs.api.context.Context
- */
 @Transactional
 public interface PharmacyOrderService extends OpenmrsService {
      
-	
-	/**
-	 * 
-	 * @return
-	 * @should return the Ordertype relative to PharmacyOrders
-	 */
 	public OrderType getPharmacyOrderType();
 
 	public EncounterType getPharmacyOrderEncounterType();
@@ -65,12 +49,7 @@ public interface PharmacyOrderService extends OpenmrsService {
 	public List<PharmacyOrder> saveAllPharmacyOrders(List<PharmacyOrder> phamacyOrders);
 	
 	public List<PharmacyOrder> saveAllPharmacyOrdersOnSameEncounter(List<PharmacyOrder> pharmacyOrders);
-	
-	
+		
 	public PharmacyOrder addPharmacyOrderToDrugOrder(DrugOrder drugOrder, PharmacyOrder pharmacyOrder) throws APIException;
-
-
 	
-
-
 }

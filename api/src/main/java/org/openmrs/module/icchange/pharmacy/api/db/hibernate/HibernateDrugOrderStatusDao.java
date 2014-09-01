@@ -12,10 +12,17 @@ import org.openmrs.module.icchange.pharmacy.api.db.DrugOrderStatusDao;
 public class HibernateDrugOrderStatusDao implements DrugOrderStatusDao{
 
 	protected final Log log = LogFactory.getLog(this.getClass());
-	
 	private SessionFactory sessionFactory;
 	
 	public HibernateDrugOrderStatusDao () {}
+
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
 
 	@Override
 	public DrugOrderStatus saveDrugOrderStatus(DrugOrderStatus status) {
@@ -25,7 +32,7 @@ public class HibernateDrugOrderStatusDao implements DrugOrderStatusDao{
 
 	@Override
 	public DrugOrderStatus getDrugOrderStatusById(Integer id) {
-		return (DrugOrderStatus)sessionFactory.getCurrentSession().get(getClass(), id);
+		return (DrugOrderStatus)sessionFactory.getCurrentSession().get(DrugOrderStatus.class, id);
 	}
 
 	@Override
@@ -47,11 +54,4 @@ public class HibernateDrugOrderStatusDao implements DrugOrderStatusDao{
 		return getDrugOrderStatusById(order.getId());
 	}
 
-	public SessionFactory getSessionFactory() {
-		return sessionFactory;
-	}
-
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
  }

@@ -38,16 +38,10 @@ public class HibernatePharmacyOrderDAO implements PharmacyOrderDAO {
 	
 	public HibernatePharmacyOrderDAO() {}
 	
-	/**
-     * @param sessionFactory the sessionFactory to set
-     */
     public void setSessionFactory(SessionFactory sessionFactory) {
 	    this.sessionFactory = sessionFactory;
     }
     
-	/**
-     * @return the sessionFactory
-     */
     public SessionFactory getSessionFactory() {
 	    return sessionFactory;
     }
@@ -128,7 +122,4 @@ public class HibernatePharmacyOrderDAO implements PharmacyOrderDAO {
 		tx.commit();
 		return phamacyOrders;
 	}
-
-
-
 }

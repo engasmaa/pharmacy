@@ -17,5 +17,6 @@
 		 <mapping resource="DrugOrderStatus.hbm.xml" />
 		 -->
 		 <mapping resource="PharmacyOrder.hbm.xml" />
+		 <mapping resource="DrugOrderStatus.hbm.xml" />
 	</session-factory>
 </hibernate-configuration>

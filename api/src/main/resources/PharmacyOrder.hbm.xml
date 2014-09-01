@@ -5,7 +5,7 @@
 
 <hibernate-mapping package="org.openmrs.module.icchange.pharmacy">
 
-	<joined-subclass name="PharmacyOrder" table="pharmacy_pharmacyorder" catalog="openmrs" extends="org.openmrs.Order">
+	<joined-subclass name="PharmacyOrder" table="pharmacy_pharmacyorder" extends="org.openmrs.Order">
 		<key column="order_id" />
 		<many-to-one name="drugOrder" class="org.openmrs.DrugOrder" column="drugorder_id"  not-null="true" />
 		<set name="items">
@@ -13,7 +13,7 @@
 			<one-to-many class="PharmacyItem"/>
 		</set>
 	</joined-subclass>
-	<class name="PharmacyItem" table="pharmacy_pharmacyitem" catalog="openmrs">
+	<class name="PharmacyItem" table="pharmacy_pharmacyitem" >
 		<id name="id" type="int" column="pharmacyitem_id" unsaved-value="0">
 			<generator class="native" />
 		</id>

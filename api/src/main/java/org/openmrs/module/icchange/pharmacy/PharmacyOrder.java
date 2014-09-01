@@ -33,7 +33,6 @@ public class PharmacyOrder extends Order implements Serializable {
 	
 	public PharmacyOrder() {
 		super();
-		//this.setOrderType(ICChangePharmacyServiceImpl.pharmacyOrderType);
 	}
 	
 	public DrugOrder getDrugOrder() {
