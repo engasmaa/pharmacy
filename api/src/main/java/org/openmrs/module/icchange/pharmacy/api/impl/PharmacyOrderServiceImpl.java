@@ -35,6 +35,7 @@ import org.openmrs.module.icchange.pharmacy.PharmacyOrder;
 import org.openmrs.module.icchange.pharmacy.api.PharmacyOrderService;
 import org.openmrs.module.icchange.pharmacy.api.db.PharmacyOrderDAO;
 import org.openmrs.module.icchange.pharmacy.util.PharmacyOrderUtil;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * It is a default implementation of {@link PharmacyOrderService}.
@@ -116,7 +117,10 @@ public class PharmacyOrderServiceImpl extends BaseOpenmrsService implements Phar
 	}
 
 	@Override
-	public List<PharmacyOrder> getPharmacyOrdersByDrugOrder(DrugOrder drugOrder) {
+	public List<PharmacyOrder> getPharmacyOrdersByDrugOrder(DrugOrder drugOrder) throws APIException{
+		if (drugOrder == null)
+			throw new APIException("Drug order cannot be null.");
+		
 		return dao.getPharmacyOrderByDrugOrder(drugOrder);
 	}
 	
@@ -156,7 +160,6 @@ public class PharmacyOrderServiceImpl extends BaseOpenmrsService implements Phar
 		}	
 		return map;
 	}
-	
 	
 	@Override
 	public PharmacyOrder savePharmacyOrder(PharmacyOrder pharmacyOrder) throws APIException {
@@ -233,7 +236,6 @@ public class PharmacyOrderServiceImpl extends BaseOpenmrsService implements Phar
 				
 		return dao.saveAll(pharmacyOrders);
 	}
-
 
 	@Override
 	public List<PharmacyOrder> saveAllPharmacyOrdersOnSameEncounter(List<PharmacyOrder> pharmacyOrders) {

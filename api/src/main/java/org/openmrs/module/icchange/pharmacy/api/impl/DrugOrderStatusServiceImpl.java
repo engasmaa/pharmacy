@@ -8,6 +8,7 @@ import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.icchange.pharmacy.DrugOrderStatus;
 import org.openmrs.module.icchange.pharmacy.api.DrugOrderStatusService;
 import org.openmrs.module.icchange.pharmacy.api.db.DrugOrderStatusDao;
+import org.springframework.transaction.annotation.Transactional;
 
 public class DrugOrderStatusServiceImpl extends BaseOpenmrsService implements DrugOrderStatusService {
 
@@ -23,6 +24,14 @@ public class DrugOrderStatusServiceImpl extends BaseOpenmrsService implements Dr
 	@Override
 	public void onShutdown() {
 		super.onShutdown();
+	}
+
+	public DrugOrderStatusDao getDao() {
+		return dao;
+	}
+
+	public void setDao(DrugOrderStatusDao dao) {
+		this.dao = dao;
 	}
 
 	@Override
@@ -62,13 +71,4 @@ public class DrugOrderStatusServiceImpl extends BaseOpenmrsService implements Dr
 			
 		return dao.saveDrugOrderStatus(drugOrderSratus);
 	}
-
-	public DrugOrderStatusDao getDao() {
-		return dao;
-	}
-
-	public void setDao(DrugOrderStatusDao dao) {
-		this.dao = dao;
-	}
-
 }

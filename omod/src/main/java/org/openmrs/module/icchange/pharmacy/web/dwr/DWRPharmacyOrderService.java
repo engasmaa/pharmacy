@@ -17,9 +17,9 @@ import org.openmrs.Visit;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.icchange.pharmacy.PharmacyOrder;
 import org.openmrs.module.icchange.pharmacy.api.PharmacyOrderService;
-import org.openmrs.module.icchange.pharmacy.web.model.DWRDrugOrder;
-import org.openmrs.module.icchange.pharmacy.web.model.DWRDrugOrderHeader;
-import org.openmrs.module.icchange.pharmacy.web.model.DWRPharmacyOrder;
+import org.openmrs.module.icchange.pharmacy.web.dwr.model.DWRDrugOrder;
+import org.openmrs.module.icchange.pharmacy.web.dwr.model.DWRDrugOrderHeader;
+import org.openmrs.module.icchange.pharmacy.web.dwr.model.DWRPharmacyOrder;
 import org.openmrs.util.OpenmrsUtil;
 
 public class DWRPharmacyOrderService {

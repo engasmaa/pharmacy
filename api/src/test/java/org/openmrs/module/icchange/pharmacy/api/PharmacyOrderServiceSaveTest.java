@@ -34,9 +34,8 @@ public class PharmacyOrderServiceSaveTest extends BaseModuleContextSensitiveTest
 		service = Context.getService(PharmacyOrderService.class);
 		testDrugOrder = Context.getOrderService().getOrder(200, DrugOrder.class);
 		testPatient = testDrugOrder.getPatient();
-		//User u = Context.getAuthenticatedUser();
-		//u.setUserProperty("defaultLocation", "3");
-		//Context.getUserService().setUserProperty(u, "defaultLocation", "3");
+		User u = Context.getAuthenticatedUser();
+		Context.getUserService().setUserProperty(u, "defaultLocation", "3");
 	}
 	
 	@Test
@@ -57,14 +56,14 @@ public class PharmacyOrderServiceSaveTest extends BaseModuleContextSensitiveTest
 	public void shouldSavePharmacyOrder () {
 		Integer pOrdersBefore = service.getPharmacyOrdersByDrugOrder(testDrugOrder).size();
 		PharmacyOrder p = service.savePharmacyOrder(PharmacyOrderUtil.createNewPharmacyOrder(testDrugOrder));
-		//User u = p.getCreator();
-		//String local = u.getUserProperty("defaultLocation");
-		Encounter e = p.getEncounter();
-		Visit v = e.getVisit();
-		Location l = e.getLocation();
-		EncounterType et = e.getEncounterType();
-		OrderType ot = p.getOrderType();
-		assertEquals(new Integer(pOrdersBefore + 1), new Integer(service.getPharmacyOrdersByDrugOrder(testDrugOrder).size()));
+		assertNotNull(p);
+		assertNotNull(p.getId());
+		assertNotNull(p.getEncounter());
+		assertNotNull(p.getEncounter().getLocation());
+		assertEquals("Pharmacy Order", p.getOrderType().getName());
+		assertEquals("Pharmacy Encounter", p.getEncounter().getEncounterType().getName());
+		assertNotNull(p.getEncounter().getLocation());
+		assertEquals(new Integer(3), p.getEncounter().getLocation().getId());
 	}
 	
 	@Test

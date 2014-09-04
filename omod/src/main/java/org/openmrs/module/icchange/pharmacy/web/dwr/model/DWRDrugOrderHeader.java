@@ -1,4 +1,4 @@
-package org.openmrs.module.icchange.pharmacy.web.model;
+package org.openmrs.module.icchange.pharmacy.web.dwr.model;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
@@ -8,6 +8,7 @@ import org.openmrs.DrugOrder;
 import org.openmrs.Encounter;
 import org.openmrs.Visit;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.icchange.pharmacy.DrugOrderStatus;
 
 public class DWRDrugOrderHeader {
 	
@@ -20,15 +21,16 @@ public class DWRDrugOrderHeader {
 
 	private Boolean active;
 	private String status;
+	private String dispenseStatus;
+	private String lastDispensed;
+	private String lastDispensedBy;
 	
 	private Double dose;
 	private String units;
 	private String drugName;
 	
-	private Integer drugSetId;
 	private String drugSetLabel;
-
-	private Integer dispenseStatus;
+	private String drugOrderSetIds;
 
 	private String encounterDate;
 	private Integer encounterId;
@@ -41,7 +43,6 @@ public class DWRDrugOrderHeader {
 	}
 	
 	public DWRDrugOrderHeader (DrugOrder order) {
-		
 		active = true;
 		status = "current";
 		id = order.getId();
@@ -54,7 +55,7 @@ public class DWRDrugOrderHeader {
 		
 		if (order.getOrderer() != null) {
 			ordererId = order.getOrderer().getUserId();
-			ordererName = order.getOrderer().getName();
+			ordererName = order.getOrderer().getPersonName().getFullName();
 		} else {
 			ordererName = order.getCreator().getPersonName().getFullName();
 			ordererId = order.getCreator().getId();
@@ -94,23 +95,42 @@ public class DWRDrugOrderHeader {
 			}
 		}
 	}
-	
+
+	public DWRDrugOrderHeader (DrugOrder order, DrugOrderStatus status) { 
+		this(order);
+		this.complementDrugOrder(status);
+	}
+
+		
+	public void complementDrugOrder(DrugOrderStatus status) {
+		if (status == null)
+			return;
+		
+		if (status.getStatus() != null) {
+			dispenseStatus = status.getStatus().toString();
+			SimpleDateFormat sdf = Context.getDateFormat();
+					
+			if (status.getDateChanged() == null) {
+				lastDispensedBy = status.getCreator().getPersonName().getFullName();
+				lastDispensed = sdf.format(status.getDateCreated());
+			} else {
+				lastDispensedBy = status.getChangedBy().getPersonName().getFullName();
+				lastDispensed = sdf.format(status.getDateChanged());
+			}
+		}
+	}
 	
 	public String toJasonRepresentation () {
 		
 		StringBuilder ret = new StringBuilder();		
 		ret.append("{");
 
-		for (Field f : this.getClass().getDeclaredFields()) {
-			ret.append(f.getName());
-			
+		for (Field f : this.getClass().getDeclaredFields()) {			
 			Object val = null;
-			
 			try { val = f.get(this); } catch (Exception e) { }
 		
-			if (val == null) {
-				ret.append(":null,");
-			} else {
+			if (val != null) {
+				ret.append(f.getName());
 				ret.append(":\"");		
 				ret.append(val.toString());
 				ret.append("\",");
@@ -121,7 +141,6 @@ public class DWRDrugOrderHeader {
 			ret.setCharAt(ret.length() - 1, ' ');
 					
 		ret.append("}");
-		
 		return ret.toString();
 	}
 		
@@ -154,7 +173,6 @@ public class DWRDrugOrderHeader {
 	public void setOrdererName(String ordererName) {
 		this.ordererName = ordererName;
 	}
-
 	public Boolean getActive() {
 		return active;
 	}
@@ -167,22 +185,16 @@ public class DWRDrugOrderHeader {
 	public void setDrugName(String drugName) {
 		this.drugName = drugName;
 	}
-	public Integer getDrugSetId() {
-		return drugSetId;
-	}
-	public void setDrugSetId(Integer drugSetId) {
-		this.drugSetId = drugSetId;
-	}
 	public String getDrugSetLabel() {
 		return drugSetLabel;
 	}
 	public void setDrugSetLabel(String drugSetLabel) {
 		this.drugSetLabel = drugSetLabel;
 	}
-	public Integer getDispenseStatus() {
+	public String getDispenseStatus() {
 		return dispenseStatus;
 	}
-	public void setDispenseStatus(Integer dispenseStatus) {
+	public void setDispenseStatus(String dispenseStatus) {
 		this.dispenseStatus = dispenseStatus;
 	}
 	public String getEncounterDate() {
@@ -240,5 +252,13 @@ public class DWRDrugOrderHeader {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getDrugOrderSetIds() {
+		return drugOrderSetIds;
+	}
+
+	public void setDrugOrderSetIds(String drugOrderSetIds) {
+		this.drugOrderSetIds = drugOrderSetIds;
 	}
 }

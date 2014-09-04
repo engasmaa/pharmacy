@@ -1,4 +1,4 @@
-package org.openmrs.module.icchange.pharmacy.web.model;
+package org.openmrs.module.icchange.pharmacy.web.dwr.model;
 
 import java.util.List;
 

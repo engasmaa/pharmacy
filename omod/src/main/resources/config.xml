@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <module configVersion="1.2">
-
 	<!-- Module Properties -->
 	<id>${project.parent.artifactId}</id>
 	<name>${project.parent.name}</name>
@@ -15,10 +14,8 @@
 	<require_version>${openMRSVersion}</require_version>
 	<!-- / Module Properties -->
 
-	
 	<!-- Module Activator -->
 	<activator>${project.parent.groupId}.${project.parent.artifactId}.PharmacyActivator</activator>
-	
 	
 	<!-- Adds link to admin page -->
 	<extension>
@@ -87,24 +84,27 @@
 	</messages>
 	<!-- /Internationalization -->
 
-	<privilege>
-		<name>View Prescriptions</name>
-		<description>Able to view prescriptions.</description>
-	</privilege>
 
 	<privilege>
 		<name>Add Prescriptions</name>
 		<description>Able to add prescriptions.</description>
 	</privilege>
-
 	<privilege>
 		<name>Edit Prescriptions</name>
 		<description>Able to edit prescriptions.</description>
 	</privilege>
-
 	<privilege>
 		<name>Delete Prescriptions</name>
 		<description>Able to delete prescriptions.</description>
 	</privilege>
-</module>
+	
+	<globalProperty>
+		<property>icchange.pharmacy.drugs.units</property>
+		<defaultValue>kg,grams,mg,liters,tablets,capsules,bottles,other</defaultValue>
+		<description>
+			Default units used in case there is no compatible inventory module installed. 
+			Should be specified as json object as {conceptNames=[], conceptsIds=[], literalNames=[]}.
+		</description>
+	</globalProperty>
 
+</module>
