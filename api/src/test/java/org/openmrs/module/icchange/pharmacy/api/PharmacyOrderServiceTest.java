@@ -54,7 +54,7 @@ public class  PharmacyOrderServiceTest extends BaseModuleContextSensitiveTest {
 	public void shouldEnsurePharmacyOrderTypeExist () throws Exception {
 		logger.debug("Testing pharmacy order type");
 		
-		OrderType type = service.getPharmacyOrderType();
+		OrderType type = service.getPharmacyConfig().pharmacyOrderType;
 		assertNotNull(type);
 		
 		logger.debug("id= " + type.getId() + " " + type.getName());

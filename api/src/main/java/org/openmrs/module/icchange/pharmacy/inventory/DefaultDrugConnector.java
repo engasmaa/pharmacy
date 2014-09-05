@@ -19,10 +19,10 @@ import org.hibernate.criterion.Restrictions;
 import org.openmrs.Concept;
 import org.openmrs.ConceptWord;
 import org.openmrs.Drug;
+import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.context.ServiceContext;
-import org.openmrs.module.icchange.pharmacy.util.PharmacyConstants;
-import org.springframework.transaction.annotation.Transactional;
+import org.openmrs.module.icchange.pharmacy.config.PharmacyConstants;
 
 public class DefaultDrugConnector implements InventoryConnector {
 	
@@ -35,13 +35,17 @@ public class DefaultDrugConnector implements InventoryConnector {
 	public static InventoryConnector getInstance () {
 		if (instance == null) {
 			instance = new DefaultDrugConnector();		
-			units = loadUnitsConfigurationAsJson();
+			loadUnitsConfigurationAsJson();
 		}
 		return instance;
 	}
 	
 	private DefaultDrugConnector() {}
 
+	public void reloadConnector() {
+		loadUnitsConfigurationAsJson();
+	}
+	
 	@Override
 	public Map<String, Integer> listPharmacyItemsNamesIds() {
 		Map<String, Integer> ret = new HashMap<String, Integer>();
@@ -97,38 +101,7 @@ public class DefaultDrugConnector implements InventoryConnector {
 
 	@Override
 	public List<String> listDispenseUnitsToItem(Integer itemId) {
-		String unitsStringList = null;
-		
-		try {
-			unitsStringList = Context.getAdministrationService().getGlobalProperty(PharmacyConstants.unitsPropertyName);
-		} catch (Exception e) { }
-		
-		if (unitsStringList == null)
-			unitsStringList = PharmacyConstants.unitsStringList;
-
-		List<String> ret = new ArrayList<String>();
-		for (String unit: unitsStringList.split(",")) {
-			String uname = null;	
-			Concept c = null;
-			
-			try {
-				c = Context.getConceptService().getConcept(Integer.parseInt(unit));
-			} catch (Exception e) {}
-			
-			if (c == null)
-				try { 
-					c = Context.getConceptService().getConcept(uname);
-				} catch (Exception e) {}
-		
-			if (c != null)
-				uname = c.getName().getName();
-			
-			if (uname == null)
-				uname = unit;
-			
-			ret.add(uname);
-		}
-		return ret;
+		return units;
 	}
 
 	@Override
@@ -192,6 +165,7 @@ public class DefaultDrugConnector implements InventoryConnector {
 			for (String s: PharmacyConstants.unitsStringList.split(","))
 				ret.add(s);
 		}
+		units =  ret;
 		return ret;
 	}
 	
@@ -200,5 +174,15 @@ public class DefaultDrugConnector implements InventoryConnector {
 	}
 	public void setSessionFactory(SessionFactory session) {
 		sessionFactory = session;
+	}
+
+	@Override
+	public Boolean lockInventory(User u) {
+		return true;
+	}
+
+	@Override
+	public Boolean unLockInventory(User u) {
+		return true;
 	}
 }

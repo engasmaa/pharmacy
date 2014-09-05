@@ -14,28 +14,30 @@
 package org.openmrs.module.icchange.pharmacy.api.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.DrugOrder;
 import org.openmrs.Encounter;
-import org.openmrs.EncounterType;
-import org.openmrs.Order;
-import org.openmrs.OrderType;
+import org.openmrs.GlobalProperty;
 import org.openmrs.Patient;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.openmrs.module.icchange.pharmacy.PharmacyItem;
 import org.openmrs.module.icchange.pharmacy.PharmacyOrder;
+import org.openmrs.module.icchange.pharmacy.api.PharmacyItemService;
 import org.openmrs.module.icchange.pharmacy.api.PharmacyOrderService;
 import org.openmrs.module.icchange.pharmacy.api.db.PharmacyOrderDAO;
+import org.openmrs.module.icchange.pharmacy.config.PharmacyConfiguration;
+import org.openmrs.module.icchange.pharmacy.config.PharmacyConfigurationLoader;
+import org.openmrs.module.icchange.pharmacy.config.PharmacyConstants;
 import org.openmrs.module.icchange.pharmacy.util.PharmacyOrderUtil;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * It is a default implementation of {@link PharmacyOrderService}.
@@ -44,9 +46,8 @@ public class PharmacyOrderServiceImpl extends BaseOpenmrsService implements Phar
 	
 	protected final Log log = LogFactory.getLog(this.getClass());
 	private PharmacyOrderDAO dao;
-	private static OrderType pharmacyOrderType = null;
-	private static EncounterType pharmacyEncounterType = null;
-
+	private static PharmacyConfiguration config = null;
+	
 	/**
      * @param dao the dao to set
      */
@@ -61,44 +62,41 @@ public class PharmacyOrderServiceImpl extends BaseOpenmrsService implements Phar
 	    return dao;
     }
 
-	@Override
-	public OrderType getPharmacyOrderType() {
-		if (pharmacyOrderType == null)
-			for (OrderType t: Context.getOrderService().getAllOrderTypes(false)) {
-				if (t.getName().equalsIgnoreCase("Pharmacy Order"))
-					pharmacyOrderType = t;
-			}
+    @Override
+	public final PharmacyConfiguration getPharmacyConfig () {
+		if (config == null)
+			reloadPharmacyConfig();
 		
-		if (pharmacyOrderType == null) {
-			OrderType t = new OrderType();
-			t.setCreator(Context.getUserService().getUser(1));
-			t.setDateCreated(new Date());
-			t.setName("Pharmacy Order");
-			t.setDescription("Pharmacy Order");
-			pharmacyOrderType = Context.getOrderService().saveOrderType(t);
-		}
-			
-		return pharmacyOrderType;
+		return config;
+	} 
+
+	public void reloadPharmacyConfig () {
+		config = PharmacyConfigurationLoader.getConfiguration();
+	}
+	
+	@Override
+	public void onStartup() {
+		super.onStartup();
+		reloadPharmacyConfig();
+	};
+	
+	@Override
+	public boolean supportsPropertyName(String propertyName) {
+		for (String pname : PharmacyConstants.pharmacyClobalPropertiesList)
+			if (propertyName.equalsIgnoreCase(pname))
+				return true;
+		
+		return false;
 	}
 
 	@Override
-	public EncounterType getPharmacyOrderEncounterType() {
-		if (pharmacyEncounterType == null)
-			for (EncounterType t: Context.getEncounterService().getAllEncounterTypes(false)) {
-				if (t.getName().equalsIgnoreCase("Pharmacy Encounter"))
-					pharmacyEncounterType = t;
-			}
-		
-		if (pharmacyEncounterType == null) {
-			EncounterType t = new EncounterType();
-			t.setCreator(Context.getUserService().getUser(1));
-			t.setDateCreated(new Date());
-			t.setName("Pharmacy Encounter");
-			t.setDescription("Pharmacy Encounter");
-			pharmacyEncounterType = Context.getEncounterService().saveEncounterType(t);
-		}
+	public void globalPropertyChanged(GlobalProperty newValue) {
+		reloadPharmacyConfig();		
+	}
 
-		return pharmacyEncounterType;
+	@Override
+	public void globalPropertyDeleted(String propertyName) {
+		reloadPharmacyConfig();		
 	}
 
 	@Override
@@ -238,7 +236,7 @@ public class PharmacyOrderServiceImpl extends BaseOpenmrsService implements Phar
 	}
 
 	@Override
-	public List<PharmacyOrder> saveAllPharmacyOrdersOnSameEncounter(List<PharmacyOrder> pharmacyOrders) {
+	public List<PharmacyOrder> saveAllPharmacyOrdersOnSameEncounter(List<PharmacyOrder> pharmacyOrders, Encounter e) {
 	
 		if (pharmacyOrders == null)
 			throw new APIException("Pharmacy Order cannot be null.");
@@ -248,12 +246,12 @@ public class PharmacyOrderServiceImpl extends BaseOpenmrsService implements Phar
 
 		if (pharmacyOrders.get(0) == null)
 			throw new APIException("Pharmacy Order cannot be null.");
-		
-		Encounter e = pharmacyOrders.get(0).getEncounter();
-		
+
 		if (e == null)
 			e = PharmacyOrderUtil.createValidPharmacyEncounter(pharmacyOrders.get(0).getPatient());
-		
+		else if (!e.getEncounterType().getName().equalsIgnoreCase(PharmacyConstants.PHARMACYENCOUNTERNAME))
+			throw new APIException("The specified encounter must be of type Pharmacy Encounter.");
+			
 		for (PharmacyOrder p : pharmacyOrders) {
 			if (p.getDrugOrder() == null)
 				throw new APIException("Pharmacy Order must be associated to a drug order.");
@@ -265,4 +263,41 @@ public class PharmacyOrderServiceImpl extends BaseOpenmrsService implements Phar
 		Context.getEncounterService().saveEncounter(e);
 		return dao.saveAll(pharmacyOrders);		
 	}
+
+	@Override
+	public List<Boolean> dispenseItems(DrugOrder drugOrder, List<PharmacyItem> items) throws APIException {
+		
+		if (drugOrder == null)
+			throw new APIException("A valid Drug order must be specified.");
+		
+		if (items == null)
+			throw new APIException("Cannot dispense an empty llist of items");
+		
+		List<Boolean> ret = new ArrayList<Boolean>(items.size());
+		Context.getService(PharmacyItemService.class).lockPharmacy(Context.getAuthenticatedUser());
+		Set<PharmacyItem> dispensedItems = new HashSet<PharmacyItem>();
+		
+		for (PharmacyItem item: items) {
+			Boolean status = false;
+	
+			try {
+				status = Context.getService(PharmacyItemService.class).dispenseItem(item.getItemId(), item.getQuantity(), item.getUnit());
+			} catch (Exception e) {
+				log.warn("An error occuried while trying to save item "+
+						item.getItemId() + " " + item.getQuantity() + " " + item.getUnit(), e);
+				status = false;
+			}
+			
+			if (status)
+				dispensedItems.add(item);
+			
+			ret.add(status);
+		}
+		Context.getService(PharmacyItemService.class).unLockPharmacy(Context.getAuthenticatedUser());
+		
+		PharmacyOrder porder = PharmacyOrderUtil.createNewPharmacyOrder(drugOrder, dispensedItems);
+		savePharmacyOrder(porder);
+		return ret;
+	}
+
 }

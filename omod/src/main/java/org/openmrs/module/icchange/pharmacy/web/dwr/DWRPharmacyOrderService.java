@@ -25,7 +25,7 @@ import org.openmrs.util.OpenmrsUtil;
 public class DWRPharmacyOrderService {
 
 	private PharmacyOrderService service = Context.getService(PharmacyOrderService.class);
-	
+
 	public DWRPharmacyOrder savePharmacyOrder (DWRPharmacyOrder order) {
 		
 		if (order == null)
@@ -61,17 +61,6 @@ public class DWRPharmacyOrderService {
 		
 		porder.setPatient(p);
 		
-		//porder.
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		String visitsEnabeled = Context.getAdministrationService().getGlobalProperty("visits.enabled");
 		
 		if (visitsEnabeled != null && visitsEnabeled.toLowerCase(null).equals("true")) {
@@ -98,185 +87,9 @@ public class DWRPharmacyOrderService {
 		}
 		
 		
-		
-		
-		
-//		porder.setEncounter(encounter);
-		
 		return null;		
 	}
-	
-	
-	
-	
-	public List<DWRDrugOrderHeader> getDrugOrdersHeaders (Integer patientId) {
 
-		List<DWRDrugOrderHeader> ret = new ArrayList<DWRDrugOrderHeader>();
-		
-		if (patientId == null)
-			return ret;
-		
-		List<DrugOrder> orders = Context.getOrderService().getDrugOrdersByPatient(Context.getPatientService().getPatient(patientId));
-		
-		if (orders == null)
-			return ret;
-		
-		String drugSetsString = Context.getAdministrationService().getGlobalProperty("dashboard.regimen.displayDrugSetIds");
-		
-		if (drugSetsString == null || drugSetsString.isEmpty())
-			drugSetsString = "ANTIRETROVIRAL DRUGS,TUBERCULOSIS TREATMENT DRUGS";
-		
-		Map<String, List<Concept>> nameConceptsMap = new HashMap<String, List<Concept>>();
-		
-		for (String s : drugSetsString.split(",")) { 
-
-			Concept c = OpenmrsUtil.getConceptByIdOrName(s);
-			
-			if (c == null || !c.isSet()) {
-				nameConceptsMap.put(s, null);
-			}else {
-				nameConceptsMap.put(s, Context.getConceptService().getConceptsByConceptSet(c));
-			}
-
-		}
-
-		for (DrugOrder order : orders) {
-			DWRDrugOrderHeader dh = new DWRDrugOrderHeader(order);
-			
-			dh.setDrugSetLabel("*");
-			
-			for (String s: nameConceptsMap.keySet()) {
-				
-				List<Concept> cs = nameConceptsMap.get(s);
-				
-				if (cs == null)
-					continue;
-				
-				for (Concept c: cs) {
-					if (c.equals(order.getDrug().getConcept())) {
-						dh.setDrugSetLabel(dh.getDrugSetLabel() + "," + s);
-						break;
-					}
-				}
-			}
-			ret.add(dh);
-		}
-
-		
-		for (DrugOrder o : orders) {
-
-			String s = "*";
-			
-			List<ConceptSet> cs = Context.getConceptService().getSetsContainingConcept(o.getDrug().getConcept());
-			
-			if (cs == null)
-				continue;
-			
-			for (ConceptSet c : cs) {
-				s += c.getConcept().getName().getName();
-			}
-		
-		}
-
-		
-		
-		/*
-			getSetsContainingConcept(concept)
-		 * 
-		 * */
-		
-		/*
-		Map<String, Concept> nameConceptMap = new HashMap<String, Concept>();
-		Map<String, Collection<ConceptSet>> nameConceptSetMap = new HashMap<String, Collection<ConceptSet>>();
-				
-		for (String s : drugSetsString.split(",")) {
-			
-			Concept c = OpenmrsUtil.getConceptByIdOrName(s);
-			
-			if (c == null || !c.isSet()) {
-				nameConceptMap.put(s, null);
-				nameConceptSetMap.put(s, null);
-			}else {
-				nameConceptMap.put(s, c);
-				nameConceptSetMap.put(s, c.getConceptSets());
-			}
-			
-		}
-		
-		
-		for (DrugOrder order : orders) {
-			DWRDrugOrderHeader dh = new DWRDrugOrderHeader(order);
-			
-			dh.setDrugSetLabel("*");
-			
-			for (String s: nameConceptMap.keySet()) {
-				
-				Concept c = nameConceptMap.get(s);
-				
-				if (c == null)
-					break;
-				
-				for (ConceptSet cs: nameConceptSetMap.get(s)) {
-					if (cs.getConcept().equals(order.getDrug().getConcept())) {
-						dh.setDrugSetLabel(dh.getDrugSetLabel() + "," + s);
-						break;
-					}
-				}
-			}
-			ret.add(dh);
-		}
-
-		*/
-		
-		
-		/*
-		
-		Map<String, List<DrugOrder>> durgOrdersSetMap = OrderUtil.getDrugSetsByDrugSetIdList(orders, drugSetsString, ",");
-		
-		if (durgOrdersSetMap == null)
-			return null;
-		
-		List<DWRDrugOrderHeader> ret = new ArrayList<DWRDrugOrderHeader>();
-		
-		for (String setName: durgOrdersSetMap.keySet()) {
-			for (DrugOrder drugOrder: durgOrdersSetMap.get(setName)) {
-			
-				DWRDrugOrderHeader dh = new DWRDrugOrderHeader(drugOrder);
-				dh.setDrugSetLabel(setName);
-				ret.add(dh);
-			}
-		}
-		*/
-		return ret;
-	}
-	
-	
-	private DWRDrugOrder getDrugOrder (Integer id) {
-		return null;//Context.getS
-	}
-	
-	public DWRDrugOrder getDrugOrderById(Integer id) {
-
-		DrugOrder d = Context.getOrderService().getDrugOrder(id);
-		
-		if (d == null)
-			return null;
-		
-		DWRDrugOrder dw = new DWRDrugOrder(d);
-		
-		List<PharmacyOrder> pList = Context.getService(PharmacyOrderService.class).getPharmacyOrdersByDrugOrder(d);
-		
-		if (pList == null)
-			return dw;
-		
-		List<DWRPharmacyOrder> dwplist = new ArrayList<DWRPharmacyOrder>();
-		for (PharmacyOrder p: pList)
-			dwplist.add(new DWRPharmacyOrder(p));
-		
-		dw.setDispenses(dwplist);
-		
-		return dw;
-	}
 	
 	public List<DWRDrugOrder> getAllPharmacyOrdersByPatient(Integer patientId) {
 		

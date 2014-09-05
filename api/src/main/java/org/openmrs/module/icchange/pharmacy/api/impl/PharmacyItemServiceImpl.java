@@ -5,13 +5,13 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.User;
 import org.openmrs.api.APIAuthenticationException;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.ServiceContext;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.icchange.pharmacy.api.PharmacyItemService;
 import org.openmrs.module.icchange.pharmacy.inventory.InventoryConnector;
-import org.springframework.transaction.annotation.Transactional;
 
 public class PharmacyItemServiceImpl extends BaseOpenmrsService implements PharmacyItemService {
 
@@ -26,13 +26,14 @@ public class PharmacyItemServiceImpl extends BaseOpenmrsService implements Pharm
 	
 	@Override
 	public void onShutdown() {
-		super.onShutdown();
+		super.onShutdown();	
 	};
 	
 	@Override
 	public void onStartup() {
 		super.onStartup();
 		connector = defaultDrugConnector;
+		connector.reloadConnector();
 	};
 	
 	@Override
@@ -63,5 +64,15 @@ public class PharmacyItemServiceImpl extends BaseOpenmrsService implements Pharm
 
 	public void setDefaultDrugConnector(InventoryConnector defaultDrugConnector) {
 		this.defaultDrugConnector = defaultDrugConnector;
+	}
+
+	@Override
+	public Boolean lockPharmacy(User u) {
+		return connector.lockInventory(u);
+	}
+
+	@Override
+	public Boolean unLockPharmacy(User u) {
+		return connector.unLockInventory(u);
 	}
 }

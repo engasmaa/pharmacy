@@ -16,7 +16,7 @@ import org.junit.Test;
 import org.openmrs.Drug;
 import org.openmrs.GlobalProperty;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.icchange.pharmacy.util.PharmacyConstants;
+import org.openmrs.module.icchange.pharmacy.config.PharmacyConstants;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 
 public class DefaultDrugConnectorTest extends BaseModuleContextSensitiveTest {

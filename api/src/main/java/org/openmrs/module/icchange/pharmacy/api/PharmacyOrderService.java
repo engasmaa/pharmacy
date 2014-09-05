@@ -13,24 +13,24 @@
  */
 package org.openmrs.module.icchange.pharmacy.api;
 
-import org.openmrs.DrugOrder;
-import org.openmrs.Encounter;
-import org.openmrs.EncounterType;
-import org.openmrs.OrderType;
-import org.openmrs.Patient;
-import org.openmrs.module.icchange.pharmacy.PharmacyOrder;
-import org.openmrs.api.APIException;
-import org.openmrs.api.OpenmrsService;
-import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 
-@Transactional
-public interface PharmacyOrderService extends OpenmrsService {
-     
-	public OrderType getPharmacyOrderType();
+import org.openmrs.DrugOrder;
+import org.openmrs.Encounter;
+import org.openmrs.Patient;
+import org.openmrs.api.APIException;
+import org.openmrs.api.GlobalPropertyListener;
+import org.openmrs.api.OpenmrsService;
+import org.openmrs.module.icchange.pharmacy.PharmacyItem;
+import org.openmrs.module.icchange.pharmacy.PharmacyOrder;
+import org.openmrs.module.icchange.pharmacy.config.PharmacyConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
-	public EncounterType getPharmacyOrderEncounterType();
+@Transactional
+public interface PharmacyOrderService extends OpenmrsService, GlobalPropertyListener {
+     
+	public PharmacyConfiguration getPharmacyConfig();
 	
 	public PharmacyOrder getPharmacyOrder(Integer pharmacyOrderId);
 
@@ -48,8 +48,9 @@ public interface PharmacyOrderService extends OpenmrsService {
 	
 	public List<PharmacyOrder> saveAllPharmacyOrders(List<PharmacyOrder> phamacyOrders);
 	
-	public List<PharmacyOrder> saveAllPharmacyOrdersOnSameEncounter(List<PharmacyOrder> pharmacyOrders);
+	public List<PharmacyOrder> saveAllPharmacyOrdersOnSameEncounter(List<PharmacyOrder> pharmacyOrders, Encounter e);
 		
 	public PharmacyOrder addPharmacyOrderToDrugOrder(DrugOrder drugOrder, PharmacyOrder pharmacyOrder) throws APIException;
 	
+	public List<Boolean> dispenseItems (DrugOrder drugOrder, List<PharmacyItem> items) throws APIException; 
 }

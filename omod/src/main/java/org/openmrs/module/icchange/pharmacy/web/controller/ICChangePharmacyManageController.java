@@ -36,6 +36,8 @@ import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.icchange.pharmacy.PharmacyOrder;
 import org.openmrs.module.icchange.pharmacy.api.PharmacyOrderService;
+import org.openmrs.module.icchange.pharmacy.web.dwr.DWRDrugOrderHeaderService;
+import org.openmrs.module.icchange.pharmacy.web.dwr.DWRDrugOrderService;
 import org.openmrs.module.icchange.pharmacy.web.dwr.DWRPharmacyOrderService;
 import org.openmrs.module.icchange.pharmacy.web.dwr.model.DWRDrugOrderHeader;
 import org.openmrs.module.web.extension.ExtensionUtil;
@@ -50,6 +52,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 /**
  * The main controller.
  */
+@SuppressWarnings("unused")
 @Controller
 public class  ICChangePharmacyManageController {
 	
@@ -163,7 +166,7 @@ public class  ICChangePharmacyManageController {
 		
 		List<String> sDrugsList = new ArrayList<String>();
 		
-		for (DWRDrugOrderHeader h: (new DWRPharmacyOrderService()).getDrugOrdersHeaders(patient.getId())) {
+		for (DWRDrugOrderHeader h: (new DWRDrugOrderHeaderService()).getDrugOrderHeadersByPatient(patient.getId())) {
 			sDrugsList.add(h.toJasonRepresentation());
 		}
 		

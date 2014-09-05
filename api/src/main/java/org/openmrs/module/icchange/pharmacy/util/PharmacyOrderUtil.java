@@ -14,6 +14,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.icchange.pharmacy.PharmacyItem;
 import org.openmrs.module.icchange.pharmacy.PharmacyOrder;
 import org.openmrs.module.icchange.pharmacy.api.PharmacyOrderService;
+import org.openmrs.module.icchange.pharmacy.config.PharmacyConfiguration;
 
 public class PharmacyOrderUtil {
 	
@@ -72,7 +73,9 @@ public class PharmacyOrderUtil {
 		if (e == null || e.getEncounterType() == null)
 			return createValidPharmacyEncounter(p);
 
-		if (e.getEncounterType().getId() != Context.getService(PharmacyOrderService.class).getPharmacyOrderEncounterType().getId() || e.getLocation() == null)
+		PharmacyConfiguration config = Context.getService(PharmacyOrderService.class).getPharmacyConfig();
+		
+		if (e.getEncounterType().getId() != config.pharmacyEncounterType.getId() || e.getLocation() == null)
 			return createValidPharmacyEncounter(p);
 		
 		return null;
@@ -81,7 +84,8 @@ public class PharmacyOrderUtil {
 	public static Encounter createValidPharmacyEncounter (Patient p) {
 		if (p == null)
 			return null;
-		
+
+		PharmacyConfiguration config = Context.getService(PharmacyOrderService.class).getPharmacyConfig();
 		Encounter e = new Encounter();
 		
 		User u = Context.getAuthenticatedUser();
@@ -92,7 +96,7 @@ public class PharmacyOrderUtil {
 		e.setCreator(u);
 		e.setDateCreated(now);
 		e.setEncounterDatetime(now);
-		e.setEncounterType(Context.getService(PharmacyOrderService.class).getPharmacyOrderEncounterType());
+		e.setEncounterType(config.pharmacyEncounterType);
 
 		try {
 			l = Context.getLocationService().getLocation(Integer.parseInt(u.getUserProperty("defaultLocation")));
@@ -114,6 +118,7 @@ public class PharmacyOrderUtil {
 		PharmacyOrder porder = null;
 		User u = Context.getAuthenticatedUser();
 		Date now;
+		PharmacyConfiguration config = Context.getService(PharmacyOrderService.class).getPharmacyConfig();
 		
 		if (dorder == null || dorder.getPatient() == null)
 			return porder;
@@ -130,7 +135,7 @@ public class PharmacyOrderUtil {
 		porder.setItems(items);
 		porder.setAutoExpireDate(null);
 		porder.setConcept(dorder.getDrug().getConcept());
-		porder.setOrderType(Context.getService(PharmacyOrderService.class).getPharmacyOrderType());
+		porder.setOrderType(config.pharmacyOrderType);
 		porder.setEncounter(createValidPharmacyEncounter(e, dorder.getPatient()));
 		
 		return porder;

@@ -40,14 +40,14 @@ public class PharmacyOrderServiceSaveTest extends BaseModuleContextSensitiveTest
 	
 	@Test
 	public void shouldReturnPhamacyOrderTypeAndCreateIfNone () {
-		OrderType t = service.getPharmacyOrderType();
+		OrderType t = service.getPharmacyConfig().pharmacyOrderType;
 		assertNotNull(t);
 		assertEquals("Pharmacy Order", t.getName());
 	}
 	
 	@Test
 	public void shouldReturnPhamacyOrderEncounterTypeAndCreateIfNone () {
-		EncounterType t = service.getPharmacyOrderEncounterType();
+		EncounterType t = service.getPharmacyConfig().pharmacyEncounterType;
 		assertNotNull(t);
 		assertEquals("Pharmacy Encounter", t.getName());
 	}

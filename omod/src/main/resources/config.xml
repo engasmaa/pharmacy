@@ -97,13 +97,23 @@
 		<name>Delete Prescriptions</name>
 		<description>Able to delete prescriptions.</description>
 	</privilege>
-	
+
 	<globalProperty>
 		<property>icchange.pharmacy.drugs.units</property>
 		<defaultValue>kg,grams,mg,liters,tablets,capsules,bottles,other</defaultValue>
 		<description>
 			Default units used in case there is no compatible inventory module installed. 
 			Should be specified as json object as {conceptNames=[], conceptsIds=[], literalNames=[]}.
+		</description>
+	</globalProperty>
+	<globalProperty>
+		<property>icchange.pharmacy.config</property>
+		<defaultValue>
+					{ 	"defaultOrdersAgeSearch":	6, 
+						"inventoryConnector":		"org.openmrs.module.icchange.pharmacy.inventory.DefaultDrugConnector"};
+		</defaultValue>
+		<description>
+			Pharmacy module configuration. Should be specified as a json {"property":value}
 		</description>
 	</globalProperty>
 

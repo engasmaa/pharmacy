@@ -1,6 +1,6 @@
 package org.openmrs.module.icchange.pharmacy.extension.html;
 
-import org.openmrs.module.icchange.pharmacy.config.ConfigCosntants;
+import org.openmrs.module.icchange.pharmacy.config.PharmacyConstants;
 import org.openmrs.module.web.extension.LinkExt;
 
 public class PharmacyMenu extends LinkExt {
@@ -24,7 +24,7 @@ public class PharmacyMenu extends LinkExt {
 
 	@Override
 	public String getRequiredPrivilege() {
-		return ConfigCosntants.ADDPRIVILEGE;
+		return PharmacyConstants.EDITPRIVILEGE;
 	}
 
 }

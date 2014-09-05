@@ -45,7 +45,6 @@ public class PharmacyItem extends BaseOpenmrsData {
 		if (obj == null)
 			return false;
 
-
 		if (!(obj instanceof PharmacyItem))
 			return false;
 		
