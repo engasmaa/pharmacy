@@ -15,15 +15,25 @@
 				WHERE NOT EXISTS ( SELECT name FROM openmrs.order_type WHERE name = 'Pharmacy Order' ) LIMIT 1;						
 		</sql>
 
+		<createTable tableName="pharmacy_drugorderstatus">
+			<column name="order_id" type="int">
+				<constraints nullable="false" references="openmrs.drug_order(order_id)" foreignKeyName="pharmacy_drugorderstatus_drugorder_fk" />
+			</column>
+			<column name="status" type="int"></column>
+			<column name="uuid" type="char(38)"><constraints nullable="false" unique="true" /></column>	
+		</createTable>
+		
+		
+
 		<createTable tableName="pharmacy_pharmacyorder">            
-			<column defaultValueNumeric="0" name="order_id" type="int">
+			<column name="order_id" type="int" defaultValueNumeric="0">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
 			<column name="drugorder_id" type="int"><constraints nullable="false" /></column>
 		</createTable>
 		
 		<addForeignKeyConstraint 
-			constraintName="extends_order" 
+			constraintName="pharmacyorder_extends_order_fk" 
 			baseTableName="pharmacy_pharmacyorder" baseColumnNames="order_id"
 			referencedTableName="orders" referencedColumnNames="order_id"
 			deferrable="false" initiallyDeferred="false" />
@@ -71,9 +81,15 @@
 			baseTableName="pharmacy_pharmacyitem" baseColumnNames="changed_by"
 			referencedTableName="users" referencedColumnNames="user_id"
 			deferrable="false" initiallyDeferred="false" />
+			
+		<addForeignKeyConstraint 
+			constraintName="pharmacyitem_voided_by_fk"
+			baseTableName="pharmacy_pharmacyitem" baseColumnNames="voided_by"
+			referencedTableName="users" referencedColumnNames="user_id"
+			deferrable="false" initiallyDeferred="false" />
 		
 		<addForeignKeyConstraint 
-		constraintName="pharmacyitem_retired_by_fk"
+			constraintName="pharmacyitem_retired_by_fk"
 			baseTableName="pharmacy_pharmacyitem" baseColumnNames="retired_by"
 			referencedTableName="users" referencedColumnNames="user_id"
 			deferrable="false" initiallyDeferred="false" />

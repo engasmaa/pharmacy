@@ -89,7 +89,7 @@
 					<property name="target">
 						<bean class="${project.parent.groupId}.${project.parent.artifactId}.api.impl.PharmacyItemServiceImpl">
 							<property name="defaultDrugConnector">
-								<bean id="defaultDrugConnector" class="${project.parent.groupId}.${project.parent.artifactId}.inventory.DefaultDrugConnector" factory-method="getInstance">
+								<bean id="defaultDrugConnector" class="${project.parent.groupId}.${project.parent.artifactId}.inventory.DefaultDrugConnector">
 									<property name="sessionFactory">
 										<ref bean="sessionFactory" />
 									</property>

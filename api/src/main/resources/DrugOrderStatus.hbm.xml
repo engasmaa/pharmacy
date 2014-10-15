@@ -5,10 +5,10 @@
 
 <hibernate-mapping package="org.openmrs.module.icchange.pharmacy">
 	
-	<class name="DrugOrderStatus" table="pharmacy_druorderstatus" >
+	<class name="DrugOrderStatus" table="pharmacy_drugorderstatus" >
 
 		<id name="id" type="int">
-			<column name="id" />
+			<column name="order_id" />
 			<generator class="foreign">
 				<param name="property">drugOrder</param>
 			</generator>
@@ -26,7 +26,7 @@
 		<discriminator column="id" insert="false" />
 		<id name="id" type="int" column="id" unsaved-value="0">
 			<generator class="native">
-				<param name="sequence">pharmacy_druorderstatus_id_seq</param>
+				<param name="sequence">pharmacy_drugOrderstatus_id_seq</param>
 			</generator>
 		</id>
 
