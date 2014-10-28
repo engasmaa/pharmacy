@@ -5,6 +5,12 @@
 <openmrs:htmlInclude file="/dwr/util.js" />
 <openmrs:htmlInclude file="/scripts/drugOrder.js" />
 
+
+<openmrs:htmlInclude file="/dwr/interface/DWRPharmacyOrderService.js" />
+<openmrs:htmlInclude file="/moduleResources/icchange/pharmacy/js/view/DrugOrderListView.js" />
+<openmrs:htmlInclude file="/moduleResources/icchange/pharmacy/js/view/DrugOrderView.js" />
+<openmrs:htmlInclude file="/moduleResources/icchange/pharmacy/js/PharmacyOrder.js" />
+
 <% java.sql.Timestamp now = new java.sql.Timestamp(System.currentTimeMillis()); %>
 
 <style>
@@ -29,7 +35,7 @@
 <div id="regimenPortlet">
 
 	<div id="regimenPortletCurrent">
-		<div class="boxHeader${model.patientVariation}" ><openmrs:message code="DrugOrder.regimens.current" /></div>
+		<div class="boxHeader${model.patientVariation}" style="background-color: purple;" ><openmrs:message code="DrugOrder.regimens.current" /></div>
 		<div class="box${model.patientVariation}">
 			
 
@@ -186,9 +192,10 @@
 	<table class="regimenCompletedTable" style="width:100%">
 		<thead>
 			<tr class="regimenCompletedHeaderRow">
-				<th style="width: 50%;" class="regimenCompletedDrugOrderedHeader"></th>
+				<th style="width: 30%;" class="regimenCompletedDrugOrderedHeader"></th>
 				<th style="width: 40%;" class="regimenCompletedDrugOrderedHeader"></th>
-				<th style="width: 10%;" class="regimenCompletedDrugOrderedHeader"></th>
+				<th style="width: 5%;" class="regimenCompletedDrugOrderedHeader"></th>
+				<th style="width: 25%;" class="regimenCompletedDrugOrderedHeader"></th>
 			</tr>
 		</thead>
 		<c:forTokens var="drugSetId" items="${model.displayDrugSetIds}" delims=",">					
@@ -246,19 +253,20 @@
 	<tr class="drugorder_title">
 		<td class="drugorder_title, drugorder_drugname"></td>
 		<td class="drugorder_title, drugorder_prescriber"></td>
-		<td class="drugorder_title, drugorder_fill_status_title" colspan="2"></td>
+		<td class="drugorder_title, drugorder_fill_status">Status</td>
+		<td ></td>
 	</tr>
 	<tr >
-		<td width="40%"></td>
+		<td width="30%"></td>
 		<td width="40%"></td>
 		<td width="5%"></td>
-		<td width="15%"></td>	
+		<td width="25%"></td>	
 	</tr>
 	<tr class="drugorder_box, drugorder_tr">
-		<td class="drugorder_details" width="40%"></td>
+		<td class="drugorder_details" width="30%"></td>
 		<td class="drugorder_instructions" width="40%"></td>
-		<td class="drugorder_fill_status" width="5%"></td>
-		<td class="drugorder_buttons" width="15%">
+		<td class="drugorder_status" width="5%"></td>
+		<td class="drugorder_buttons" width="25%">
 			<input class="drugorder_stop"   type="button" value="stop"   />
 			<input class="drugorder_delete" type="button" value="delete" />
 			<input class="drugorder_history" type="button" value="history" />
@@ -604,13 +612,13 @@
 				
 				self.name = self.table.find(".drugorder_drugname");
 				self.prescriber = self.table.find(".drugorder_prescriber");
+				self.status = self.table.find(".drugorder_status");
 
 				self.details = self.table.find(".drugorder_details");
 				self.instructions = self.table.find(".drugorder_instructions");
 
 				self.del = self.table.find(".drugorder_delete");
 				self.stop = self.table.find(".drugorder_stop");
-				self.
 	
 				
 				var sform = self.table.find("#drugorder_stop_form");
@@ -621,16 +629,17 @@
 				
 				sform.find(".drugorder_stop_form_date").attr("id", drugorder.orderId + "date_picker" + (datePickerLongIdGenerationNUmber++));
 				
+				
 				<openmrs:hasPrivilege privilege="Manage Orders" inverse="true">
 					self.name.append(drugorder.drugName +  " (" +drugorder.dose+" "+drugorder.units+ ")");
 				</openmrs:hasPrivilege>
 				<openmrs:hasPrivilege privilege="Manage Orders">
-				//if (isCurrent) {
-					//self.name.append("<a class=\"patientRegimenDrugName\" href=\"admin/orders/orderDrug.form?orderId=" + drugorder.orderId + "\">" + drugorder.drugName+ " (" +drugorder.dose+" "+drugorder.units+ ")" + "</a>");
-					//public static final String MODULE_ROOT = "/module/openhmis/cashier/";
-				//} else {
+				if (isCurrent) {
 					self.name.append(drugorder.drugName +  " (" +drugorder.dose+" "+drugorder.units+ ")");
-				//}
+					//self.name.append("<a class=\"patientRegimenDrugName\" href=\"admin/orders/orderDrug.form?orderId=" + drugorder.orderId + "\">" + drugorder.drugName+ " (" +drugorder.dose+" "+drugorder.units+ ")" + "</a>");
+				} else {
+					self.name.append(drugorder.drugName +  " (" +drugorder.dose+" "+drugorder.units+ ")");
+				}
 				</openmrs:hasPrivilege>
 
 				if (isCurrent) {
@@ -645,7 +654,8 @@
 						});
 					}
 					
-
+					if (drugorder.status != null && drugorder.status != "")
+						self.status.append(drugorder.status);
 					if (drugorder.instructions != null && drugorder.instructions != "") 
 						self.instructions.append(drugorder.instructions + ".");
 

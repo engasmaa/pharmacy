@@ -52,7 +52,6 @@
 <c:if test="${!patient.dead && !patient.voided}">
 	<openmrs:portlet url="patientHeader" id="pharmacyPatientdHeader" patientId="${patient.patientId}" />
 	<br/>
-	<openmrs:extensionPoint pointId="org.openmrs.patientDashboard.RegimenTabHeader" type="html" parameters="patientId=${patient.patientId}" />
 	<openmrs:globalProperty var="displayDrugSetIds" key="dashboard.regimen.displayDrugSetIds" defaultValue="ANTIRETROVIRAL DRUGS,TUBERCULOSIS TREATMENT DRUGS" />
 	<openmrs:portlet url="patientRegimen" id="pharmacyRegimens" moduleId="icchange.pharmacy" patientId="${patient.patientId}" parameters="displayDrugSetIds=${displayDrugSetIds},*|displayFutureRegimens=true" />
 	<br/>

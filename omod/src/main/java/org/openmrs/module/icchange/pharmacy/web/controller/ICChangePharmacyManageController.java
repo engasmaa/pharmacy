@@ -164,11 +164,11 @@ public class  ICChangePharmacyManageController {
 		
 		Set<Link> links = ExtensionUtil.getAllAddEncounterToVisitLinks();
 		map.put("allAddEncounterToVisitLinks", links);
-	
+		/***
 		List<DrugOrder> dlist = Context.getOrderService().getDrugOrdersByPatient(patient, OrderService.ORDER_STATUS.CURRENT_AND_FUTURE);
 		
 		List<String> sDrugsList = new ArrayList<String>();
-		/***
+		
 		for (DWRDrugOrderHeader h: (new DWRDrugOrderHeaderService()).getDrugOrderHeadersByPatient(patient.getId())) {
 			sDrugsList.add(h.toJasonRepresentation());
 		}

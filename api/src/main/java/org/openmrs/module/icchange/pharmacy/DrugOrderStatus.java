@@ -13,7 +13,7 @@ public class DrugOrderStatus extends BaseOpenmrsData {
 	private DrugOrder drugOrder;
 	private Status status = Status.NOT_DISPENSED;
 	private String noteToPharmacist;
-	private String noteToPhysicist;
+	//private String noteToPhysicist;
 	private String uuid;
 	
 	
@@ -49,16 +49,18 @@ public class DrugOrderStatus extends BaseOpenmrsData {
 	public void setStatus(Status status) {
 		this.status = status;
 	}
+	/***
 	public String getNoteToPhysicist() {
 		return noteToPhysicist;
 	}
 	public void setNoteToPhysicist(String noteToPhysicist) {
 		this.noteToPhysicist = noteToPhysicist;
-	}
+	}***/
 	public String getNoteToPharmacist() {
 		return noteToPharmacist;
 	}
 	public void setNoteToPharmacist(String noteToPharmacist) {
 		this.noteToPharmacist = noteToPharmacist;
 	}	
+	
 }
