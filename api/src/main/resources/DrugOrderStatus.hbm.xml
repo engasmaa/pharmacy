@@ -20,7 +20,7 @@
 		    </type>
 		</property>
 		<property name="uuid" type="java.lang.String" column="uuid" length="38" unique="true" />
-
+		<property name="noteToPharmacist" type="java.lang.String" column="note_to_pharmacist" />
 		<!-- 
 		
 		<discriminator column="id" insert="false" />
@@ -32,9 +32,8 @@
 
 
 		
-		<property name="noteToPharmacist" type="java.lang.String" column="note_to_pharmacist" />
-		<property name="noteToPhysicist" type="java.lang.String" column="note_to_physicist" />
 				
+		<property name="noteToPhysicist" type="java.lang.String" column="note_to_physicist" />
 
 		 -->
 		<!-- 

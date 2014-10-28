@@ -38,7 +38,7 @@ public class DrugOrderStatusUtil {
 		d.setCreator(Context.getAuthenticatedUser());
 		d.setDateCreated(new Date());
 		d.setDrugOrder(drugOrder);
-		d.setStatus(Status.NO_DISPENSE);
+		d.setStatus(Status.NOT_DISPENSED);
 
 		return d;
 	}

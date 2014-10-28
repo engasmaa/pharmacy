@@ -7,7 +7,7 @@
 	<!-- See http://www.liquibase.org/manual/home#available_database_refactorings 
 		for a list of supported elements and attributes -->
 
-	<changeSet id="icchange.pharmacy-v1.0" author="icchange">
+	<changeSet id="icchange.pharmacy-v1.0.1" author="sLuchianov">
 	
 		<sql>
 			INSERT INTO openmrs.order_type (name, description, creator, date_created, retired, uuid)
@@ -94,5 +94,26 @@
 			referencedTableName="users" referencedColumnNames="user_id"
 			deferrable="false" initiallyDeferred="false" />
 
+	</changeSet>
+	<changeSet id="icchange.pharmacy-v1.0.2" author="sLuchianov">
+	<preConditions onFail="MARK_RAN">
+	<tableExists tableName="pharmacy_drugorderstatus"/>
+	</preConditions>
+		<addColumn tableName="pharmacy_drugorderstatus">
+			<column name="note_to_pharmacist" type="Text"></column>
+		</addColumn>
+	</changeSet>
+	<changeSet id="icchange.pharmacy-v1.0.3" author="sLuchianov">
+	<preConditions onFail="MARK_RAN">
+	<tableExists tableName="pharmacy_drugorderstatus"/>
+	</preConditions>
+		<comment>This code populates null 1-to-1 drug order statuses</comment>
+		<sql>
+			insert into pharmacy_drugorderstatus
+			select o.order_id, 4, o.uuid, ''
+			from orders o left join pharmacy_drugorderstatus pdos
+			on o.order_id = pdos.order_id
+			where pdos.status is null;
+		</sql>
 	</changeSet>
 </databaseChangeLog>

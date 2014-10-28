@@ -6,12 +6,12 @@ import org.openmrs.DrugOrder;
 public class DrugOrderStatus extends BaseOpenmrsData {
 
 	public enum Status {
-		FULL_DISPENSED, HALF_DISPENSED, NO_DISPENSE
+		FULLY_DISPENSED, PARTIALLY_DISPENSED, NOT_DISPENSED, N_A
 	};
 	
 	private Integer id;
 	private DrugOrder drugOrder;
-	private Status status = Status.NO_DISPENSE;
+	private Status status = Status.NOT_DISPENSED;
 	private String noteToPharmacist;
 	private String noteToPhysicist;
 	private String uuid;

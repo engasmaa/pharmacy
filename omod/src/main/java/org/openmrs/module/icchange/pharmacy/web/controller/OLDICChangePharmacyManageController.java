@@ -13,16 +13,14 @@
  */
 package org.openmrs.module.icchange.pharmacy.web.controller;
 
+
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.ServletException;
 
 import org.apache.commons.logging.Log;
@@ -55,19 +53,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 /**
  * The main controller.
  */
+/***
 @SuppressWarnings("unused")
 @Controller
-public class  ICChangePharmacyManageController {
+public class  OLDICChangePharmacyManageController {
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
-	@RequestMapping(value = "/module/icchange/pharmacy/manage", method = RequestMethod.GET)
+	@RequestMapping(value = "/module/icchange/pharmacy/manage/OLD", method = RequestMethod.GET)
 	public void manage(ModelMap model) {
 		model.addAttribute("user", Context.getAuthenticatedUser());
 	}
 	
 	
-	@RequestMapping(value = "/module/icchange/pharmacy/pharmacy", method = RequestMethod.GET)
+	@RequestMapping(value = "/module/icchange/pharmacy/pharmacy/OLD", method = RequestMethod.GET)
 	public void menu(ModelMap model) {
 	}
 	
@@ -78,8 +77,8 @@ public class  ICChangePharmacyManageController {
 */
 	
 	//@RequestMapping("/patientDashboard.form")
-
-	@RequestMapping(value = "/module/icchange/pharmacy/drugDispense", method = RequestMethod.GET)
+/***
+	@RequestMapping(value = "/module/icchange/pharmacy/drugDispense/OLD", method = RequestMethod.GET)
 	protected void drugDispense(@RequestParam(required = true, value = "patientId") Integer patientId, ModelMap map)
 	        throws Exception {
 		
@@ -168,10 +167,11 @@ public class  ICChangePharmacyManageController {
 		List<DrugOrder> dlist = Context.getOrderService().getDrugOrdersByPatient(patient, OrderService.ORDER_STATUS.CURRENT_AND_FUTURE);
 		
 		List<String> sDrugsList = new ArrayList<String>();
-		/***
+		
 		for (DWRDrugOrderHeader h: (new DWRDrugOrderHeaderService()).getDrugOrderHeadersByPatient(patient.getId())) {
 			sDrugsList.add(h.toJasonRepresentation());
 		}
+		
 		map.put("druglist", dlist);
 		map.put("drugOrderHeaders", sDrugsList);
 		
@@ -190,7 +190,7 @@ public class  ICChangePharmacyManageController {
 		
 		map.put("pharmacyordermap", orderlist);
 		
-		***/
 	}
 	
 }
+***/
