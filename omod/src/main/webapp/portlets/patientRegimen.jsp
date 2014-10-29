@@ -194,8 +194,8 @@
 			<tr class="regimenCompletedHeaderRow">
 				<th style="width: 30%;" class="regimenCompletedDrugOrderedHeader"></th>
 				<th style="width: 40%;" class="regimenCompletedDrugOrderedHeader"></th>
-				<th style="width: 5%;" class="regimenCompletedDrugOrderedHeader"></th>
-				<th style="width: 25%;" class="regimenCompletedDrugOrderedHeader"></th>
+				<th style="width: 10%;" class="regimenCompletedDrugOrderedHeader"></th>
+				<th style="width: 20%;" class="regimenCompletedDrugOrderedHeader"></th>
 			</tr>
 		</thead>
 		<c:forTokens var="drugSetId" items="${model.displayDrugSetIds}" delims=",">					
@@ -253,20 +253,20 @@
 	<tr class="drugorder_title">
 		<td class="drugorder_title, drugorder_drugname"></td>
 		<td class="drugorder_title, drugorder_prescriber"></td>
-		<td class="drugorder_title, drugorder_fill_status">Status</td>
+		<td class="drugorder_title, drugorder_fill_status">Prescription Status</td>
 		<td ></td>
 	</tr>
 	<tr >
 		<td width="30%"></td>
 		<td width="40%"></td>
-		<td width="5%"></td>
-		<td width="25%"></td>	
+		<td width="10%"></td>
+		<td width="20%"></td>	
 	</tr>
 	<tr class="drugorder_box, drugorder_tr">
 		<td class="drugorder_details" width="30%"></td>
 		<td class="drugorder_instructions" width="40%"></td>
-		<td class="drugorder_status" width="5%"></td>
-		<td class="drugorder_buttons" width="25%">
+		<td class="drugorder_status" width="10%"></td>
+		<td class="drugorder_buttons" width="20%">
 			<input class="drugorder_stop"   type="button" value="stop"   />
 			<input class="drugorder_delete" type="button" value="delete" />
 			<input class="drugorder_history" type="button" value="history" />
@@ -620,7 +620,6 @@
 				self.del = self.table.find(".drugorder_delete");
 				self.stop = self.table.find(".drugorder_stop");
 	
-				
 				var sform = self.table.find("#drugorder_stop_form");
 				var dform = self.table.find("#drugorder_del_form");
 				
@@ -656,6 +655,8 @@
 					
 					if (drugorder.status != null && drugorder.status != "")
 						self.status.append(drugorder.status);
+					else
+						self.status.append("N/A");
 					if (drugorder.instructions != null && drugorder.instructions != "") 
 						self.instructions.append(drugorder.instructions + ".");
 
