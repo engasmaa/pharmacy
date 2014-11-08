@@ -6,8 +6,12 @@
 <openmrs:htmlInclude file="/scripts/drugOrder.js" />
 
 
-<openmrs:htmlInclude file="/dwr/interface/DWRPharmacyOrderService.js" />
 <openmrs:htmlInclude file="/moduleResources/icchange/pharmacy/js/PharmacyOrder.js" />
+<openmrs:htmlInclude file="/dwr/DWRPharmacyOrderService.js" />
+<openmrs:htmlInclude file="/dwr/DWRPharmacyOrder.js" />
+<openmrs:htmlInclude file="/dwr/DWRPharmacyItem.js" />
+<openmrs:htmlInclude file="/dwr/DWRDrugOrderStatusService.js" />
+<openmrs:htmlInclude file="/dwr/DWRDrugOrderStatus.js" />
 
 
 <% java.sql.Timestamp now = new java.sql.Timestamp(System.currentTimeMillis()); %>
@@ -1066,6 +1070,8 @@
 				///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				//Retrieve drugorderstatus here
 				console.log("Getting drug order status for order:" + drugorder.orderId);
+				var status = DWRDrugOrderStatusService.getDrugOrderStatusByDrugOrder(drugorder);
+				console.log("Status:" + status.status);
 				
 				<openmrs:hasPrivilege privilege="Manage Orders" inverse="true">
 					self.name.append(drugorder.drugName +  " (" +drugorder.dose+" "+drugorder.units+ ")");
@@ -1090,7 +1096,8 @@
 				</c:forEach>
 				self.pharmacyOrders = pharmacyOrders;
 				
-				//self.pharmacyOrders.foreach(function(listItem, i) {
+				//self.pharmacyOrders.foreach(function(listItem, i) 
+				//{
 				//	console.log(listItem);
 				//});
 				self.po = pharmacyOrders;
@@ -1101,7 +1108,8 @@
 				else
 					self.status.append("N/A");
 
-				if (isCurrent) {
+				if (isCurrent) 
+				{
 					
 					if (drugorder.ordererName != null && drugorder.ordererName.length > 0) {	
 						self.prescriber.append("Prescribed by "+drugorder.ordererName + " on " + drugorder.createdDate + ".");
@@ -1126,7 +1134,8 @@
 					self.table.find(".drugorder_tr").hide();
 					self.table.find(".pharmacyorder_tr").hide();
 					
-					self.table.find(".drugorder_title").click(function() {
+					self.table.find(".drugorder_title").click(function() 
+					{
 						if(self.showed) {
 							self.showed = false;
 							self.table.find(".drugorder_tr").hide();
@@ -1144,7 +1153,8 @@
 					if (drugorder.discontinued) {
 
 						self.prescriber.append("DISCONTINUED");
-						if (drugorder.discontinuerName != null && drugorder.discontinuerName.length > 0) {
+						if (drugorder.discontinuerName != null && drugorder.discontinuerName.length > 0) 
+						{
 							
 							if (drugorder.instructions != null && drugorder.instructions != "") 
 								inst = drugorder.instructions + ". ";
@@ -1161,7 +1171,8 @@
 							
 						} else {
 						
-							DWRPersonService.getPerson(drugorder.discontinuerId, function (d) {
+							DWRPersonService.getPerson(drugorder.discontinuerId, function (d) 
+							{
 								
 								if (drugorder.instructions != null && drugorder.instructions != "") 
 									inst = drugorder.instructions + ". ";
@@ -1199,7 +1210,10 @@
 				}
 
 				var details = "";
-					details = (details + "Dose: " +drugorder.dose+" "+drugorder.units+ ", ");
+					details = (details + "Dose: " +drugorder.dose+" ");
+
+				if (drugorder.units != null || drugorder.units != "")
+					details = (details + drugorder.units+ ", ");
 								
 				if (drugorder.frequency != null || drugorder.frequency != "")
 					details = (details + "Frequency: " + drugorder.frequency + ", ");
@@ -1209,7 +1223,8 @@
 				
 				//details = (details + ".");		
 				
-				if (drugorder.autoExpireDate == null || drugorder.autoExpireDate == "") {
+				if (drugorder.autoExpireDate == null || drugorder.autoExpireDate == "") 
+				{
 					details += " Start: " + drugorder.startDate + ", ongoing.";
 				} else {
 					details += " From " + drugorder.startDate + " to " + drugorder.autoExpireDate + ".";
@@ -1220,7 +1235,8 @@
 				
 				self.details.append(details);
 			
-				self.del.click(function() {
+				self.del.click(function() 
+				{
 					self.del.hide(); 
 					self.stop.hide();
 					self.dispense.hide();
@@ -1229,7 +1245,8 @@
 					pform.hide();
 				});
 				
-				self.stop.click(function() {
+				self.stop.click(function() 
+				{
 					self.del.hide(); 
 					self.stop.hide();
 					self.dispense.hide();
@@ -1238,7 +1255,7 @@
 					pform.hide();
 				});
 				
-				self.dispense.click(function() {
+				self.dispense.click(function()
 					self.del.hide(); 
 					self.stop.hide();
 					self.dispense.hide();
@@ -1248,7 +1265,8 @@
 				});
 				
 				
-				sform.find("#drugorder_stop_form_stop").click(function(){
+				sform.find("#drugorder_stop_form_stop").click(function()
+				{
 					
 					var res = sform.find("select").val();
 					var date = sform.find(".drugorder_stop_form_date").val();
@@ -1288,7 +1306,8 @@
 					
 				});
 				
-				dform.find("#drugorder_del_form_cancel").click(function(){
+				dform.find("#drugorder_del_form_cancel").click(function()
+				{
 					self.del.show(); 
 					self.stop.show();
 					self.dispense.show();
@@ -1296,7 +1315,8 @@
 					sform.hide();					
 				});
 				
-				pform.find("#pharmacyorder_cancel").click(function(){
+				pform.find("#pharmacyorder_cancel").click(function()
+				{
 					self.del.show(); 
 					self.stop.show();
 					self.dispense.show();
@@ -1306,7 +1326,8 @@
 				});
 				
 				
-				pform.find("#pharmacyorder_add").click(function(){
+				pform.find("#pharmacyorder_add").click(function()
+				{
 					
 					//verify all pharmacyOrder data here
 					
@@ -1359,7 +1380,8 @@
 			self.ddata = {};
 			
 			
-			self.addToCurrent = function (drugOrder) {
+			self.addToCurrent = function (drugOrder) 
+			{
 
 				var t = new DrugTable(drugOrder.ortherId+drugOrder.drugSetLabel, drugOrder, true);
 				
@@ -1372,7 +1394,8 @@
 				t.show();
 			} 
 			
-			self.addToCompleted = function (drugOrder) {
+			self.addToCompleted = function (drugOrder) 
+			{
 
 				var t = new DrugTable(drugOrder.ortherId+drugOrder.drugSetLabel, drugOrder, false);
 				
@@ -1407,7 +1430,8 @@
 					
 					var now = new Date();
 					
-					data.drugSets.forEach(function(set, k) {
+					data.drugSets.forEach(function(set, k) 
+							{
 						
 						if (set == null)
 							return;
@@ -1418,7 +1442,8 @@
 							return;
 						
 						drugOrderList.sort(comp);
-						drugOrderList.forEach(function (drugOrder, i) {
+						drugOrderList.forEach(function (drugOrder, i) 
+								{
 							
 							if (drugOrder.drugSetLabel == "*") 
 								drugOrder.drugSetLabel = "other";
@@ -1426,7 +1451,8 @@
 							if (drugOrder.discontinued) {
 								self.addToCompleted(drugOrder);
 							} else {
-								if (drugOrder.autoExpireDate == null || drugOrder.autoExpireDate == "") {
+								if (drugOrder.autoExpireDate == null || drugOrder.autoExpireDate == "") 
+									{
 									self.addToCurrent(drugOrder);
 								}else {
 									var ddate  = new Date(drugOrder.autoExpireDate);
@@ -1468,7 +1494,8 @@
 		//alert("hasOrders starting as " + hasOrders);
 
 		
-		function setUnitsField(unitsText) {
+		function setUnitsField(unitsText) 
+		{
 			dwr.util.setValue(gUnitsFieldId + "Span", unitsText);
 			dwr.util.setValue(gUnitsFieldId, unitsText);
 			hideOtherStandards("New");

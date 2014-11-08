@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dwr PUBLIC
+    "-//GetAhead Limited//DTD Direct Web Remoting 2.0//EN"
+    "http://directwebremoting.org/schema/dwr20.dtd">
+
+<dwr>
+
+	<allow>
+		<create creator="new" javascript="JDate">
+	      <param name="class" value="java.util.Date"/>
+		</create>
+		
+		<convert match="java.lang.Exception" converter="exception">
+			<param name="exclude" value="stackTrace"/>
+		</convert>
+		
+		<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.model.DWRPharmacyOrder"/>
+		<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.model.DWRPharmacyItem"/>
+		<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.model.DWRDrugOrderStatus"/>
+				
+		<create creator="new" javascript="DWRPharmacyOrderService">
+			<param name="class" value="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRPharmacyOrderService" />
+			<include method="savePharmacyOrder"/>
+			<include method="getAllPharmacyOrdersByPatient"/>
+			<include method="createPharmacyOrder"/>
+			<include method="getPharmacyOrdersByDrugOrderId" />
+		</create>
+		
+		<create creator="new" javascript="DWRDrugOrderStatusService">
+			<param name="class" value="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRDrugOrderStatusService" />
+			<include method="getDrugOrderStatusByDrugOrderId"/>
+			<include method="getDrugOrderStatusByPatient" />
+			<include method="getDrugOrderStatusByPatient" />
+		</create>
+				
+	</allow>
+	
+	<signatures>
+		<![CDATA[
+			import org.openmrs.module.icchange.pharmacy.web.dwr.model.DWRPharmacyOrder;
+			import org.openmrs.module.icchange.pharmacy.web.dwr.model.DWRPharmacyItem;
+			import org.openmrs.module.icchange.pharmacy.web.dwr.model.DWRDrugOrderStatus;
+			import org.openmrs.module.icchange.pharmacy.web.dwr.DWRPharmacyOrderService;
+			import org.openmrs.module.icchange.pharmacy.web.dwr.DWRDrugOrderStatusService;
+			import java.util.Date;
+			import java.util.List;
+			import java.util.Map;
+			
+			DWRDrugOrderStatusService.getDrugOrderStatusByDrugOrderId(Integer id);
+			DWRDrugOrderStatusService.getDrugOrderStatusByPatient (Integer patientId, Date from);
+			DWRDrugOrderStatusService.getDrugOrderStatusByPatient (Integer patientId);
+		]]>
+	</signatures>
+  	
+</dwr>
