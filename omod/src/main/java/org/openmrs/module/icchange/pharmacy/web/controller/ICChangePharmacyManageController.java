@@ -70,15 +70,8 @@ public class  ICChangePharmacyManageController {
 	@RequestMapping(value = "/module/icchange/pharmacy/pharmacy", method = RequestMethod.GET)
 	public void menu(ModelMap model) {
 	}
+		
 	
-	/*@RequestMapping(value = "/module/icchange/pharmacy/drugDispense", method = RequestMethod.GET)
-	public void drugDispense(ModelMap model) {
-
-	}
-*/
-	
-	//@RequestMapping("/patientDashboard.form")
-
 	@RequestMapping(value = "/module/icchange/pharmacy/drugDispense", method = RequestMethod.GET)
 	protected void drugDispense(@RequestParam(required = true, value = "patientId") Integer patientId, ModelMap map)
 	        throws Exception {

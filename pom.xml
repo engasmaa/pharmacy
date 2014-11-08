@@ -96,6 +96,23 @@
 			</dependency>
 						
 			<!-- End OpenMRS core -->
+			
+			
+			<dependency>
+				<groupId>org.openmrs.module</groupId>
+				<artifactId>openhmis.inventory-api</artifactId>
+				<version>1.0.0</version>
+				<type>jar</type>
+				<scope>provided</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.openmrs.module</groupId>
+				<artifactId>openhmis.inventory-omod</artifactId>
+				<version>1.0.0</version>
+				<type>jar</type>
+				<scope>provided</scope>
+			</dependency>			
 
 		</dependencies>
 	</dependencyManagement>

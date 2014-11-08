@@ -63,6 +63,12 @@
 				
 		<!-- End OpenMRS core -->
 		
+		
+		<dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>openhmis.inventory-api</artifactId>
+		</dependency>
+		
 	</dependencies>
 	
 	<build>

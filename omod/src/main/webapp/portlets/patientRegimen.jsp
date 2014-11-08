@@ -7,9 +7,8 @@
 
 
 <openmrs:htmlInclude file="/dwr/interface/DWRPharmacyOrderService.js" />
-<openmrs:htmlInclude file="/moduleResources/icchange/pharmacy/js/view/DrugOrderListView.js" />
-<openmrs:htmlInclude file="/moduleResources/icchange/pharmacy/js/view/DrugOrderView.js" />
 <openmrs:htmlInclude file="/moduleResources/icchange/pharmacy/js/PharmacyOrder.js" />
+
 
 <% java.sql.Timestamp now = new java.sql.Timestamp(System.currentTimeMillis()); %>
 
@@ -180,6 +179,62 @@
 					</tr>
 				</table>
 			</div>
+			<br/>
+			<div id="OLD_pharmacyOrderAddForm" style="display:none; border: 1px dashed black; padding: 10px;">
+				<table width="100%" class="pharmacyOrderTable">
+					<tr class="pharmacyOrderRow">						
+						<td valign="top" align="right" class="pharmacyOrderDataFlexible">
+							<div id="pharmacyPortletAddFlexible">
+								<form method="post" id="orderForm" onSubmit="void()">
+								<table class="pharmacyOrderAddFlexibleTable" style="width:100%;">
+									<tr class="pharmacyOrderAddFlexibleRow">
+										<td colspan="2" class="pharmacyOrderAddFlexibleData"><strong>Pharmacy Order Here</strong></td>
+									</tr>								
+									<tr class="pharmacyOrderAddFlexibleRow">
+										<td class="pharmacyOrderAddFlexibleData" >Select a Drug:</td>						
+										<td class="pharmacyOrderAddFlexibleData">
+											<openmrs:fieldGen type="org.openmrs.Drug" formFieldName="pharmacyOrderItem" val="" parameters="includeVoided=false|noBind=true|optionHeader=[blank]" />
+											<div id="pharmacyOrderItem_error" class="error" style="display:none"></div>
+										</td>
+									</tr>
+									<tr class="pharmacyOrderAddFlexibleRow">
+										<td class="pharmacyOrderAddFlexibleData"> Quantity: </td>
+										<td>
+											<openmrs:fieldGen type="java.lang.Integer" formFieldName="pharmacyOrderQuantity" val="" parameters="noBind=true" />
+											<select name="pharmacyOrderQuantity_unit" id="pharmacyOrderQuantity_unit">
+                                    		</select>
+                                    		<div id="pharmacyOrderQuantity_error" class="error" style="display:none"></div>
+										</td>	
+									</tr>
+									<tr class="pharmacyOrderAddFlexibleDateRow">
+										<td class="pharmacyOrderAddFlexibleData"> Dispense Date: </td>
+										<td class="pharmacyOrderAddFlexibleData">
+											<openmrs:fieldGen type="java.util.Date" formFieldName="pharmacyOrderDate" val="" parameters="noBind=true" />
+											<input id="pick_date_template" class="pharmacyOrder_form_date" type="text" size="10" value="" onFocus="showCalendar(this)" />
+											<div id="pharmacyOrderDate_error" class="error" style="display:none"></div>
+										</td>
+									</tr>
+									<tr class="pharmacyOrderAddFlexibleRow">
+										<td class="pharmacyOrderAddFlexibleData"> Notes: </td>
+										<td class="pharmacyOrderAddFlexibleData">
+											<openmrs:fieldGen type="java.lang.String" formFieldName="pharmacyOrderNotes" val="" parameters="noBind=true" />
+											<div id="pharmacyOrderNotes_error" class="error" style="display:none"></div>
+										</td>
+									</tr>
+									<tr class="pharmacyOrderAddFlexibleButtonRow">
+										<td colspan="2" align="center" class="pharmacyOrderAddFlexibleButtonData">
+											<span id="addNew"><input type="button" value="<openmrs:message code="general.add" />" onClick="pharmacyOrderAddForm.submit();"></span>
+											<span id="cancelNew"><input type="button" value="<openmrs:message code="general.cancel" />" onClick="pharmacyOrderAddForm.hide();"></span>
+										</td>
+									</tr>
+								</table>
+								</form>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			
 		</div>			
 	</div>
 	<br />
@@ -252,25 +307,24 @@
 <table id="drugorder_template" class="drugorder_box" width="100%" style="display:none">
 	<tr class="drugorder_title">
 		<td class="drugorder_title, drugorder_drugname"></td>
-		<td class="drugorder_title, drugorder_prescriber"></td>
+		<td class="drugorder_title">Prescriber</td>
 		<td class="drugorder_title, drugorder_fill_status">Prescription Status</td>
 		<td ></td>
 	</tr>
 	<tr >
-		<td width="30%"></td>
 		<td width="40%"></td>
+		<td width="15%"></td>
 		<td width="10%"></td>
-		<td width="20%"></td>	
+		<td width="25%"></td>	
 	</tr>
 	<tr class="drugorder_box, drugorder_tr">
-		<td class="drugorder_details" width="30%"></td>
-		<td class="drugorder_instructions" width="40%"></td>
-		<td class="drugorder_status" width="10%"></td>
-		<td class="drugorder_buttons" width="20%">
+		<td class="drugorder_details" width="40%"></td>
+		<td class="drugorder_prescriber" width="15%"></td>
+		<td class="drugorder_status" width="10%" ></td>
+		<td class="drugorder_buttons" width="25%">
 			<input class="drugorder_stop"   type="button" value="stop"   />
 			<input class="drugorder_delete" type="button" value="delete" />
-			<input class="drugorder_history" type="button" value="history" />
-			<input class="drugorder_dispense" type="button" value="dispense" />
+			<input class="pharmacyorder_dispense" type="button" value="dispense"/>
 			<div id="drugorder_stop_form" style="display:none" class="dashedAndHighlighted">
 				<form>
 					<openmrs:message code="DrugOrder.discontinuedDate" />:
@@ -297,21 +351,104 @@
 			</div>
 		</td>	
 	</tr>
+	<tr >
+		<td colspan="4">
+		<div id="pharmacyOrderAddForm" style="display:none; border: 1px dashed black; padding: 10px;">
+			<form>
+				<table width="100%" class="pharmacyOrderTable">
+					<tr class="pharmacyOrderRow">						
+						<td valign="top" align="right" class="pharmacyOrderDataFlexible">
+							<div id="pharmacyPortletAddFlexible">
+								<form method="post" id="orderForm" onSubmit="void()">
+								<table class="pharmacyOrderAddFlexibleTable" style="width:100%;">
+									<tr class="pharmacyOrderAddFlexibleRow">
+										<td colspan="2" class="pharmacyOrderAddFlexibleData"><strong>Pharmacy Order Here</strong></td>
+									</tr>								
+									<tr class="pharmacyOrderAddFlexibleRow">
+										<td class="pharmacyOrderAddFlexibleData" >Select a Drug:</td>						
+										<td class="pharmacyOrderAddFlexibleData">
+											<openmrs:fieldGen type="org.openmrs.Drug" formFieldName="pharmacyOrderItem" val="" parameters="includeVoided=false|noBind=true|optionHeader=[blank]" />
+											<div id="pharmacyOrderItem_error" class="error" style="display:none"></div>
+										</td>
+									</tr>
+									<tr class="pharmacyOrderAddFlexibleRow">
+										<td class="pharmacyOrderAddFlexibleData"> Quantity: </td>
+										<td>
+											<openmrs:fieldGen type="java.lang.Integer" formFieldName="pharmacyOrderQuantity" val="" parameters="noBind=true" />
+											<select name="pharmacyOrderQuantity_unit" id="pharmacyOrderQuantity_unit">
+												<option value="mg" >mg</option>
+												<option value="ml" >ml</option>
+												<option value="grams" >grams</option>
+												<option value="liters" >liters</option>
+												<option value="tablets" >tablets</option>
+												<option value="capsules" >capsules</option>
+												<option value="bottles" >bottles</option>
+												<option value="other" >other</option>
+                                    		</select>
+                                    		<div id="pharmacyOrderQuantity_error" class="error" style="display:none"></div>
+										</td>	
+									</tr>
+									<tr class="pharmacyOrderAddFlexibleDateRow">
+										<td class="pharmacyOrderAddFlexibleData"> Dispense Date: </td>
+										<td class="pharmacyOrderAddFlexibleData">
+											<input id="pick_date_template" class="pharmacyOrder_form_date" type="text" size="10" value="" onFocus="showCalendar(this)" />
+											<div id="pharmacyOrderDate_error" class="error" style="display:none"></div>
+										</td>
+									</tr>
+									<tr class="pharmacyOrderAddFlexibleRow">
+										<td class="pharmacyOrderAddFlexibleData"> Notes: </td>
+										<td class="pharmacyOrderAddFlexibleData">
+											<input id="pharmacyOrderNotes" size="40" value="" />
+											<div id="pharmacyOrderNotes_error" class="error" style="display:none"></div>
+										</td>
+									</tr>
+									<tr class="pharmacyOrderAddFlexibleButtonRow">
+										<td colspan="2" align="center" class="pharmacyOrderAddFlexibleButtonData">
+											<span id="addNew"><input type="button" id="pharmacyorder_add" value="<openmrs:message code="general.add" />"></span>
+											<span id="cancelNew"><input type="button" id="pharmacyorder_cancel" value="<openmrs:message code="general.cancel" />"></span>
+										</td>
+									</tr>
+								</table>
+								</form>
+							</div>
+						</td>
+					</tr>
+				</table>
+				</form>
+			</div>
+			</td>
+	</tr>
+</table>
+
+<table id="pharmacyorder_template" class="drugorder_box" width="100%" style="display:none">
+	<tr>
+		<td class="pharmacyorder_itemname"></td>
+		<td class="pharmacyorder_itemdose"></td>
+		<td class="pharmacyorder_itemdose"></td>
+		<td class="pharmacyorder_dispense_date"></td>
+		<td class="pharmacyorder_dispenser"></td>
+		<td class="pharmacyorder_adherence"></td>
+		<td class="pharmacyorder_quantity">
+			<openmrs:fieldGen type="java.lang.Double" formFieldName="dose" val="" parameters="noBind=true" />
+			<select name="dose_unit" id="dose_unit">
+            </select>
+            <div id="dose_error" class="error" style="display:none"></div>
+		</td>
+		<td ><input class="pharmacyorder_save" type="button" value="save" /></td>
+	</tr>
 </table>
 
 
-
-	<openmrs:htmlInclude file="/dwr/interface/DWROrderService.js" />
-	<openmrs:htmlInclude file="/dwr/engine.js" />
-	<openmrs:htmlInclude file="/dwr/util.js" />
 	<script>
 		<!-- // begin
 
-		var drugOrderForm = new function () {
+		var drugOrderForm = new function () 
+		{
 			
 			datePickerLongIdGenerationNUmber = 0;
 			
-			var BaseField = function (fname, ferror, emsg) {
+			var BaseField = function (fname, ferror, emsg) 
+			{
 				var self = this;
 				
 				self.field = $j(fname);
@@ -320,7 +457,8 @@
 				
 				self.validate =  function () {return true;};
 				
-				self.clear =  function() {
+				self.clear =  function() 
+				{
 					self.field.val("");
 					self.error.text("");
 					self.error.hide();
@@ -386,6 +524,8 @@
 				};
 				
 			};
+			
+		
 			
 			var self = this;
 			
@@ -591,9 +731,299 @@
 				
 			};
 		};
+		// End of drugorder form
+		
+		//Start of pharmacyorder form
+		var pharmacyOrderAddForm = new function () 
+		{
+			
+			datePickerLongIdGenerationNUmber = 0;
+			
+			var BaseField = function (fname, ferror, emsg) 
+			{
+				var self = this;
+				
+				self.field = $j(fname);
+				self.error = $j(ferror);
+				self.emsg = emsg;
+				
+				self.validate =  function () {return true;};
+				
+				self.clear =  function() 
+				{
+					self.field.val("");
+					self.error.text("");
+					self.error.hide();
+				}
+			};
+			
+			
+			var UnitField = function (fname, funit, ferror, vunits, emsg, plural) {
+				
+				var self = this;
+				self.field = $j(fname);
+				self.field_unit = $j(funit);
+				self.error = $j(ferror);
+				self.units = vunits.split("|");
+					
+				self.validate = function () {
+					var f = self.field.val();
+					var fu = self.field_unit.val();
+					var pattern =  /(^0|[^0-9])/;
+					
+					
+					if (!f || pattern.test(f) || f <= 0 ) {
+						self.error.text(emsg);
+						self.error.show();
+						return false;
+					}
+				
+					if (!fu || !fu.match(vunits)) {
+						self.error.text(emsg);
+						self.error.show();
+						return false;						
+					}
+					
+					self.error.text("");
+					self.error.hide();
+					return true;
+				};
+				
+				self.populate = function () {
+					var op;
+					self.field_unit.children().remove();
+					
+					op = document.createElement("OPTION");
+					op.innerHTML = "";
+					op.value = "";
+					op.id=fname+"_void";
+					self.field_unit.append(op);
+					
+					for (var i = 0; i < self.units.length; i++) {
+						op = document.createElement("OPTION");
+						op.innerHTML = self.units[i] + (plural ? "(s)" : "");
+						op.value = self.units[i];
+						op.id=fname+"_"+self.units[i];
+						self.field_unit.append(op);					
+					}
+				};
+				
+				self.clear = function () {
+					self.field.val("");
+					self.field_unit.val("");
+					self.error.text("");
+					self.error.hide();
+				};
+				
+			};
+			
+		
+			
+			var self = this;
+			
+			self.visible = false;
+			
+			self.form = $j("#pharmacyOrderAddForm");
+		
+			self.item = new BaseField("#pharmacyOrderItem", "#pharmacyOrderItem_error");
+			
+			self.item.validate =  function() {
+				var id = self.item.field.attr("numId");
+				
+				if (!id || id <= 0 ) {
+					self.item.error.text("Select a valid item");
+					self.item.error.show();
+					return false;
+				}
+				
+				if (!self.item.field.val() || self.item.field.val() == "") {
+					self.item.field.attr("numId", 0);
+					self.item.error.text("Select a valid item");
+					self.item.error.show();
+					return false;					
+				}
+				
+				self.item.error.text("");
+				self.item.error.hide();
+				return true;
+			};
+			
+
+			self.item.clear = function() {
+				self.item.field.attr("numId", 0); 
+				self.item.field.val("");
+				self.item.error.text("");
+				self.item.error.hide();
+			}
+
+			
+			self.start = new BaseField("#pharmacyOrderDate", "#pharmacyOrderDate_error");
+			
+			self.start.validate =  function () {
+				var d;
+				
+				if(self.start.field.val()=="") {
+					self.start.error.text("Select a valid dispense date");
+					self.start.error.show();
+					return false;
+				}
+				
+				d = new Date(self.start.field.val());
+				
+				if (!d.getTime()) {
+					self.start.error.text("Select a valid dispense date");
+					self.start.error.show();
+					return false;					
+				}
+				
+				self.start.error.text("");
+				self.start.error.hide();					
+				return true;
+			};
+
+
+			self.notes = new BaseField("#pharmacyOrderNotes", "#pharmacyOrderNotes_error");
+			
+			//self.freq = new UnitField("#frequency","#frequency_unit", "#frequency_error", "day|week|month", "select a valid frequency", false);
+			//self.freq.prn = $j("#drugorder_prn");
+			
+			//self.dose = new UnitField("#dose","#dose_unit", "#dose_error", "mg|ml|grams|liters|tablets|capsules|bottles|other", "select a valid dosage", false);
+			
+			self.quantity = new UnitField("#pharmacyOrderQuantity","#pharmacyOrderQuantity_unit", "#pharmacyOrderQuantity_error", "mg|ml|grams|liters|tablets|capsules|bottles|other", "select a valid quantity", false);
+			
+			/***
+			
+			self.quantity.f = self.quantity.validate;
+			self.quantity.validate = function()
+			{
+				
+				var v = self.quantity.field.val();
+				
+				if (v == "") 
+				{
+					self.quantity.field_unit.val("");
+					return true;
+				}
+					
+				return self.quantity.f();
+			}
+			
+			self.duration = new UnitField("#duration","#duration_unit", "#duration_error", "day|week|month", "select a valid duration", true);
+			self.duration.field_check = $j("#durationLong");
+			self.duration.f = self.duration.validate;
+			
+			self.duration.validate = function () {
+				if (self.duration.field_check.attr( "checked" ))
+					return true;
+				
+				return self.duration.f();
+			}
+			
+			***/
+			
+			self.show =  function(){
+				if (self.visible)
+					return;
+				
+				self.form.show(); 
+				self.clear();
+				self.visible = true;
+			};
+				
+			self.hide = function(){self.form.hide(); self.clear();self.visible = false;};
+			
+			self.validate = function() {
+				var ret = true;
+				
+				ret = (ret &&  self.item.validate());
+				ret = (ret &&  self.quantity.validate());
+				ret = (ret &&  self.start.validate());
+				ret = (ret &&  self.notes.validate());
+				
+				return ret;
+			};
+			
+			
+			self.clear = function() {
+				self.item.clear();
+				self.quantity.clear();
+				self.start.clear();
+				self.notes.clear();
+			};
+			
+			self.getFilledData = function () {
+
+				var f = function (n) {return "" + (n.getMonth()+1) + "/" + n.getDate()+ "/"+  n.getFullYear();};
+				
+				///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				// Notes are not a part of pharmacy order item, but rather a pharmacy order
+				//		  notes: 			self.notes.field.val(),	
+				
+				var pharmacyOrderItem = {
+						  orderId: 			orderId,	
+						  itemId: 			self.item.field.attr("numId"),	
+						  quantity:			self.quantity.field.val(),	
+						  units: 			self.quantity.field_unit.val(),	
+						  dateDispensed: 	new Date(self.start.field.val())
+						};
+								
+				
+				if (self.quantity.field.val() != "") {
+					pharmacyOrderItem.quantity = self.quantity.field.val();
+				}
+				
+				//if (self.quantity.field.val() && self.quantity.field.val() != "")
+				//	pharmacyOrderItem.instructions += " (quantity: " +self.quantity.field.val()+" "+self.quantity.field_unit.val()+")"; 
+				
+				/***		
+				if (!self.duration.field_check.attr( "checked" )) {
+					var durMs = (parseInt(self.duration.field.val())) * 24 * 3600 * 1000;
+					var durationUnit =  self.duration.field_unit.val();
+					
+					if  (durationUnit === "week") {
+						durMs *= 7;
+					} else if ( self.duration.field_unit.val() === "month") {
+						durMs *= 30;
+					}
+					
+					var end = new Date (pharmacyOrderItem.pharmacyStartDate.getTime() + durMs);
+
+					pharmacyOrderItem.autoExpireDate = f(end);
+				}
+				
+				if (pharmacyOrderItem.autoExpireDate == "")
+					pharmacyOrderItem.autoExpireDate = null;
+				***/
+				
+				pharmacyOrderItem.dateDispensed = f(pharmacyOrderItem.dateDispensed);
+				
+				return pharmacyOrderItem;
+			};
+			
+			self.create = function () {
+				self.quantity.populate();
+				self.clear();
+				self.hide();
+			};
+			
+			self.submit = function () {
+				if(!pharmacyOrderAddForm.validate())
+					return;				
+				
+				var pharmacyOrder = self.getFilledData();
+				self.hide();
+				//This code needs to be rewritten as there is no support for pharmacyOrder creation by object at the moment
+				//DWROrderService.createDrugOrderByObject(pharmacyOrder, function(d) {if (d) {regimentTables.refreshTables();} } );
+				
+				
+			};
+		};
+		// End of pharmacyorder form
+			
 		
 		$j(document).ready(function(){
 			drugOrderForm.create();
+			pharmacyOrderAddForm.create();
 			regimentTables.refreshTables();
 		});
 		
@@ -607,7 +1037,7 @@
 				var self = this;
 				
 				self.table = $j("#drugorder_template").clone();
-				self.table.attr("id",drugorder.orderId + "drugOrederForm");
+				self.table.attr("id",drugorder.orderId + "drugOrderForm");
 				self.table.addClass("drugorder_table");
 				
 				self.name = self.table.find(".drugorder_drugname");
@@ -619,62 +1049,94 @@
 
 				self.del = self.table.find(".drugorder_delete");
 				self.stop = self.table.find(".drugorder_stop");
-	
-				var sform = self.table.find("#drugorder_stop_form");
-				var dform = self.table.find("#drugorder_del_form");
 				
-				self.sform = sform;
+				self.dispense = self.table.find(".pharmacyorder_dispense");
+	
+				var dform = self.table.find("#drugorder_del_form");
 				self.dform = dform;
 				
+				var sform = self.table.find("#drugorder_stop_form");
+				self.sform = sform;				
 				sform.find(".drugorder_stop_form_date").attr("id", drugorder.orderId + "date_picker" + (datePickerLongIdGenerationNUmber++));
 				
+				var pform = self.table.find("#pharmacyOrderAddForm");
+				self.pform = pform;
+				pform.find(".pharmacyOrder_form_date").attr("id", drugorder.orderId + "date_picker" + (datePickerLongIdGenerationNUmber++));
+				
+				///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				//Retrieve drugorderstatus here
+				console.log("Getting drug order status for order:" + drugorder.orderId);
 				
 				<openmrs:hasPrivilege privilege="Manage Orders" inverse="true">
 					self.name.append(drugorder.drugName +  " (" +drugorder.dose+" "+drugorder.units+ ")");
 				</openmrs:hasPrivilege>
 				<openmrs:hasPrivilege privilege="Manage Orders">
-				if (isCurrent) {
-					self.name.append(drugorder.drugName +  " (" +drugorder.dose+" "+drugorder.units+ ")");
-					//self.name.append("<a class=\"patientRegimenDrugName\" href=\"admin/orders/orderDrug.form?orderId=" + drugorder.orderId + "\">" + drugorder.drugName+ " (" +drugorder.dose+" "+drugorder.units+ ")" + "</a>");
+				if (isCurrent) 
+				{
+					self.name.append("<a class=\"patientRegimenDrugName\" href=\"../../../admin/orders/orderDrug.form?orderId=" + drugorder.orderId + "\">" + drugorder.drugName+ " (" +drugorder.dose+" "+drugorder.units+ ")" + "</a>");
 				} else {
 					self.name.append(drugorder.drugName +  " (" +drugorder.dose+" "+drugorder.units+ ")");
 				}
 				</openmrs:hasPrivilege>
+				
+				var pharmacyOrders = [];
+				<c:forEach items="${model.pharmacyOrders}" var="listItem">
+  					var arr = [];
+
+  					arr.push("<c:out value="${listItem.drugOrder}" />");
+  					arr.push("<c:out value="${listItem.pharmacyOrder}" />");
+
+  					pharmacyOrders.push(arr);
+				</c:forEach>
+				self.pharmacyOrders = pharmacyOrders;
+				
+				//self.pharmacyOrders.foreach(function(listItem, i) {
+				//	console.log(listItem);
+				//});
+				self.po = pharmacyOrders;
+				
+				
+				if (drugorder.status != null && drugorder.status != "")
+					self.status.append(drugorder.status);
+				else
+					self.status.append("N/A");
 
 				if (isCurrent) {
 					
 					if (drugorder.ordererName != null && drugorder.ordererName.length > 0) {	
-						self.prescriber.append("Prescribed by "+drugorder.ordererName + " in " + drugorder.createdDate + ".");
+						self.prescriber.append("Prescribed by "+drugorder.ordererName + " on " + drugorder.createdDate + ".");
 					} else if (drugorder.creatorName != null && drugorder.creatorName.length > 0) {
-						self.prescriber.append("Prescribed by "+drugorder.creatorName + " in " + drugorder.createdDate + ".");
+						self.prescriber.append("Prescribed by "+drugorder.creatorName + " on " + drugorder.createdDate + ".");
 					} else {
-						DWRPersonService.getPerson(drugorder.creatorId, function (d) {					
-							self.prescriber.append("Prescribed by "+d.personName + " in " + drugorder.createdDate + ".");
+						DWRPersonService.getPerson(drugorder.creatorId, function (d) 
+						{					
+							self.prescriber.append("Prescribed by "+d.personName + " on " + drugorder.createdDate + ".");
 						});
 					}
 					
-					if (drugorder.status != null && drugorder.status != "")
-						self.status.append(drugorder.status);
-					else
-						self.status.append("N/A");
+					
+						
 					if (drugorder.instructions != null && drugorder.instructions != "") 
-						self.instructions.append(drugorder.instructions + ".");
+						self.instructions.append("<br/>Instructions" + drugorder.instructions + ".");
 
 				} else {
 
 					self.showed = false;
 					self.table.fadeTo(0, 0.5);
 					self.table.find(".drugorder_tr").hide();
+					self.table.find(".pharmacyorder_tr").hide();
 					
 					self.table.find(".drugorder_title").click(function() {
 						if(self.showed) {
 							self.showed = false;
 							self.table.find(".drugorder_tr").hide();
+							self.table.find(".pharmacyorder_tr").hide();
 							self.table.fadeTo(0, 0.5);
 						} else {
 							self.showed = true;
 							self.table.fadeTo(0, 1);
 							self.table.find(".drugorder_tr").show();
+							self.table.find(".pharmacyorder_tr").show();
 						}
 					});
 		
@@ -700,7 +1162,7 @@
 						} else {
 						
 							DWRPersonService.getPerson(drugorder.discontinuerId, function (d) {
-		
+								
 								if (drugorder.instructions != null && drugorder.instructions != "") 
 									inst = drugorder.instructions + ". ";
 								
@@ -735,38 +1197,54 @@
 						self.instructions.append(inst);						
 					};				
 				}
-				
 
 				var details = "";
-				
+					details = (details + "Dose: " +drugorder.dose+" "+drugorder.units+ ", ");
+								
 				if (drugorder.frequency != null || drugorder.frequency != "")
-					details = (details + drugorder.frequency);
+					details = (details + "Frequency: " + drugorder.frequency + ", ");
 				
 				if (drugorder.prn != null)
 					details = (details + (drugorder.prn? " (as needed)" : ""));
 				
-				details = (details + ".");
+				//details = (details + ".");		
 				
 				if (drugorder.autoExpireDate == null || drugorder.autoExpireDate == "") {
-					details += " Start: " + drugorder.startDate;
+					details += " Start: " + drugorder.startDate + ", ongoing.";
 				} else {
 					details += " From " + drugorder.startDate + " to " + drugorder.autoExpireDate + ".";
 				}
+								
+				if (drugorder.instructions != null && drugorder.instructions != "") 
+					details = (details + "<br/>Instructions:" + drugorder.instructions + ", ");
 				
 				self.details.append(details);
 			
 				self.del.click(function() {
 					self.del.hide(); 
 					self.stop.hide();
+					self.dispense.hide();
 					sform.hide();
 					dform.show();
+					pform.hide();
 				});
 				
 				self.stop.click(function() {
 					self.del.hide(); 
 					self.stop.hide();
+					self.dispense.hide();
 					dform.hide();
 					sform.show();
+					pform.hide();
+				});
+				
+				self.dispense.click(function() {
+					self.del.hide(); 
+					self.stop.hide();
+					self.dispense.hide();
+					dform.hide();
+					sform.hide();
+					pform.show();
 				});
 				
 				
@@ -792,6 +1270,7 @@
 				sform.find("#drugorder_stop_form_cancel").click(function(){
 					self.del.show(); 
 					self.stop.show();
+					self.dispense.show();
 					dform.hide();
 					sform.hide();					
 				});
@@ -812,8 +1291,29 @@
 				dform.find("#drugorder_del_form_cancel").click(function(){
 					self.del.show(); 
 					self.stop.show();
+					self.dispense.show();
 					dform.hide();
 					sform.hide();					
+				});
+				
+				pform.find("#pharmacyorder_cancel").click(function(){
+					self.del.show(); 
+					self.stop.show();
+					self.dispense.show();
+					dform.hide();
+					sform.hide();
+					pform.hide();					
+				});
+				
+				
+				pform.find("#pharmacyorder_add").click(function(){
+					
+					//verify all pharmacyOrder data here
+					
+					console.log("Adding a new pharmacy order for order:" + drugorder.orderId);	
+					//Dispense drug
+					//Update DrugOrderStatus
+					///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
 				});
 				
 				var sel = sform.find("select");
@@ -863,6 +1363,10 @@
 
 				var t = new DrugTable(drugOrder.ortherId+drugOrder.drugSetLabel, drugOrder, true);
 				
+				//This code is supposed to populate page with pharmacyOrder tables
+				var t = new DrugTable(drugOrder.ortherId+drugOrder.drugSetLabel, drugOrder, true);
+				
+				
 				self.currentTables[drugOrder.drugSetLabel].find(".noDrugsOrderRow").hide();
 				self.currentTables[drugOrder.drugSetLabel].append(t.envolve()); 				
 				t.show();
@@ -874,8 +1378,8 @@
 				
 				self.completedTables[drugOrder.drugSetLabel].find(".noDrugsOrderRow").hide();
 				self.completedTables[drugOrder.drugSetLabel].append(t.envolve());
-				t.sform.children().remove();
-				t.stop.remove();	
+				t.stop.remove();
+				t.dispense.remove();
 				t.show();
 			}
 			
@@ -896,7 +1400,8 @@
 				
 	
 				
-				DWROrderService.getMappedDrugOrdersByPatientIdDrugSetId(patientId, displayDrugSetIds, 4, function(data){
+				DWROrderService.getMappedDrugOrdersByPatientIdDrugSetId(patientId, displayDrugSetIds, 4, function(data)
+				{
 					
 					var comp = function (a, b) {var da=new Date(a.createdDate); var db=new Date(b.createdDate); return da>db?-1:1;}; 
 					
@@ -976,7 +1481,6 @@
 				hideDiv('add' + codeName);
 				showDiv('action' + codeName);
 			} else {
-				hideDiv('action' + codeName);
 				dwr.util.setValue('actionSelect' + codeName, 'add');
 				showDiv('add' + codeName);
 			}

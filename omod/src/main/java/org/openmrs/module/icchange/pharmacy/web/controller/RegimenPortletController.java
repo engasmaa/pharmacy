@@ -26,19 +26,33 @@ import org.openmrs.Concept;
 import org.openmrs.DrugOrder;
 import org.openmrs.api.context.Context;
 
-public class RegimenPortletController extends PortletController {
+//Pharmacy adaptations
+import org.openmrs.module.icchange.pharmacy.PharmacyOrder;
+import org.openmrs.module.icchange.pharmacy.DrugOrderStatus;
+import org.openmrs.module.icchange.pharmacy.PharmacyItem;
+import org.openmrs.module.icchange.pharmacy.api.PharmacyOrderService;
+import org.openmrs.module.icchange.pharmacy.api.DrugOrderStatusService;
+import org.openmrs.module.icchange.pharmacy.api.PharmacyItemService;
+
+public class RegimenPortletController extends PortletController 
+{
 	
 	@SuppressWarnings("unchecked")
-	protected void populateModel(HttpServletRequest request, Map<String, Object> model) {
+	protected void populateModel(HttpServletRequest request, Map<String, Object> model) 
+	{
 		String drugSetIds = (String) model.get("displayDrugSetIds");
 		String cachedDrugSetIds = (String) model.get("cachedDrugSetIds");
-		if (cachedDrugSetIds == null || !cachedDrugSetIds.equals(drugSetIds)) {
+		if (cachedDrugSetIds == null || !cachedDrugSetIds.equals(drugSetIds)) 
+		{
 			if (drugSetIds != null && drugSetIds.length() > 0) {
 				Map<String, List<DrugOrder>> patientDrugOrderSets = new HashMap<String, List<DrugOrder>>();
 				Map<String, List<DrugOrder>> currentDrugOrderSets = new HashMap<String, List<DrugOrder>>();
 				Map<String, List<DrugOrder>> completedDrugOrderSets = new HashMap<String, List<DrugOrder>>();
+				Map<Integer, List<PharmacyOrder>> pharmacyOrders = new HashMap<Integer, List<PharmacyOrder>>();
+				Map<Integer, String> DrugOrderStatuses = new HashMap<Integer, String>();
 				
 				Map<String, Collection<Concept>> drugConceptsBySetId = new LinkedHashMap<String, Collection<Concept>>();
+				
 				boolean includeOther = false;
 				{
 					for (String setId : drugSetIds.split(",")) {
@@ -54,13 +68,27 @@ public class RegimenPortletController extends PortletController {
 					}
 				}
 				List<DrugOrder> patientDrugOrders = (List<DrugOrder>) model.get("patientDrugOrders");
-				if (patientDrugOrders != null) {
-					for (DrugOrder order : patientDrugOrders) {
+				if (patientDrugOrders != null) 
+				{
+					//VVV--Potentially not needed as pharmacy order carries a list of pharmacy items
+					//Retrieve Pharmacy Items for this patient
+					
+					
+					for (DrugOrder order : patientDrugOrders) 
+					{
+						//Retrieve Pharmacy Orders for this patient
+						pharmacyOrders.put(order.getId(), Context.getService(PharmacyOrderService.class).getPharmacyOrdersByDrugOrder(order));
+						//Retrieve Drug Order Statuses for this patient
+						DrugOrderStatuses.put(order.getId(), Context.getService(DrugOrderStatusService.class).getDrugOrderStatusByDrugOrder(order).getStatus().toString());
+						
 						String setIdToUse = null;
-						if (order.getDrug() != null) {
+						if (order.getDrug() != null) 
+						{
 							Concept orderConcept = order.getDrug().getConcept();
-							for (Map.Entry<String, Collection<Concept>> e : drugConceptsBySetId.entrySet()) {
-								if (e.getValue().contains(orderConcept)) {
+							for (Map.Entry<String, Collection<Concept>> e : drugConceptsBySetId.entrySet()) 
+							{
+								if (e.getValue().contains(orderConcept)) 
+								{
 									setIdToUse = e.getKey();
 									break;
 								}
@@ -81,6 +109,8 @@ public class RegimenPortletController extends PortletController {
 				model.put("patientDrugOrderSets", patientDrugOrderSets);
 				model.put("currentDrugOrderSets", currentDrugOrderSets);
 				model.put("completedDrugOrderSets", completedDrugOrderSets);
+				model.put("pharmacyOrders", pharmacyOrders);
+				model.put("DrugOrderStatuses", DrugOrderStatuses);
 				
 				model.put("cachedDrugSetIds", drugSetIds);
 			} // else do nothing - we already have orders in the model
@@ -90,7 +120,8 @@ public class RegimenPortletController extends PortletController {
 	/**
 	 * Null-safe version of "drugOrderSets.get(setIdToUse).add(order)"
 	 */
-	private void helper(Map<String, List<DrugOrder>> drugOrderSets, String setIdToUse, DrugOrder order) {
+	private void helper(Map<String, List<DrugOrder>> drugOrderSets, String setIdToUse, DrugOrder order) 
+	{
 		List<DrugOrder> list = drugOrderSets.get(setIdToUse);
 		if (list == null) {
 			list = new ArrayList<DrugOrder>();
@@ -98,5 +129,4 @@ public class RegimenPortletController extends PortletController {
 		}
 		list.add(order);
 	}
-	
 }

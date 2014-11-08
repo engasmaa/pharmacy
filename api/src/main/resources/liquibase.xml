@@ -103,7 +103,6 @@
 			<column name="note_to_pharmacist" type="varchar(255)"></column>
 		</addColumn>
 	</changeSet>
-	<!-- 
 	<changeSet id="icchange.pharmacy-v1.0.3" author="sLuchianov">
 	<preConditions onFail="MARK_RAN">
 	<tableExists tableName="pharmacy_drugorderstatus"/>
@@ -117,5 +116,4 @@
 			where pdos.status is null;
 		</sql>
 	</changeSet>
-	 -->
 </databaseChangeLog>

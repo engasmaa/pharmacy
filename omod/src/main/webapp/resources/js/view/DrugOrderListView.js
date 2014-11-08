@@ -151,7 +151,8 @@ function DrugOrderViewHeader (order, mode) {
 
 	this.createView  = function () {
 			
-		if (self.order.) {
+		//should not check for null, but rather order status, whether filled, not filled, or ongoing
+		if (self.order == null) {
 	
 			
 		} else {

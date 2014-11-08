@@ -157,7 +157,7 @@ public class DWRPharmacyOrderService {
 	}
 	
 	
-	public List<PharmacyOrder> getPharmacyOerdersByDrugOrderId(Integer drugId) throws Exception{
+	public List<PharmacyOrder> getPharmacyOrdersByDrugOrderId(Integer drugId) throws Exception{
 		
 		DrugOrder drugOrder = Context.getOrderService().getDrugOrder(drugId);
 		
