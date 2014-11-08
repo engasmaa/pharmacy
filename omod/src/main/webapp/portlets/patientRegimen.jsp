@@ -6,12 +6,8 @@
 <openmrs:htmlInclude file="/scripts/drugOrder.js" />
 
 
-<openmrs:htmlInclude file="/moduleResources/icchange/pharmacy/js/PharmacyOrder.js" />
-<openmrs:htmlInclude file="/dwr/DWRPharmacyOrderService.js" />
-<openmrs:htmlInclude file="/dwr/DWRPharmacyOrder.js" />
-<openmrs:htmlInclude file="/dwr/DWRPharmacyItem.js" />
-<openmrs:htmlInclude file="/dwr/DWRDrugOrderStatusService.js" />
-<openmrs:htmlInclude file="/dwr/DWRDrugOrderStatus.js" />
+<openmrs:htmlInclude file="/moduleResources/icchange/pharmacy/dwr/interface/DWRDrugOrderStatusService.js" />
+<openmrs:htmlInclude file="/moduleResources/icchange/pharmacy/dwr/interface/DWRDrugOrderStatus.js" />
 
 
 <% java.sql.Timestamp now = new java.sql.Timestamp(System.currentTimeMillis()); %>
@@ -1054,7 +1050,7 @@
 				self.del = self.table.find(".drugorder_delete");
 				self.stop = self.table.find(".drugorder_stop");
 				
-				self.dispense = self.table.find(".pharmacyorder_dispense");
+				self.disp = self.table.find(".pharmacyorder_dispense");
 	
 				var dform = self.table.find("#drugorder_del_form");
 				self.dform = dform;
@@ -1239,7 +1235,7 @@
 				{
 					self.del.hide(); 
 					self.stop.hide();
-					self.dispense.hide();
+					self.disp.hide();
 					sform.hide();
 					dform.show();
 					pform.hide();
@@ -1255,7 +1251,8 @@
 					pform.hide();
 				});
 				
-				self.dispense.click(function()
+				self.disp.click(function()
+				{
 					self.del.hide(); 
 					self.stop.hide();
 					self.dispense.hide();

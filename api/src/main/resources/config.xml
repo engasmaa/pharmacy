@@ -6,14 +6,6 @@
 <dwr>
 
 	<allow>
-		<create creator="new" javascript="JDate">
-	      <param name="class" value="java.util.Date"/>
-		</create>
-		
-		<convert match="java.lang.Exception" converter="exception">
-			<param name="exclude" value="stackTrace"/>
-		</convert>
-		
 		<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.model.DWRPharmacyOrder"/>
 		<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.model.DWRPharmacyItem"/>
 		<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.model.DWRDrugOrderStatus"/>
@@ -42,13 +34,11 @@
 			import org.openmrs.module.icchange.pharmacy.web.dwr.model.DWRDrugOrderStatus;
 			import org.openmrs.module.icchange.pharmacy.web.dwr.DWRPharmacyOrderService;
 			import org.openmrs.module.icchange.pharmacy.web.dwr.DWRDrugOrderStatusService;
-			import java.util.Date;
-			import java.util.List;
-			import java.util.Map;
 			
 			DWRDrugOrderStatusService.getDrugOrderStatusByDrugOrderId(Integer id);
 			DWRDrugOrderStatusService.getDrugOrderStatusByPatient (Integer patientId, Date from);
 			DWRDrugOrderStatusService.getDrugOrderStatusByPatient (Integer patientId);
+			
 		]]>
 	</signatures>
   	
