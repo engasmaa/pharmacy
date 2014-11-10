@@ -42,11 +42,12 @@
 	
 	<dwr>
 		<allow>
-			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.model.DWRBaseOpenmrsData" javascript="DWRBaseOpenmrsData"/>
-			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.model.DWROrder" javascript="DWROrder" />
-			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.model.DWRPharmacyOrder" javascript="DWRPharmacyOrder" />
-			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.model.DWRDrugOrder" javascript="DWRDrugOrder" />
-			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.model.DWRDrugOrderHeader" javascript="DWRDrugOrderHeader" />
+			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.DWRBaseOpenmrsData" javascript="DWRBaseOpenmrsData"/>
+			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.DWROrder" javascript="DWROrder" />
+			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.DWRPharmacyOrder" javascript="DWRPharmacyOrder" />
+			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.DWRDrugOrder" javascript="DWRDrugOrder" />
+			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.DWRDrugOrderHeader" javascript="DWRDrugOrderHeader" />
+			
 			<create creator="new" javascript="DWRPharmacyOrderService">
 				<param name="class" value="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRPharmacyOrderService"/>
 				<include method="createPharmacyOrder"/>
@@ -55,17 +56,34 @@
 				<include method="getDrugOrder" />
 				<include method="getDrugOrderById" />
 			</create>
+			
+			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRPharmacyOrder"/>
+			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRPharmacyItem"/>
+			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRDrugOrderStatus"/>
+				
+			<create creator="new" javascript="DWRDrugOrderStatusService">
+				<param name="class" value="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRDrugOrderStatusService" />
+				<include method="getDrugOrderStatusByDrugOrderId"/>
+				<include method="getDrugOrderStatusByPatient" />
+				<include method="getDrugOrderStatusByPatient" />
+			</create>
 		</allow>
 		<signatures>
 			<![CDATA[
 				import java.util.Date;
 				import java.util.List;
 				import java.util.Map;
-				import ${project.parent.groupId}.${project.parent.artifactId}.web.model.DWRBaseOpenmrsData;
-				import ${project.parent.groupId}.${project.parent.artifactId}.web.model.DWROrder;
-				import ${project.parent.groupId}.${project.parent.artifactId}.web.model.DWRPharmacyOrder;
-				import ${project.parent.groupId}.${project.parent.artifactId}.web.model.DWRDrugOrder;
+				import ${project.parent.groupId}.${project.parent.artifactId}.web.DWRBaseOpenmrsData;
+				import ${project.parent.groupId}.${project.parent.artifactId}.web.DWROrder;
+				import ${project.parent.groupId}.${project.parent.artifactId}.web.DWRPharmacyOrder;
+				import ${project.parent.groupId}.${project.parent.artifactId}.web.DWRDrugOrder;				
+				import ${project.parent.groupId}.${project.parent.artifactId}.web.DWRDrugOrderStatus;
 				import ${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRPharmacyOrderService;
+				import ${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRDrugOrderStatusService;
+			
+				DWRDrugOrderStatusService.getDrugOrderStatusByDrugOrderId(Integer id);
+				DWRDrugOrderStatusService.getDrugOrderStatusByPatient (Integer patientId, Date from);
+				DWRDrugOrderStatusService.getDrugOrderStatusByPatient (Integer patientId);
 			]]>
 		</signatures>	
 	</dwr>

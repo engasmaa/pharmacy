@@ -42,7 +42,7 @@ import org.openmrs.module.icchange.pharmacy.api.PharmacyOrderService;
 import org.openmrs.module.icchange.pharmacy.web.dwr.DWRDrugOrderHeaderService;
 import org.openmrs.module.icchange.pharmacy.web.dwr.DWRDrugOrderService;
 import org.openmrs.module.icchange.pharmacy.web.dwr.DWRPharmacyOrderService;
-import org.openmrs.module.icchange.pharmacy.web.dwr.model.DWRDrugOrderHeader;
+import org.openmrs.module.icchange.pharmacy.web.dwr.DWRDrugOrderHeader;
 import org.openmrs.module.web.extension.ExtensionUtil;
 import org.openmrs.module.web.extension.provider.Link;
 import org.springframework.orm.ObjectRetrievalFailureException;

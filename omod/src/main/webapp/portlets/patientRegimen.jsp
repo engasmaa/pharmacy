@@ -6,9 +6,7 @@
 <openmrs:htmlInclude file="/scripts/drugOrder.js" />
 
 
-<openmrs:htmlInclude file="/moduleResources/icchange/pharmacy/dwr/interface/DWRDrugOrderStatusService.js" />
-<openmrs:htmlInclude file="/moduleResources/icchange/pharmacy/dwr/interface/DWRDrugOrderStatus.js" />
-
+<openmrs:htmlInclude file="/dwr/interface/DWRDrugOrderStatusService.js" />
 
 <% java.sql.Timestamp now = new java.sql.Timestamp(System.currentTimeMillis()); %>
 
@@ -351,6 +349,7 @@
 			</div>
 		</td>	
 	</tr>
+	<tr></tr>
 	<tr >
 		<td colspan="4">
 		<div id="pharmacyOrderAddForm" style="display:none; border: 1px dashed black; padding: 10px;">
@@ -1066,8 +1065,23 @@
 				///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				//Retrieve drugorderstatus here
 				console.log("Getting drug order status for order:" + drugorder.orderId);
-				var status = DWRDrugOrderStatusService.getDrugOrderStatusByDrugOrder(drugorder);
-				console.log("Status:" + status.status);
+				
+				//var dispenseStatus = self.table.find(".drugorder_status"); 
+				//self.dispenseStatus = dispenseStatus;
+				//var dispenseStatus = [];
+				DWRDrugOrderStatusService.getDrugOrderStatusByDrugOrderId(drugorder.orderId, function (d) 
+						{					
+							self.status.append(d[0].status);
+						});
+				/***
+				var reply0 = function(data)
+   				{
+      				if (data != null && typeof data == 'object') alert(dwr.util.toDescriptiveString(data, 2));
+      				else dwr.util.setValue('drugorder_status', dwr.util.toDescriptiveString(data, 1));
+    			}
+				DWRDrugOrderStatusService.getDrugOrderStatusByDrugOrderId((drugorder.orderId), reply0);
+				***/
+				
 				
 				<openmrs:hasPrivilege privilege="Manage Orders" inverse="true">
 					self.name.append(drugorder.drugName +  " (" +drugorder.dose+" "+drugorder.units+ ")");
@@ -1098,12 +1112,12 @@
 				//});
 				self.po = pharmacyOrders;
 				
-				
+				/***
 				if (drugorder.status != null && drugorder.status != "")
 					self.status.append(drugorder.status);
 				else
 					self.status.append("N/A");
-
+				***/
 				if (isCurrent) 
 				{
 					
@@ -1245,7 +1259,7 @@
 				{
 					self.del.hide(); 
 					self.stop.hide();
-					self.dispense.hide();
+					self.disp.hide();
 					dform.hide();
 					sform.show();
 					pform.hide();
@@ -1255,7 +1269,7 @@
 				{
 					self.del.hide(); 
 					self.stop.hide();
-					self.dispense.hide();
+					self.disp.hide();
 					dform.hide();
 					sform.hide();
 					pform.show();
@@ -1285,7 +1299,7 @@
 				sform.find("#drugorder_stop_form_cancel").click(function(){
 					self.del.show(); 
 					self.stop.show();
-					self.dispense.show();
+					self.disp.show();
 					dform.hide();
 					sform.hide();					
 				});
@@ -1307,7 +1321,7 @@
 				{
 					self.del.show(); 
 					self.stop.show();
-					self.dispense.show();
+					self.disp.show();
 					dform.hide();
 					sform.hide();					
 				});
@@ -1316,7 +1330,7 @@
 				{
 					self.del.show(); 
 					self.stop.show();
-					self.dispense.show();
+					self.disp.show();
 					dform.hide();
 					sform.hide();
 					pform.hide();					
@@ -1399,7 +1413,7 @@
 				self.completedTables[drugOrder.drugSetLabel].find(".noDrugsOrderRow").hide();
 				self.completedTables[drugOrder.drugSetLabel].append(t.envolve());
 				t.stop.remove();
-				t.dispense.remove();
+				t.disp.remove();
 				t.show();
 			}
 			

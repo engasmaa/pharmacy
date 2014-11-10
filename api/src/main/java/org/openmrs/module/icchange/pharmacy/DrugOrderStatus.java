@@ -4,14 +4,14 @@ import org.openmrs.BaseOpenmrsData;
 import org.openmrs.DrugOrder;
 
 public class DrugOrderStatus extends BaseOpenmrsData {
-
+	/***
 	public enum Status {
 		FULLY_DISPENSED, PARTIALLY_DISPENSED, NOT_DISPENSED, N_A
 	};
-	
+	***/
 	private Integer id;
 	private DrugOrder drugOrder;
-	private Status status = Status.NOT_DISPENSED;
+	private String status = "NOT_DISPENSED";
 	private String noteToPharmacist;
 	//private String noteToPhysicist;
 	private String uuid;
@@ -43,10 +43,10 @@ public class DrugOrderStatus extends BaseOpenmrsData {
 	public void setDrugOrder(DrugOrder drugOrder) {
 		this.drugOrder = drugOrder;
 	}
-	public Status getStatus() {
+	public String getStatus() {
 		return status;
 	}
-	public void setStatus(Status status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 	/***

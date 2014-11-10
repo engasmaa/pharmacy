@@ -7,8 +7,8 @@ import org.openmrs.DrugOrder;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.icchange.pharmacy.PharmacyOrder;
 import org.openmrs.module.icchange.pharmacy.api.PharmacyOrderService;
-import org.openmrs.module.icchange.pharmacy.web.dwr.model.DWRDrugOrder;
-import org.openmrs.module.icchange.pharmacy.web.dwr.model.DWRPharmacyOrder;
+import org.openmrs.module.icchange.pharmacy.web.dwr.DWRDrugOrder;
+import org.openmrs.module.icchange.pharmacy.web.dwr.DWRPharmacyOrder;
 
 public class DWRDrugOrderService {
 	

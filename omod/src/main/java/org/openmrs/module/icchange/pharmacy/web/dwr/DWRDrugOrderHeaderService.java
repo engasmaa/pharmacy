@@ -17,7 +17,7 @@ import org.openmrs.module.icchange.pharmacy.DrugOrderStatus;
 import org.openmrs.module.icchange.pharmacy.api.DrugOrderStatusService;
 import org.openmrs.module.icchange.pharmacy.api.PharmacyOrderService;
 import org.openmrs.module.icchange.pharmacy.config.PharmacyConfiguration;
-import org.openmrs.module.icchange.pharmacy.web.dwr.model.DWRDrugOrderHeader;
+import org.openmrs.module.icchange.pharmacy.web.dwr.DWRDrugOrderHeader;
 import org.openmrs.util.OpenmrsUtil;
 
 public class DWRDrugOrderHeaderService {

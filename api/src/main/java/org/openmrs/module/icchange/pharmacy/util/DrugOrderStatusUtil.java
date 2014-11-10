@@ -7,7 +7,7 @@ import javax.swing.text.AbstractDocument.Content;
 import org.openmrs.DrugOrder;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.icchange.pharmacy.DrugOrderStatus;
-import org.openmrs.module.icchange.pharmacy.DrugOrderStatus.Status;
+//import org.openmrs.module.icchange.pharmacy.DrugOrderStatus.Status;
 
 public class DrugOrderStatusUtil {
 	
@@ -38,7 +38,7 @@ public class DrugOrderStatusUtil {
 		d.setCreator(Context.getAuthenticatedUser());
 		d.setDateCreated(new Date());
 		d.setDrugOrder(drugOrder);
-		d.setStatus(Status.NOT_DISPENSED);
+		d.setStatus("NOT_DISPENSED");
 
 		return d;
 	}

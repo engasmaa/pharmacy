@@ -14,10 +14,10 @@
 			</generator>
 		</id>
 		<one-to-one name="drugOrder" class="org.openmrs.DrugOrder" constrained="true"></one-to-one> 
-		<property name="status" column="status">
-		    <type name="org.openmrs.util.HibernateEnumType">
+		<property name="status" type="java.lang.String" column="status">
+		    <!-- <type name="org.openmrs.util.HibernateEnumType">
 		        <param name="enumClassName">org.openmrs.module.icchange.pharmacy.DrugOrderStatus$Status</param>
-		    </type>
+		    </type> -->
 		</property>
 		<property name="uuid" type="java.lang.String" column="uuid" length="38" unique="true" />
 		<property name="noteToPharmacist" type="java.lang.String" column="note_to_pharmacist" length="255" />

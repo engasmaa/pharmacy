@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 import org.openmrs.Concept;
 import org.openmrs.DrugOrder;
@@ -17,7 +18,7 @@ import org.openmrs.module.icchange.pharmacy.DrugOrderStatus;
 import org.openmrs.module.icchange.pharmacy.api.DrugOrderStatusService;
 import org.openmrs.module.icchange.pharmacy.api.PharmacyOrderService;
 import org.openmrs.module.icchange.pharmacy.config.PharmacyConfiguration;
-import org.openmrs.module.icchange.pharmacy.web.dwr.model.DWRDrugOrderStatus;
+import org.openmrs.module.icchange.pharmacy.web.dwr.DWRDrugOrderStatus;
 import org.openmrs.util.OpenmrsUtil;
 
 public class DWRDrugOrderStatusService {
@@ -31,18 +32,15 @@ public class DWRDrugOrderStatusService {
 		this.pharmacyService = Context.getService(PharmacyOrderService.class);
 		this.drugOrderStatusService = Context.getService(DrugOrderStatusService.class);
 	}
-	
+	/***
 	public DWRDrugOrderStatus getDrugOrderStatusByDrugOrder (DrugOrder d) {
-		if (d == null)
-			return null;
 		
-		DrugOrderStatus dstatus = drugOrderStatusService.getDrugOrderStatusByDrugOrder(d);
-		DWRDrugOrderStatus dh = new DWRDrugOrderStatus(d, dstatus);
-		PharmacyConfiguration config = pharmacyService.getPharmacyConfig();
-		Map<String, Set<Integer>> setsMap = config.setConceptMap;
+		//DWRDrugOrderStatus dh = new DWRDrugOrderStatus(d, dstatus);
+		//PharmacyConfiguration config = pharmacyService.getPharmacyConfig();
+		//Map<String, Set<Integer>> setsMap = config.setConceptMap;
 
-		dh.setDrugSetLabel("");
-		dh.setDrugOrderSetIds("");
+		//dh.setDrugSetLabel("");
+		//dh.setDrugOrderSetIds("");
 		
 		for (String setName: setsMap.keySet()) {
 			if (setsMap.get(setName).contains(d.getConcept().getId())) {
@@ -55,20 +53,29 @@ public class DWRDrugOrderStatusService {
 			dh.setDrugSetLabel("OTHER");
 			dh.setDrugOrderSetIds("null");				
 		}
-						
-		return dh;
-	}
+					
+		return dstatus;
+	}***/
 	
-	public DWRDrugOrderStatus getDrugOrderStatusByDrugOrderId (Integer id) {
+	public Vector<DWRDrugOrderStatus> getDrugOrderStatusByDrugOrderId (Integer id) 
+	{
 		if (id == null)
 			return null;
-	
-		DrugOrder d = orderService.getDrugOrder(id);		
-		return getDrugOrderStatusByDrugOrder(d);
+		Vector<DWRDrugOrderStatus> ret = new Vector<DWRDrugOrderStatus>();
+		DrugOrderStatus status = drugOrderStatusService.getDrugOrderStatusById(id);
+		if (status != null)
+		{
+			ret.add(new DWRDrugOrderStatus(status));
+			return ret;
+		}
+		else
+		{
+			return null;
+		}
 	}
 
-	public List<DWRDrugOrderStatus> getDrugOrderStatusByPatient (Integer patientId, Date from) throws Exception{
-		List<DWRDrugOrderStatus>  ret = new ArrayList<DWRDrugOrderStatus>();
+	public Vector<DWRDrugOrderStatus> getDrugOrderStatusByPatient (Integer patientId, Date from) throws Exception{
+		Vector<DWRDrugOrderStatus>  ret = new Vector<DWRDrugOrderStatus>();
 		
 		if (patientId == null)
 			throw new Exception("A patient must be specified.");
@@ -92,13 +99,13 @@ public class DWRDrugOrderStatusService {
 
 		for (DrugOrder d: drugOrders) 
 			if (d.getDateCreated().after(from))
-				ret.add(getDrugOrderStatusByDrugOrder(d));
+				ret = getDrugOrderStatusByDrugOrderId(d.getOrderId());
 		
 		return ret;
 	}
 
 	
-	public List<DWRDrugOrderStatus> getDrugOrderStatusByPatient (Integer patientId) throws Exception {
+	public Vector<DWRDrugOrderStatus> getDrugOrderStatusByPatient (Integer patientId) throws Exception {
 		return getDrugOrderStatusByPatient(patientId, null);
 	}
 }
