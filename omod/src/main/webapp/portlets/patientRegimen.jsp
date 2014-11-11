@@ -1083,6 +1083,11 @@
 						{					
 							self.status.append(d[0].status);
 						});
+
+				DWRPharmacyOrderService.getPharmacyOrdersByDrugOrderId(drugorder.orderId, function (p) 
+						{					
+							self.status.append(p[0].status);
+						});
 				/***
 				var reply0 = function(data)
    				{

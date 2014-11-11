@@ -56,11 +56,9 @@
 			
 			<create creator="new" javascript="DWRPharmacyOrderService">
 				<param name="class" value="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRPharmacyOrderService"/>
-				<include method="createPharmacyOrder"/>
-				<include method="getAllPharmacyOrdersByPatient"/>
-				<include method="getDrugOrdersHeaders" />
-				<include method="getDrugOrder" />
-				<include method="getDrugOrderById" />
+				<include method="getPharmacyOrdersByDrugOrderId"/>
+				<include method="savePharmacyOrder" />
+				<include method="createPharmacyOrder" />
 			</create>
 			
 				
@@ -84,6 +82,9 @@
 				DWRDrugOrderStatusService.getDrugOrderStatusByDrugOrderId(Integer id);
 				DWRDrugOrderStatusService.getDrugOrderStatusByPatient (Integer patientId, Date from);
 				DWRDrugOrderStatusService.getDrugOrderStatusByPatient (Integer patientId);
+				DWRPharmacyOrderService.getPharmacyOrdersByDrugOrderId(Integer drugId);
+				DWRPharmacyOrderService.savePharmacyOrder(DWRPharmacyOrder order);
+				DWRPharmacyOrderService.createPharmacyOrder(Integer drugId);
 			]]>
 		</signatures>	
 		<!--  Useless Garbage Imports

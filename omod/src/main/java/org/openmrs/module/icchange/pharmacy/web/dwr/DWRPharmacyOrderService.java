@@ -27,7 +27,7 @@ public class DWRPharmacyOrderService {
 
 	private PharmacyOrderService service = Context.getService(PharmacyOrderService.class);
 
-	public DWRPharmacyOrder savePharmacyOrder (DWRPharmacyOrder order) throws Exception {
+	public DWRPharmacyOrder savePharmacyOrder(DWRPharmacyOrder order) throws Exception {
 		
 		if (order == null)
 			return null;

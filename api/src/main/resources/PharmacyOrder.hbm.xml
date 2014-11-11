@@ -5,6 +5,20 @@
 
 <hibernate-mapping package="org.openmrs.module.icchange.pharmacy">
 
+	<class name="PharmacyOrderTest" table="pharmacy_pharmacyorder_test" >
+		<id name="id" type="int" column="pharmacyorder_id" unsaved-value="0">
+			<generator class="native" />
+		</id>
+		<discriminator column="pharmacyorder_id" insert="false" />
+		<many-to-one name="drugOrder" class="org.openmrs.DrugOrder" column="drugorder_id"  not-null="true" />
+		<many-to-one name="item" class="org.openmrs.module.openhmis.inventory.api.model.Item" column="item_id" not-null="true" />
+		<property name="quantity" type="java.lang.Integer" column="quanity"/>
+		<property name="units" type="java.lang.String" column="units" length="255"/>
+		<property name="dispenseDate" type="java.lang.Date" column="dispense_date"/>
+		<property name="notes" type="java.lang.String" column="notes" length="255"/>
+		<property name="uuid" type="java.lang.String" column="uuid" length="38" unique="true" />
+	</class>
+	<!-- 
 	<joined-subclass name="PharmacyOrder" table="pharmacy_pharmacyorder" extends="org.openmrs.Order">
 		<key column="order_id" />
 		<many-to-one name="drugOrder" class="org.openmrs.DrugOrder" column="drugorder_id"  not-null="true" />
@@ -19,10 +33,10 @@
 			<generator class="native" />
 		</id>
 		<discriminator column="pharmacyitem_id" insert="false" />
-		<property name="itemId" type="java.lang.Integer" column="item_id"/><!--  -->
-		<!-- <many-to-one name="item" class="org.openmrs.module.openhmis.inventory.api.model.Item" column="item_id" not-null="true" /> -->
+		<property name="itemId" type="java.lang.Integer" column="item_id"/>
+		<many-to-one name="item" class="org.openmrs.module.openhmis.inventory.api.model.Item" column="item_id" not-null="true" />
 		<property name="quantity" type="java.lang.Integer" column="quanity"/>
 		<property name="unit" type="java.lang.String" column="unit" length="255"/>
 		<property name="uuid" type="java.lang.String" column="uuid" length="38" unique="true" />
-	</class>
+	</class>-->
 </hibernate-mapping>
