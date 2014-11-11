@@ -97,14 +97,15 @@ public class DWRPharmacyOrderService {
 		
 		return null;	**/
 		
-	}
-	
-public Vector<DWRDrugOrder> getAllPharmacyOrdersByPatient(Integer patientId) {
+		}
+	/**
+		public Vector<DWRDrugOrder> getAllPharmacyOrdersByPatient(Integer patientId) 
+		{
 		
 		if (patientId == null)
 			return null;
 		
-		Patient patient = Context.getPatientService().getPatient(patientId);
+		//Patient patient = Context.getPatientService().getPatient(patientId);
 		
 		if (patient == null)
 			return null;
@@ -118,12 +119,14 @@ public Vector<DWRDrugOrder> getAllPharmacyOrdersByPatient(Integer patientId) {
 		
 		List<DWRDrugOrder> dwrOrders = new ArrayList<DWRDrugOrder>();
 		
-		for (DrugOrder key: map.keySet()) {
+		for (DrugOrder key: map.keySet()) 
+		{
 			DWRDrugOrder dwrOrder = new DWRDrugOrder(key);
 			
 			List<DWRPharmacyOrder> pList = new ArrayList<DWRPharmacyOrder>();
 			
-			for (PharmacyOrder p: map.get(key)) {
+			for (PharmacyOrder p: map.get(key)) 
+			{
 				if (p != null)
 					pList.add(new DWRPharmacyOrder(p));
 			}
@@ -133,7 +136,8 @@ public Vector<DWRDrugOrder> getAllPharmacyOrdersByPatient(Integer patientId) {
 		}
 		
 		return dwrOrders;
-
+		}
+		**/
 	/***
 	public List<DWRDrugOrder> getAllPharmacyOrdersByPatient(Integer patientId) {
 		
