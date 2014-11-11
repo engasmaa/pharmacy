@@ -29,7 +29,7 @@ public interface PharmacyOrderDAO {
 	
 	public PharmacyOrder getPharmacyOrderByUuid(String uuid) throws DAOException;
 
-	public List<PharmacyOrder> getPharmacyOrderByPatient(Patient patient) throws DAOException;
+	//public List<PharmacyOrder> getPharmacyOrderByPatient(Patient patient) throws DAOException;
 	
 	public List<PharmacyOrder> getPharmacyOrderByDrugOrder(DrugOrder drugOrder) throws DAOException;
 	

@@ -1,19 +1,34 @@
 package org.openmrs.module.icchange.pharmacy.web.dwr;
 
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
+import org.openmrs.api.context.Context;
 
 import org.openmrs.module.icchange.pharmacy.PharmacyOrder;
 
 public class DWRPharmacyOrder {
 
 	private Integer orderId;
+	private Integer itemId;
+	private Integer quantity;
+	private String units;
+	private String dispenseDate;
+	private String notes;
 	
 	public DWRPharmacyOrder () {}
 
 	
 	public DWRPharmacyOrder (PharmacyOrder order) {
-		super(order);
-		this.orderId = order.getDrugOrder().getId();
+		//super(order);
+		this.orderId = order.getDrugOrder().getOrderId();
+		this.itemId = order.getItem().getId();
+		this.quantity = order.getQuantity();
+		this.units = order.getUnits();
+		this.notes = order.getNotes();
+
+		SimpleDateFormat sdf = Context.getDateFormat();
+		if (order.getDispenseDate() != null)
+			dispenseDate = sdf.format(order.getDispenseDate());
 	}
 	
 	public String toJasonRepresentation () {
@@ -44,7 +59,6 @@ public class DWRPharmacyOrder {
 	public String toString () {
 		return this.toJasonRepresentation();
 	}
-
 	
 	public Integer getOrderId() {
 		return orderId;
@@ -53,5 +67,35 @@ public class DWRPharmacyOrder {
 	public void setOrderId(Integer orderId) {
 		this.orderId = orderId;
 	}
-
+	
+	public Integer getItemId() {
+		return itemId;
+	}
+	public void setId(Integer itemId) {
+		this.itemId = itemId;
+	}
+	public Integer getQuantity() {
+		return quantity;
+	}
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
+	public String getUnits() {
+		return units;
+	}
+	public void setUnits(String units) {
+		this.units = units;
+	}
+	public String getNotes() {
+		return notes;
+	}
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+	public String getDispenseDate() {
+		return dispenseDate;
+	}
+	public void setDispenseDate(String dispenseDate) {
+		this.dispenseDate = dispenseDate;
+	}
 }

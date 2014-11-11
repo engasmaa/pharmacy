@@ -36,7 +36,7 @@ public interface PharmacyOrderService extends OpenmrsService, GlobalPropertyList
 
 	public PharmacyOrder getPharmacyOrderByUuid(String uuid);
 	
-	public List<PharmacyOrder> getPharmacyOrdersByPatient(Patient patient);
+	//public List<PharmacyOrder> getPharmacyOrdersByPatient(Patient patient);
 
 	public List<PharmacyOrder> getPharmacyOrdersByDrugOrder(DrugOrder drugOrder);
 
@@ -46,11 +46,11 @@ public interface PharmacyOrderService extends OpenmrsService, GlobalPropertyList
 	
 	public PharmacyOrder savePharmacyOrder(PharmacyOrder pharmacyOrder) throws APIException;
 	
-	public List<PharmacyOrder> saveAllPharmacyOrders(List<PharmacyOrder> phamacyOrders);
+	//public List<PharmacyOrder> saveAllPharmacyOrders(List<PharmacyOrder> phamacyOrders);
 	
-	public List<PharmacyOrder> saveAllPharmacyOrdersOnSameEncounter(List<PharmacyOrder> pharmacyOrders, Encounter e);
+	//public List<PharmacyOrder> saveAllPharmacyOrdersOnSameEncounter(List<PharmacyOrder> pharmacyOrders, Encounter e);
 		
 	public PharmacyOrder addPharmacyOrderToDrugOrder(DrugOrder drugOrder, PharmacyOrder pharmacyOrder) throws APIException;
 	
-	public List<Boolean> dispenseItems (DrugOrder drugOrder, List<PharmacyItem> items) throws APIException; 
+	//public List<Boolean> dispenseItems (DrugOrder drugOrder, List<PharmacyItem> items) throws APIException; 
 }

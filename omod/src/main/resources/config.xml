@@ -42,11 +42,17 @@
 	
 	<dwr>
 		<allow>
+		<!-- Useless Garbage Imports 
 			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.DWRBaseOpenmrsData" javascript="DWRBaseOpenmrsData"/>
 			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.DWROrder" javascript="DWROrder" />
-			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.DWRPharmacyOrder" javascript="DWRPharmacyOrder" />
 			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.DWRDrugOrder" javascript="DWRDrugOrder" />
+			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRPharmacyItem"/>
+			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.DWRPharmacyOrder" javascript="DWRPharmacyOrder" />
 			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.DWRDrugOrderHeader" javascript="DWRDrugOrderHeader" />
+		
+		-->
+			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRPharmacyOrder"/>
+			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRDrugOrderStatus"/>
 			
 			<create creator="new" javascript="DWRPharmacyOrderService">
 				<param name="class" value="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRPharmacyOrderService"/>
@@ -57,9 +63,6 @@
 				<include method="getDrugOrderById" />
 			</create>
 			
-			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRPharmacyOrder"/>
-			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRPharmacyItem"/>
-			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRDrugOrderStatus"/>
 				
 			<create creator="new" javascript="DWRDrugOrderStatusService">
 				<param name="class" value="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRDrugOrderStatusService" />
@@ -72,11 +75,8 @@
 			<![CDATA[
 				import java.util.Date;
 				import java.util.List;
-				import java.util.Map;
-				import ${project.parent.groupId}.${project.parent.artifactId}.web.DWRBaseOpenmrsData;
-				import ${project.parent.groupId}.${project.parent.artifactId}.web.DWROrder;
-				import ${project.parent.groupId}.${project.parent.artifactId}.web.DWRPharmacyOrder;
-				import ${project.parent.groupId}.${project.parent.artifactId}.web.DWRDrugOrder;				
+				import java.util.Map;	
+				import ${project.parent.groupId}.${project.parent.artifactId}.web.DWRPharmacyOrder;		
 				import ${project.parent.groupId}.${project.parent.artifactId}.web.DWRDrugOrderStatus;
 				import ${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRPharmacyOrderService;
 				import ${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRDrugOrderStatusService;
@@ -86,6 +86,12 @@
 				DWRDrugOrderStatusService.getDrugOrderStatusByPatient (Integer patientId);
 			]]>
 		</signatures>	
+		<!--  Useless Garbage Imports
+		
+				import ${project.parent.groupId}.${project.parent.artifactId}.web.DWRBaseOpenmrsData;
+				import ${project.parent.groupId}.${project.parent.artifactId}.web.DWROrder;
+				import ${project.parent.groupId}.${project.parent.artifactId}.web.DWRDrugOrder;	
+				 -->
 	</dwr>
 
 	<!-- Internationalization -->

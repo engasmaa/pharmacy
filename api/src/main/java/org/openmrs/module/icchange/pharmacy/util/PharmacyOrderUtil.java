@@ -11,7 +11,7 @@ import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.icchange.pharmacy.PharmacyItem;
+//import org.openmrs.module.icchange.pharmacy.PharmacyItem;
 import org.openmrs.module.icchange.pharmacy.PharmacyOrder;
 import org.openmrs.module.icchange.pharmacy.api.PharmacyOrderService;
 import org.openmrs.module.icchange.pharmacy.config.PharmacyConfiguration;
@@ -23,13 +23,13 @@ public class PharmacyOrderUtil {
 		if (porder == null)
 			return false;
 		
-		if (porder.getPatient() == null || porder.getDrugOrder() == null)
-			return false;
+		//if (porder.getPatient() == null || porder.getDrugOrder() == null)
+			//return false;
 		
 		return true;
 	}
 
-	
+	/***
 	public static PharmacyItem createItem (Integer itemId, Integer quantity, String unit) {
 		
 		if (itemId == null || quantity == null || unit == null)
@@ -46,8 +46,8 @@ public class PharmacyOrderUtil {
 		
 		return item;
 	}
-	
-	
+	***/
+	/***
 	public static Set<PharmacyItem> createItemsSet (List<Integer> items, List<Integer> quantities, List<String> units) {
 		if (items == null || quantities == null || units == null)
 			return null;
@@ -64,8 +64,8 @@ public class PharmacyOrderUtil {
 				itemsSet.add(item);
 		}
 		return itemsSet;
-	}
-
+	}***/
+/***
 	public static Encounter createValidPharmacyEncounter (Encounter e, Patient p) {
 		if (p == null)
 			return null;
@@ -79,8 +79,8 @@ public class PharmacyOrderUtil {
 			return createValidPharmacyEncounter(p);
 		
 		return null;
-	}
-	
+	}***/
+	/***
 	public static Encounter createValidPharmacyEncounter (Patient p) {
 		if (p == null)
 			return null;
@@ -104,17 +104,17 @@ public class PharmacyOrderUtil {
 		} catch (Exception exception) {}
 		
 		return e;
-	}
+	}***/
 	
 	public static PharmacyOrder createNewPharmacyOrder (DrugOrder dorder) {
-		return PharmacyOrderUtil.createNewPharmacyOrder(dorder, new HashSet<PharmacyItem>());
+		return PharmacyOrderUtil.createNewPharmacyOrder(dorder);//, new HashSet<PharmacyItem>());
 	} 
 
-	public static PharmacyOrder createNewPharmacyOrder (DrugOrder dorder, Set<PharmacyItem> items) {
-		return createNewPharmacyOrder(dorder, items, null);
-	}
+	//public static PharmacyOrder createNewPharmacyOrder (DrugOrder dorder) {//, Set<PharmacyItem> items) {
+	//	return createNewPharmacyOrder(dorder, null);
+	//}
 	
-	public static PharmacyOrder createNewPharmacyOrder (DrugOrder dorder, Set<PharmacyItem> items, Encounter e) {
+	public static PharmacyOrder createNewPharmacyOrder (DrugOrder dorder, Encounter e) { //, Set<PharmacyItem> items, Encounter e) {
 		PharmacyOrder porder = null;
 		User u = Context.getAuthenticatedUser();
 		Date now;
@@ -127,16 +127,16 @@ public class PharmacyOrderUtil {
 		now = new Date();
 		
 		porder.setDrugOrder(dorder);
-		porder.setPatient(dorder.getPatient());
+		//porder.setPatient(dorder.getPatient());
 		porder.setDateCreated(now);
-		porder.setStartDate(now);
+		//porder.setStartDate(now);
 		porder.setCreator(u);
-		porder.setOrderer(u);
-		porder.setItems(items);
-		porder.setAutoExpireDate(null);
-		porder.setConcept(dorder.getDrug().getConcept());
-		porder.setOrderType(config.pharmacyOrderType);
-		porder.setEncounter(createValidPharmacyEncounter(e, dorder.getPatient()));
+		//porder.setOrderer(u);
+		//porder.setItems(items);
+		//porder.setAutoExpireDate(null);
+		//porder.setConcept(dorder.getDrug().getConcept());
+		//porder.setOrderType(config.pharmacyOrderType);
+		//porder.setEncounter(createValidPharmacyEncounter(e, dorder.getPatient()));
 		
 		return porder;
 	} 

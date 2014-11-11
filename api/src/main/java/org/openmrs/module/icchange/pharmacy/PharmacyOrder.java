@@ -19,20 +19,37 @@ import java.util.Set;
 import org.openmrs.BaseOpenmrsMetadata;
 import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.DrugOrder;
-import org.openmrs.Order;
+//import org.openmrs.Order;
+import org.openmrs.BaseOpenmrsData;
+import org.openmrs.module.openhmis.inventory.api.model.Item;
+import java.util.Date;
 
 /**
  * It is a model class. It should extend either {@link BaseOpenmrsObject} or {@link BaseOpenmrsMetadata}.
  */
-public class PharmacyOrder extends Order implements Serializable {
+public class PharmacyOrder extends BaseOpenmrsData implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	private Integer id;
 	private DrugOrder drugOrder;
-	private Set<PharmacyItem> items;
+	private Item item;
+	private Integer quantity;
+	private String units;
+	private Date dispenseDate;
+	private String notes;
+	//private Set<PharmacyItem> items;
 	
 	public PharmacyOrder() {
 		super();
+	}
+	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	
 	public DrugOrder getDrugOrder() {
@@ -43,7 +60,47 @@ public class PharmacyOrder extends Order implements Serializable {
 		this.drugOrder = drugOrder;
 	}
 
+	public Item getItem() {
+		return item;
+	}
 
+	public void setItem(Item item) {
+		this.item = item;
+	}
+
+	public Date getDispenseDate() {
+		return dispenseDate;
+	}
+
+	public void setDispenseDate(Date dispenseDate) {
+		this.dispenseDate = dispenseDate;
+	}
+
+	public Integer getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
+
+	public String getUnits() {
+		return units;
+	}
+
+	public void setUnits(String units) {
+		this.units = units;
+	}
+
+	public String getNotes() {
+		return notes;
+	}
+
+	public void setNotes(String notes) {
+		this.units = notes;
+	}
+	
+/***
 	public Set<PharmacyItem> getItems() {
 		return items;
 	}
@@ -51,5 +108,5 @@ public class PharmacyOrder extends Order implements Serializable {
 	public void setItems(Set<PharmacyItem> items) {
 		this.items = items;
 	}
-
+***/
 }

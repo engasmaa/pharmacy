@@ -116,6 +116,15 @@
 					<artifactId>maven-resources-plugin</artifactId>
 					<configuration>
 						<includeEmptyDirs>true</includeEmptyDirs>
+					<artifactItems>
+						<artifactItem>
+							<groupId>${project.parent.groupId}</groupId>
+							<artifactId>openhmis.inventory-omod</artifactId>
+							<overWrite>true</overWrite>
+							<outputDirectory>${project.build.directory}/jasmine/inventory</outputDirectory>
+							<includes>web/module/resources/**</includes>
+						</artifactItem>
+					</artifactItems>
 					</configuration>
 				</plugin>
 				<!--This plugin's configuration is used to store Eclipse m2e settings 

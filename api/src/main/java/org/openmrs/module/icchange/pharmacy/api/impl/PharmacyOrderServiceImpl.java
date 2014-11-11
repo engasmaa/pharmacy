@@ -108,11 +108,11 @@ public class PharmacyOrderServiceImpl extends BaseOpenmrsService implements Phar
     public PharmacyOrder getPharmacyOrderByUuid (String uuid) {
     	return dao.getPharmacyOrderByUuid(uuid);
     }
-		
+	/***	
 	@Override
 	public List<PharmacyOrder> getPharmacyOrdersByPatient(Patient patient) {
 		return dao.getPharmacyOrderByPatient(patient);		
-	}
+	}***/
 
 	@Override
 	public List<PharmacyOrder> getPharmacyOrdersByDrugOrder(DrugOrder drugOrder) throws APIException{
@@ -158,7 +158,6 @@ public class PharmacyOrderServiceImpl extends BaseOpenmrsService implements Phar
 		}	
 		return map;
 	}
-	
 	@Override
 	public PharmacyOrder savePharmacyOrder(PharmacyOrder pharmacyOrder) throws APIException {
 		
@@ -167,7 +166,7 @@ public class PharmacyOrderServiceImpl extends BaseOpenmrsService implements Phar
 		
 		if (pharmacyOrder.getDrugOrder() == null)
 			throw new APIException("Pharmacy Order must be associated to a drug order.");
-		
+		/***
 		if (pharmacyOrder.getPatient() == null)
 			throw new APIException("Pharmacy Order must be associated to a patient.");
 		
@@ -175,9 +174,9 @@ public class PharmacyOrderServiceImpl extends BaseOpenmrsService implements Phar
 			pharmacyOrder.setEncounter(PharmacyOrderUtil.createValidPharmacyEncounter(pharmacyOrder.getPatient()));
 
 		Encounter e = pharmacyOrder.getEncounter();
-		e.addOrder(pharmacyOrder);
+		e.addOrder(pharmacyOrder);**/
 
-		Context.getEncounterService().saveEncounter(e);
+		//Context.getEncounterService().saveEncounter(e);
 		PharmacyOrder p = dao.savePharmacyOrder(pharmacyOrder);
 		
 		return p;
@@ -188,9 +187,9 @@ public class PharmacyOrderServiceImpl extends BaseOpenmrsService implements Phar
 		
 		if (drugOrder == null)
 			throw new APIException("Pharmacy Order must be associated to a valid drug order.");
-
+		/**
 		if (drugOrder.getPatient() == null)
-			throw new APIException("Pharmacy Order must be associated to a patient.");
+			throw new APIException("Pharmacy Order must be associated to a patient.");**/
 		
 		if (pharmacyOrder == null || pharmacyOrder.getDrugOrder() == null)
 			pharmacyOrder = PharmacyOrderUtil.createNewPharmacyOrder(drugOrder);
@@ -202,13 +201,13 @@ public class PharmacyOrderServiceImpl extends BaseOpenmrsService implements Phar
 		if (pharmacyOrder == null)
 			throw new APIException("Could not associate the pharmacy order to the a drug order.");
 			
-		if (pharmacyOrder.getEncounter() == null)
-			pharmacyOrder.setEncounter(PharmacyOrderUtil.createValidPharmacyEncounter(pharmacyOrder.getPatient()));
+		//if (pharmacyOrder.getEncounter() == null)
+			//pharmacyOrder.setEncounter(PharmacyOrderUtil.createValidPharmacyEncounter(pharmacyOrder.getPatient()));
 		
 		pharmacyOrder.setDrugOrder(drugOrder);	
 		return savePharmacyOrder(pharmacyOrder);
 	}
-	
+	/***
 	@Override
 	public List<PharmacyOrder> saveAllPharmacyOrders(List<PharmacyOrder> pharmacyOrders) {
 	
@@ -233,8 +232,8 @@ public class PharmacyOrderServiceImpl extends BaseOpenmrsService implements Phar
 		}
 				
 		return dao.saveAll(pharmacyOrders);
-	}
-
+	}***/
+/***
 	@Override
 	public List<PharmacyOrder> saveAllPharmacyOrdersOnSameEncounter(List<PharmacyOrder> pharmacyOrders, Encounter e) {
 	
@@ -263,7 +262,8 @@ public class PharmacyOrderServiceImpl extends BaseOpenmrsService implements Phar
 		Context.getEncounterService().saveEncounter(e);
 		return dao.saveAll(pharmacyOrders);		
 	}
-
+***/
+	/***
 	@Override
 	public List<Boolean> dispenseItems(DrugOrder drugOrder, List<PharmacyItem> items) throws APIException {
 		
@@ -298,6 +298,6 @@ public class PharmacyOrderServiceImpl extends BaseOpenmrsService implements Phar
 		PharmacyOrder porder = PharmacyOrderUtil.createNewPharmacyOrder(drugOrder, dispensedItems);
 		savePharmacyOrder(porder);
 		return ret;
-	}
+	}***/
 
 }

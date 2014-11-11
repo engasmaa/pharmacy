@@ -115,5 +115,18 @@
 			on o.order_id = pdos.order_id
 			where pdos.status is null;
 		</sql>
-	</changeSet>
+	</changeSet><!-- 
+	<changeSet id="icchange.pharmacy-v1.0.4" author="sLuchianov">
+	<preConditions onFail="MARK_RAN">
+	<tableExists tableName="pharmacy_drugorderstatus"/>
+	</preConditions>
+		<comment>
+			1st Trigger This code creates a trigger that will generate DrugOrderStatus on a new drugOrder entry or 
+			2nd Trigger drugOrder status change.
+			3rd Trigger Another trigger will update DrugOrderStatus to partially dispensed on any pharmacyOrder creation against that particular order
+		</comment>
+		<sql>
+			
+		</sql>
+	</changeSet> -->
 </databaseChangeLog>

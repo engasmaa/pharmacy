@@ -349,7 +349,17 @@
 			</div>
 		</td>	
 	</tr>
-	<tr></tr>
+	<tr class="pharmacyorder_tr">
+	<td >
+							<table class="pharmacyOrderTable">
+								<tr class="pharmacyOrderHeadersRow">
+									<td class="pharmacyOrderHeadersData">
+										${fn:toUpperCase(drugSetId)}
+									</td>
+								</tr>
+							</table>
+	</td>
+	</tr>
 	<tr >
 		<td colspan="4">
 		<div id="pharmacyOrderAddForm" style="display:none; border: 1px dashed black; padding: 10px;">

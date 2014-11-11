@@ -11,22 +11,23 @@ import org.jfree.util.Log;
 import org.openmrs.Concept;
 import org.openmrs.ConceptSet;
 import org.openmrs.DrugOrder;
-import org.openmrs.Encounter;
-import org.openmrs.Patient;
-import org.openmrs.Visit;
+//import org.openmrs.Encounter;
+//import org.openmrs.Patient;
+//import org.openmrs.Visit;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.icchange.pharmacy.PharmacyOrder;
 import org.openmrs.module.icchange.pharmacy.api.PharmacyOrderService;
-import org.openmrs.module.icchange.pharmacy.web.dwr.DWRDrugOrder;
-import org.openmrs.module.icchange.pharmacy.web.dwr.DWRDrugOrderHeader;
+//import org.openmrs.module.icchange.pharmacy.web.dwr.DWRDrugOrder;
+//import org.openmrs.module.icchange.pharmacy.web.dwr.DWRDrugOrderHeader;
 import org.openmrs.module.icchange.pharmacy.web.dwr.DWRPharmacyOrder;
 import org.openmrs.util.OpenmrsUtil;
+import java.util.Vector;
 
 public class DWRPharmacyOrderService {
 
 	private PharmacyOrderService service = Context.getService(PharmacyOrderService.class);
 
-	public DWRPharmacyOrder savePharmacyOrder (DWRPharmacyOrder order) {
+	public DWRPharmacyOrder savePharmacyOrder (DWRPharmacyOrder order) throws Exception {
 		
 		if (order == null)
 			return null;
@@ -37,9 +38,9 @@ public class DWRPharmacyOrderService {
 		
 		porder.setCreator(Context.getAuthenticatedUser());
 		porder.setDateCreated(now);
-		porder.setStartDate(now);
-		porder.setAutoExpireDate(null);
-		porder.setInstructions(order.getInstructions());
+		porder.setDispenseDate(now);
+		//porder.setAutoExpireDate(null);
+		porder.setNotes(order.getNotes());
 		
 		if (order.getOrderId() == null)
 			return null;
@@ -50,17 +51,24 @@ public class DWRPharmacyOrderService {
 			return null;
 		
 		porder.setDrugOrder(d);
+		try {
+			PharmacyOrderService service = Context.getService(PharmacyOrderService.class);
+			service.savePharmacyOrder(porder);
+		} catch (Exception e) {
+			throw e;
+		}
+		DWRPharmacyOrder dwrporder = new DWRPharmacyOrder(porder);
+		return dwrporder;
+		//if (order.getPatientId() == null)
+			//return null;
 		
-		if (order.getPatientId() == null)
-			return null;
+		//Patient p = Context.getPatientService().getPatient(order.getPatientId());
 		
-		Patient p = Context.getPatientService().getPatient(order.getPatientId());
+		//if (p == null)
+			//return null;
 		
-		if (p == null)
-			return null;
-		
-		porder.setPatient(p);
-		
+		//porder.setPatient(p);
+		/**
 		String visitsEnabeled = Context.getAdministrationService().getGlobalProperty("visits.enabled");
 		
 		if (visitsEnabeled != null && visitsEnabeled.toLowerCase(null).equals("true")) {
@@ -87,10 +95,46 @@ public class DWRPharmacyOrderService {
 		}
 		
 		
-		return null;		
+		return null;	**/
+		
 	}
-
 	
+public Vector<DWRDrugOrder> getAllPharmacyOrdersByPatient(Integer patientId) {
+		
+		if (patientId == null)
+			return null;
+		
+		Patient patient = Context.getPatientService().getPatient(patientId);
+		
+		if (patient == null)
+			return null;
+		
+		List<DrugOrder> dOrders = Context.getOrderService().getDrugOrdersByPatient(patient);
+
+		if (dOrders == null)
+			return null;
+		
+		Map<DrugOrder, List<PharmacyOrder>> map = Context.getService(PharmacyOrderService.class).getPharmacyOrdersOrderedByDrugOrders(dOrders);
+		
+		List<DWRDrugOrder> dwrOrders = new ArrayList<DWRDrugOrder>();
+		
+		for (DrugOrder key: map.keySet()) {
+			DWRDrugOrder dwrOrder = new DWRDrugOrder(key);
+			
+			List<DWRPharmacyOrder> pList = new ArrayList<DWRPharmacyOrder>();
+			
+			for (PharmacyOrder p: map.get(key)) {
+				if (p != null)
+					pList.add(new DWRPharmacyOrder(p));
+			}
+			
+			dwrOrder.setDispenses(pList);
+			dwrOrders.add(dwrOrder);
+		}
+		
+		return dwrOrders;
+
+	/***
 	public List<DWRDrugOrder> getAllPharmacyOrdersByPatient(Integer patientId) {
 		
 		if (patientId == null)
@@ -125,20 +169,20 @@ public class DWRPharmacyOrderService {
 		}
 		
 		return dwrOrders;
-	}
+	}***/
 	
 
 	
 	
-	
-	public void createPharmacyOrder(Integer drugId, Integer patientId) throws Exception{
-		Patient patient = Context.getPatientService().getPatient(patientId);
+
+	public void createPharmacyOrder(Integer drugId) throws Exception{//, Integer patientId) throws Exception{
+		//Patient patient = Context.getPatientService().getPatient(patientId);
 		DrugOrder drugOrder =  Context.getOrderService().getDrugOrder(drugId);
 		
 		Log.debug("Enter dwr save pharmacy order.");
 		
-		if (patient == null || drugOrder == null)
-			throw new IllegalArgumentException("Invalid patient or drug order id");
+		//if (patient == null || drugOrder == null)
+			//throw new IllegalArgumentException("Invalid patient or drug order id");
 		
 		
 		PharmacyOrder pharmacyOrder = new PharmacyOrder();
@@ -150,7 +194,7 @@ public class DWRPharmacyOrderService {
 			PharmacyOrderService service = Context.getService(PharmacyOrderService.class);
 			service.savePharmacyOrder(pharmacyOrder);
 		} catch (Exception e) {
-			throw new Exception(e);
+			throw e;
 		}
 		
 		Log.debug("Exit dwr save pharmacy order");

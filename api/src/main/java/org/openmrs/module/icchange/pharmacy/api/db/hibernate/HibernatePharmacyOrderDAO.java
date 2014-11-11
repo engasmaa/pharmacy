@@ -65,7 +65,7 @@ public class HibernatePharmacyOrderDAO implements PharmacyOrderDAO {
 		return (PharmacyOrder)crit.uniqueResult();
 	}
     
-
+/***
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PharmacyOrder> getPharmacyOrderByPatient(Patient patient) throws DAOException {
@@ -76,7 +76,7 @@ public class HibernatePharmacyOrderDAO implements PharmacyOrderDAO {
 		Criteria crit = sessionFactory.getCurrentSession().createCriteria(PharmacyOrder.class);
 		crit.add(Restrictions.eq("patient", patient));		
 		return crit.list();
-	}
+	}***/
 
 	@Override
 	public List<PharmacyOrder> getPharmacyOrderByDrugOrder(DrugOrder drugOrder) throws DAOException {
