@@ -9,6 +9,7 @@ import org.openmrs.module.icchange.pharmacy.PharmacyOrder;
 public class DWRPharmacyOrder {
 
 	private Integer orderId;
+	private String itemName;
 	private Integer itemId;
 	private Integer quantity;
 	private String units;
@@ -24,7 +25,8 @@ public class DWRPharmacyOrder {
 		this.itemId = order.getItem().getId();
 		this.quantity = order.getQuantity();
 		this.units = order.getUnits();
-		this.notes = order.getNotes();
+		this.notes = order.getNotes(); 
+		this.itemName = order.getItem().getName();
 
 		SimpleDateFormat sdf = Context.getDateFormat();
 		if (order.getDispenseDate() != null)
@@ -98,4 +100,11 @@ public class DWRPharmacyOrder {
 	public void setDispenseDate(String dispenseDate) {
 		this.dispenseDate = dispenseDate;
 	}
+	public String getName() {
+		return itemName;
+	}
+	public void setName(String name) {
+		this.itemName = itemName;
+	}
+	
 }

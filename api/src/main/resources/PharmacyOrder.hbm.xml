@@ -5,16 +5,16 @@
 
 <hibernate-mapping package="org.openmrs.module.icchange.pharmacy">
 
-	<class name="PharmacyOrderTest" table="pharmacy_pharmacyorder_test" >
+	<class name="PharmacyOrder" table="pharmacy_pharmacyorder_test" >
 		<id name="id" type="int" column="pharmacyorder_id" unsaved-value="0">
 			<generator class="native" />
 		</id>
 		<discriminator column="pharmacyorder_id" insert="false" />
 		<many-to-one name="drugOrder" class="org.openmrs.DrugOrder" column="drugorder_id"  not-null="true" />
 		<many-to-one name="item" class="org.openmrs.module.openhmis.inventory.api.model.Item" column="item_id" not-null="true" />
-		<property name="quantity" type="java.lang.Integer" column="quanity"/>
+		<property name="quantity" type="java.lang.Integer" column="quantity"/>
 		<property name="units" type="java.lang.String" column="units" length="255"/>
-		<property name="dispenseDate" type="java.lang.Date" column="dispense_date"/>
+		<property name="dispenseDate" type="java.util.Date" column="dispense_date" not-null="true" length="19" />
 		<property name="notes" type="java.lang.String" column="notes" length="255"/>
 		<property name="uuid" type="java.lang.String" column="uuid" length="38" unique="true" />
 	</class>

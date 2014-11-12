@@ -7,6 +7,7 @@
 
 
 <openmrs:htmlInclude file="/dwr/interface/DWRDrugOrderStatusService.js" />
+<openmrs:htmlInclude file="/dwr/interface/DWRPharmacyOrderService.js" />
 
 <% java.sql.Timestamp now = new java.sql.Timestamp(System.currentTimeMillis()); %>
 
@@ -24,7 +25,19 @@
     	border: 0px;
     	margin: 0px;
 	}
+	.pharmacyorder_box {
+		border-collapse: collapse;		
+		padding: 3px;
+		border: 1px solid black;
+		margin: 4px;
+	}
 
+	.pharmacyorder_title {
+	    background-color: #2aacc4;
+   		padding: 3px;
+    	border: 0px;
+    	margin: 0px;
+	}
 </style>
 
 
@@ -350,13 +363,17 @@
 		</td>	
 	</tr>
 	<tr class="pharmacyorder_tr">
-	<td >
-							<table class="pharmacyOrderTable">
-								<tr class="pharmacyOrderHeadersRow">
+	<td colspan="4" >
+							<table class="pharmacyOrderTable, pharmacyorder_box" width="70%" align="right">
+								<!-- <tr class="pharmacyOrderHeadersRow">
 									<td class="pharmacyOrderHeadersData">
-										${fn:toUpperCase(drugSetId)}
 									</td>
-								</tr>
+								</tr> 
+								<tr >
+								</tr>-->
+								<tbody class="localPharmacyOrders">
+								
+								</tbody>
 							</table>
 	</td>
 	</tr>
@@ -376,7 +393,10 @@
 									<tr class="pharmacyOrderAddFlexibleRow">
 										<td class="pharmacyOrderAddFlexibleData" >Select a Drug:</td>						
 										<td class="pharmacyOrderAddFlexibleData">
-											<openmrs:fieldGen type="org.openmrs.Drug" formFieldName="pharmacyOrderItem" val="" parameters="includeVoided=false|noBind=true|optionHeader=[blank]" />
+											<openmrs:fieldGen type="org.openmrs.Item" formFieldName="pharmacyOrderItemTest" val="" parameters="includeVoided=false|noBind=true|optionHeader=[blank]" />
+											<select name="pharmacyOrderItemList" id="pharmacyOrderItemList">
+												<option value="" ></option>
+                                    		</select>
 											<div id="pharmacyOrderItem_error" class="error" style="display:none"></div>
 										</td>
 									</tr>
@@ -1052,6 +1072,8 @@
 				self.name = self.table.find(".drugorder_drugname");
 				self.prescriber = self.table.find(".drugorder_prescriber");
 				self.status = self.table.find(".drugorder_status");
+				self.localPharmacyOrders = self.table.find(".localPharmacyOrders");
+				//self.pharmacyOrderTable = self.table.find(".pharmacyOrderTable");
 
 				self.details = self.table.find(".drugorder_details");
 				self.instructions = self.table.find(".drugorder_instructions");
@@ -1071,6 +1093,8 @@
 				var pform = self.table.find("#pharmacyOrderAddForm");
 				self.pform = pform;
 				pform.find(".pharmacyOrder_form_date").attr("id", drugorder.orderId + "date_picker" + (datePickerLongIdGenerationNUmber++));
+
+				self.pharmacyOrderItemList = self.table.find(".pharmacyOrderItemList");
 				
 				///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				//Retrieve drugorderstatus here
@@ -1083,10 +1107,24 @@
 						{					
 							self.status.append(d[0].status);
 						});
-
+				//self.localPharmacyOrders.append("<tr><td>Bla Bla</td><td>1</td><td>bottles</td><td>Nov 11/2014</td><td>Nothings important</td></tr>");
+				//self.localPharmacyOrders.append("<tr><td>Bla Bla2</td><td>2</td><td>bottle3</td><td>Nov 14/2014</td><td>Nothing important5</td></tr>");
+				
 				DWRPharmacyOrderService.getPharmacyOrdersByDrugOrderId(drugorder.orderId, function (p) 
 						{					
-							self.status.append(p[0].status);
+							if (p != null && typeof p == 'object' && p[0] != null)
+								{ 
+									//<tr><td class="drugorder_title" width="15%">Item Name</td><td class="drugorder_title"  width="5%">Quantity</td><td class="drugorder_title" width="10%">Units</td><td class="drugorder_title" width="20%">Date Dispensed</td><td class="drugorder_title" width="40%">Notes:</td></tr>
+									self.localPharmacyOrders.append('<tr><td class="drugorder_title" width="15%">Item Name</td><td class="drugorder_title"  width="5%">Quantity</td><td class="drugorder_title" width="10%">Units</td><td class="drugorder_title" width="20%">Date Dispensed</td><td class="drugorder_title" width="40%">Notes:</td></tr>');
+									var porders = [];
+									var key;
+									porders = p;
+									for (key in porders) 
+										{
+											self.localPharmacyOrders.append("<tr><td>"+porders[key].name+"</td><td>"+porders[key].quantity+"</td><td>"+porders[key].units+"</td><td>"+porders[key].dispenseDate+"</td><td>"+porders[key].notes+"</td></tr>");
+										}
+									//self.status.append(p[0].dispenseDate);
+								}
 						});
 				/***
 				var reply0 = function(data)
@@ -1288,6 +1326,10 @@
 					dform.hide();
 					sform.hide();
 					pform.show();
+
+					//Populate pharmacyOrderItemSelect with appropriate drugs
+
+					self.pharmacyOrderItemList.append('<option value="'++'" >'++'</option>');
 				});
 				
 				

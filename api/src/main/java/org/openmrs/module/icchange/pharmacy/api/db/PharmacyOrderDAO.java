@@ -42,7 +42,8 @@ public interface PharmacyOrderDAO {
 	
 	public PharmacyOrder savePharmacyOrder(PharmacyOrder pharmacyOrder) throws DAOException;
 	
-
+/**
 	public List<PharmacyOrder> saveAll(List<PharmacyOrder> phamacyOrders);
+**/
 } 
 

@@ -2,10 +2,12 @@ package org.openmrs.module.icchange.pharmacy.web.dwr;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import org.jfree.util.Log;
 import org.openmrs.Concept;
@@ -20,12 +22,30 @@ import org.openmrs.module.icchange.pharmacy.api.PharmacyOrderService;
 //import org.openmrs.module.icchange.pharmacy.web.dwr.DWRDrugOrder;
 //import org.openmrs.module.icchange.pharmacy.web.dwr.DWRDrugOrderHeader;
 import org.openmrs.module.icchange.pharmacy.web.dwr.DWRPharmacyOrder;
+import org.openmrs.module.openhmis.inventory.api.model.Item;
+import org.openmrs.module.openhmis.inventory.api.IPharmacyConnectorService;
+import org.openmrs.module.openhmis.commons.api.entity.IMetadataDataService;
 import org.openmrs.util.OpenmrsUtil;
-import java.util.Vector;
 
 public class DWRPharmacyOrderService {
 
 	private PharmacyOrderService service = Context.getService(PharmacyOrderService.class);
+	private IPharmacyConnectorService ipcs = Context.getService(IPharmacyConnectorService.class);
+
+	public Vector<DWRItem> getItemsByDrugId(Integer drugId) throws Exception
+	{
+		List<Item> items = ipcs.listItemsByDrugId(drugId);
+		Vector<DWRItem> ret = new Vector<DWRItem>();
+		//Map<String, Integer> itemMap = new Map<String, Integer>();
+		if (items != null)
+		{
+			for(Item i : items)
+			{
+				ret.add(new DWRItem(i));
+			}
+		}
+		return ret;
+	}
 
 	public DWRPharmacyOrder savePharmacyOrder(DWRPharmacyOrder order) throws Exception {
 		
@@ -205,15 +225,23 @@ public class DWRPharmacyOrderService {
 	}
 	
 	
-	public List<PharmacyOrder> getPharmacyOrdersByDrugOrderId(Integer drugId) throws Exception{
-		
-		DrugOrder drugOrder = Context.getOrderService().getDrugOrder(drugId);
-		
-		if (drugOrder == null)
-			return new ArrayList<PharmacyOrder>();
-		
-		return service.getPharmacyOrdersByDrugOrder(drugOrder);
-		
+	public Vector<DWRPharmacyOrder> getPharmacyOrdersByDrugOrderId(Integer drugId) throws Exception{
+
+		try {
+			DrugOrder drugOrder = Context.getOrderService().getDrugOrder(drugId);
+			Vector<DWRPharmacyOrder> ret = new Vector<DWRPharmacyOrder>();
+			
+			if (drugOrder == null)
+				return ret;
+			List<PharmacyOrder> data = service.getPharmacyOrdersByDrugOrder(drugOrder);
+			
+			for (PharmacyOrder po: data) 
+				ret.add(new DWRPharmacyOrder(po));
+			
+			return ret;
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 	
 }

@@ -69,6 +69,16 @@
 			<artifactId>openhmis.inventory-api</artifactId>
 		</dependency>
 		
+		<dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>openhmis.backboneforms-api</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>openhmis.commons-api</artifactId>
+		</dependency>
+		
 	</dependencies>
 	
 	<build>

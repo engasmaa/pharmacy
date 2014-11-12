@@ -97,7 +97,7 @@ public class PharmacyOrder extends BaseOpenmrsData implements Serializable {
 	}
 
 	public void setNotes(String notes) {
-		this.units = notes;
+		this.notes = notes;
 	}
 	
 /***

@@ -111,7 +111,7 @@ public class HibernatePharmacyOrderDAO implements PharmacyOrderDAO {
 		sessionFactory.getCurrentSession().saveOrUpdate(pharmacyOrder);
 		return pharmacyOrder;
 	}
-	
+	/**
 	@Override
 	public List<PharmacyOrder> saveAll(List<PharmacyOrder> phamacyOrders) throws DAOException {
 		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
@@ -121,5 +121,5 @@ public class HibernatePharmacyOrderDAO implements PharmacyOrderDAO {
 		
 		tx.commit();
 		return phamacyOrders;
-	}
+	}**/
 }
