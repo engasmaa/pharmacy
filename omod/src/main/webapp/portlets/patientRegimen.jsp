@@ -364,7 +364,11 @@
 	</tr>
 	<tr class="pharmacyorder_tr">
 	<td colspan="4" >
-							<table class="pharmacyOrderTable, pharmacyorder_box" width="70%" align="right">
+				<table width="98%" ><!-- class="pharmacyorder_box"  align="right"-->
+					<tr>
+						<td><h2 align="right" class="pHistoryHeader"></h2></td>
+						<td>
+							<table class="pharmacyOrderTable, pharmacyorder_box" width="98%">
 								<!-- <tr class="pharmacyOrderHeadersRow">
 									<td class="pharmacyOrderHeadersData">
 									</td>
@@ -375,6 +379,9 @@
 								
 								</tbody>
 							</table>
+						</td>
+					</tr>
+				</table>
 	</td>
 	</tr>
 	<tr >
@@ -393,9 +400,8 @@
 									<tr class="pharmacyOrderAddFlexibleRow">
 										<td class="pharmacyOrderAddFlexibleData" >Select a Drug:</td>						
 										<td class="pharmacyOrderAddFlexibleData">
-											<openmrs:fieldGen type="org.openmrs.Item" formFieldName="pharmacyOrderItemTest" val="" parameters="includeVoided=false|noBind=true|optionHeader=[blank]" />
+											
 											<select name="pharmacyOrderItemList" id="pharmacyOrderItemList">
-												<option value="" ></option>
                                     		</select>
 											<div id="pharmacyOrderItem_error" class="error" style="display:none"></div>
 										</td>
@@ -469,7 +475,7 @@
 
 
 	<script>
-		<!-- // begin
+		<!-- --> // begin
 
 		var drugOrderForm = new function () 
 		{
@@ -1074,7 +1080,8 @@
 				self.status = self.table.find(".drugorder_status");
 				self.localPharmacyOrders = self.table.find(".localPharmacyOrders");
 				//self.pharmacyOrderTable = self.table.find(".pharmacyOrderTable");
-
+				//pHistoryHeader - Prescription History:
+				self.pHHeader = self.table.find(".pHistoryHeader");
 				self.details = self.table.find(".drugorder_details");
 				self.instructions = self.table.find(".drugorder_instructions");
 
@@ -1094,7 +1101,7 @@
 				self.pform = pform;
 				pform.find(".pharmacyOrder_form_date").attr("id", drugorder.orderId + "date_picker" + (datePickerLongIdGenerationNUmber++));
 
-				self.pharmacyOrderItemList = self.table.find(".pharmacyOrderItemList");
+				self.pharmacyOrderItemList = self.table.find("#pharmacyOrderItemList");
 				
 				///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				//Retrieve drugorderstatus here
@@ -1104,8 +1111,14 @@
 				//self.dispenseStatus = dispenseStatus;
 				//var dispenseStatus = [];
 				DWRDrugOrderStatusService.getDrugOrderStatusByDrugOrderId(drugorder.orderId, function (d) 
-						{					
-							self.status.append(d[0].status);
+						{	
+							if (d != null)
+								if (d[0] != null)		
+									self.status.append(d[0].status);
+								else
+									self.status.append("N/A");
+							else
+								self.status.append("N/A");
 						});
 				//self.localPharmacyOrders.append("<tr><td>Bla Bla</td><td>1</td><td>bottles</td><td>Nov 11/2014</td><td>Nothings important</td></tr>");
 				//self.localPharmacyOrders.append("<tr><td>Bla Bla2</td><td>2</td><td>bottle3</td><td>Nov 14/2014</td><td>Nothing important5</td></tr>");
@@ -1113,7 +1126,8 @@
 				DWRPharmacyOrderService.getPharmacyOrdersByDrugOrderId(drugorder.orderId, function (p) 
 						{					
 							if (p != null && typeof p == 'object' && p[0] != null)
-								{ 
+								{
+									self.pHHeader.append("Prescription History: ");  
 									//<tr><td class="drugorder_title" width="15%">Item Name</td><td class="drugorder_title"  width="5%">Quantity</td><td class="drugorder_title" width="10%">Units</td><td class="drugorder_title" width="20%">Date Dispensed</td><td class="drugorder_title" width="40%">Notes:</td></tr>
 									self.localPharmacyOrders.append('<tr><td class="drugorder_title" width="15%">Item Name</td><td class="drugorder_title"  width="5%">Quantity</td><td class="drugorder_title" width="10%">Units</td><td class="drugorder_title" width="20%">Date Dispensed</td><td class="drugorder_title" width="40%">Notes:</td></tr>');
 									var porders = [];
@@ -1121,11 +1135,15 @@
 									porders = p;
 									for (key in porders) 
 										{
-											self.localPharmacyOrders.append("<tr><td>"+porders[key].name+"</td><td>"+porders[key].quantity+"</td><td>"+porders[key].units+"</td><td>"+porders[key].dispenseDate+"</td><td>"+porders[key].notes+"</td></tr>");
+											if (porders[key] != null)
+												self.localPharmacyOrders.append("<tr><td>"+porders[key].name+"</td><td>"+porders[key].quantity+"</td><td>"+porders[key].units+"</td><td>"+porders[key].dispenseDate+"</td><td>"+porders[key].notes+"</td></tr>");
 										}
 									//self.status.append(p[0].dispenseDate);
 								}
 						});
+
+
+				
 				/***
 				var reply0 = function(data)
    				{
@@ -1158,19 +1176,9 @@
   					pharmacyOrders.push(arr);
 				</c:forEach>
 				self.pharmacyOrders = pharmacyOrders;
-				
-				//self.pharmacyOrders.foreach(function(listItem, i) 
-				//{
-				//	console.log(listItem);
-				//});
+
 				self.po = pharmacyOrders;
 				
-				/***
-				if (drugorder.status != null && drugorder.status != "")
-					self.status.append(drugorder.status);
-				else
-					self.status.append("N/A");
-				***/
 				if (isCurrent) 
 				{
 					
@@ -1288,7 +1296,7 @@
 				
 				if (drugorder.autoExpireDate == null || drugorder.autoExpireDate == "") 
 				{
-					details += " Start: " + drugorder.startDate + ", ongoing.";
+					details += " Start: " + drugorder.startDate + ", continuous.";
 				} else {
 					details += " From " + drugorder.startDate + " to " + drugorder.autoExpireDate + ".";
 				}
@@ -1328,8 +1336,23 @@
 					pform.show();
 
 					//Populate pharmacyOrderItemSelect with appropriate drugs
-
-					self.pharmacyOrderItemList.append('<option value="'++'" >'++'</option>');
+					var op;
+					var len = 5;
+					var items = ["Ascorbic Acid", "Acetic Acid", "Abacavir", "Ethanol", "Paracetamol"];
+					//self.pharmacyOrderItemList.children().remove();
+					op = document.createElement("OPTION");
+					op.innerHTML = "";
+					op.value = "";
+					op.id="_void";
+					self.pharmacyOrderItemList.append(op);
+					
+					for (var i = 0; i < len; i++) {
+						op = document.createElement("OPTION");
+						op.innerHTML = items[i]; //itemName should be here
+						op.value = i + 1; //itemId should be here
+						op.id=items[i]; //Should be the same as innerHTML
+						self.pharmacyOrderItemList.append(op);
+					}
 				});
 				
 				

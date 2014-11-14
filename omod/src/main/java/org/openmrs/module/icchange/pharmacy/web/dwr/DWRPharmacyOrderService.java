@@ -22,21 +22,23 @@ import org.openmrs.module.icchange.pharmacy.api.PharmacyOrderService;
 //import org.openmrs.module.icchange.pharmacy.web.dwr.DWRDrugOrder;
 //import org.openmrs.module.icchange.pharmacy.web.dwr.DWRDrugOrderHeader;
 import org.openmrs.module.icchange.pharmacy.web.dwr.DWRPharmacyOrder;
-import org.openmrs.module.openhmis.inventory.api.model.Item;
-import org.openmrs.module.openhmis.inventory.api.IPharmacyConnectorService;
+import org.openmrs.module.icchange.pharmacy.web.dwr.DWRItem;
+//import org.openmrs.module.openhmis.inventory.api.model.Item;
+//import org.openmrs.module.openhmis.inventory.api.IPharmacyConnectorService;
 import org.openmrs.module.openhmis.commons.api.entity.IMetadataDataService;
 import org.openmrs.util.OpenmrsUtil;
 
 public class DWRPharmacyOrderService {
 
 	private PharmacyOrderService service = Context.getService(PharmacyOrderService.class);
-	private IPharmacyConnectorService ipcs = Context.getService(IPharmacyConnectorService.class);
+	//private IPharmacyConnectorService ipcs = Context.getService(IPharmacyConnectorService.class);
 
 	public Vector<DWRItem> getItemsByDrugId(Integer drugId) throws Exception
 	{
-		List<Item> items = ipcs.listItemsByDrugId(drugId);
+		/**
+		List<Item> items = new List<Item>();//ipcs.listItemsByDrugId(drugId);
 		Vector<DWRItem> ret = new Vector<DWRItem>();
-		//Map<String, Integer> itemMap = new Map<String, Integer>();
+		
 		if (items != null)
 		{
 			for(Item i : items)
@@ -44,7 +46,8 @@ public class DWRPharmacyOrderService {
 				ret.add(new DWRItem(i));
 			}
 		}
-		return ret;
+		return ret;**/
+		return null;
 	}
 
 	public DWRPharmacyOrder savePharmacyOrder(DWRPharmacyOrder order) throws Exception {

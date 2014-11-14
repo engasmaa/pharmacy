@@ -50,10 +50,10 @@
 			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.DWRPharmacyOrder" javascript="DWRPharmacyOrder" />
 			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.DWRDrugOrderHeader" javascript="DWRDrugOrderHeader" />
 		
+			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRItem"/>
 		-->
 			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRPharmacyOrder"/>
 			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRDrugOrderStatus"/>
-			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRItem"/>
 			
 			<create creator="new" javascript="DWRPharmacyOrderService">
 				<param name="class" value="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRPharmacyOrderService"/>
