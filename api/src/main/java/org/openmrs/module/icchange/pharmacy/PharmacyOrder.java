@@ -21,13 +21,14 @@ import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.DrugOrder;
 //import org.openmrs.Order;
 import org.openmrs.BaseOpenmrsData;
+//import org.openmrs.module.icchange.pharmacy.inventory.Item;
 import org.openmrs.module.openhmis.inventory.api.model.Item;
 import java.util.Date;
 
 /**
  * It is a model class. It should extend either {@link BaseOpenmrsObject} or {@link BaseOpenmrsMetadata}.
  */
-public class PharmacyOrder extends BaseOpenmrsData implements Serializable {
+public class PharmacyOrder extends BaseOpenmrsData implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	

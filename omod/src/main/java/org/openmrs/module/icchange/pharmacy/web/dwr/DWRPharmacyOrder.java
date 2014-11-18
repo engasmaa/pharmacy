@@ -100,10 +100,10 @@ public class DWRPharmacyOrder {
 	public void setDispenseDate(String dispenseDate) {
 		this.dispenseDate = dispenseDate;
 	}
-	public String getName() {
+	public String getItemName() {
 		return itemName;
 	}
-	public void setName(String name) {
+	public void setItemName(String itemName) {
 		this.itemName = itemName;
 	}
 	

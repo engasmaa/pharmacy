@@ -34,6 +34,10 @@ import org.openmrs.module.icchange.pharmacy.api.PharmacyOrderService;
 import org.openmrs.module.icchange.pharmacy.api.DrugOrderStatusService;
 import org.openmrs.module.icchange.pharmacy.api.PharmacyItemService;
 
+//import org.openmrs.module.openhmis.inventory.api.IPharmacyConnectorService;
+//import org.openmrs.module.openhmis.inventory.api.model.Item;
+//import org.openmrs.module.openhmis.inventory.api.IItemDataService;
+
 public class RegimenPortletController extends PortletController 
 {
 	
@@ -72,6 +76,14 @@ public class RegimenPortletController extends PortletController
 				{
 					//VVV--Potentially not needed as pharmacy order carries a list of pharmacy items
 					//Retrieve Pharmacy Items for this patient
+
+					/*
+					IItemDataService itemService = Context.getService(IItemDataService.class);
+					IPharmacyConnectorService itemService2 = Context.getService(IPharmacyConnectorService.class);
+					List<Item> items = itemService.getItemsByCode("ABC", true);
+					List<Item> items2 = itemService2.listItemsByDrugId(order.getId());
+					*/
+					//items = ipcs;
 					
 					
 					for (DrugOrder order : patientDrugOrders) 

@@ -418,6 +418,7 @@
 												<option value="tablets" >tablets</option>
 												<option value="capsules" >capsules</option>
 												<option value="bottles" >bottles</option>
+												<option value="IU" >IU</option>
 												<option value="other" >other</option>
                                     		</select>
                                     		<div id="pharmacyOrderQuantity_error" class="error" style="display:none"></div>
@@ -1127,7 +1128,7 @@
 						{					
 							if (p != null && typeof p == 'object' && p[0] != null)
 								{
-									self.pHHeader.append("Prescription History: ");  
+									self.pHHeader.append("Dispensing History: ");  
 									//<tr><td class="drugorder_title" width="15%">Item Name</td><td class="drugorder_title"  width="5%">Quantity</td><td class="drugorder_title" width="10%">Units</td><td class="drugorder_title" width="20%">Date Dispensed</td><td class="drugorder_title" width="40%">Notes:</td></tr>
 									self.localPharmacyOrders.append('<tr><td class="drugorder_title" width="15%">Item Name</td><td class="drugorder_title"  width="5%">Quantity</td><td class="drugorder_title" width="10%">Units</td><td class="drugorder_title" width="20%">Date Dispensed</td><td class="drugorder_title" width="40%">Notes:</td></tr>');
 									var porders = [];
@@ -1136,7 +1137,7 @@
 									for (key in porders) 
 										{
 											if (porders[key] != null)
-												self.localPharmacyOrders.append("<tr><td>"+porders[key].name+"</td><td>"+porders[key].quantity+"</td><td>"+porders[key].units+"</td><td>"+porders[key].dispenseDate+"</td><td>"+porders[key].notes+"</td></tr>");
+												self.localPharmacyOrders.append("<tr><td>"+porders[key].itemName+"</td><td>"+porders[key].quantity+"</td><td>"+porders[key].units+"</td><td>"+porders[key].dispenseDate+"</td><td>"+porders[key].notes+"</td></tr>");
 										}
 									//self.status.append(p[0].dispenseDate);
 								}
@@ -1337,24 +1338,100 @@
 
 					//Populate pharmacyOrderItemSelect with appropriate drugs
 					var op;
-					var len = 5;
-					var items = ["Ascorbic Acid", "Acetic Acid", "Abacavir", "Ethanol", "Paracetamol"];
-					//self.pharmacyOrderItemList.children().remove();
-					op = document.createElement("OPTION");
-					op.innerHTML = "";
-					op.value = "";
-					op.id="_void";
-					self.pharmacyOrderItemList.append(op);
-					
-					for (var i = 0; i < len; i++) {
-						op = document.createElement("OPTION");
-						op.innerHTML = items[i]; //itemName should be here
-						op.value = i + 1; //itemId should be here
-						op.id=items[i]; //Should be the same as innerHTML
-						self.pharmacyOrderItemList.append(op);
-					}
+					DWRPharmacyOrderService.listItemsByDrugId(drugorder.drugId, function (p) 
+					{					
+						self.pharmacyOrderItemList.children().remove();
+						if (p != null && typeof p == 'object' && p[0] != null)
+						{
+							var items = [];
+							var i;
+							items = p;
+							op = document.createElement("OPTION");
+							op.innerHTML = "";
+							op.value = "";
+							op.id="_void";
+							self.pharmacyOrderItemList.append(op);
+							for (i in items) 
+							{
+								if (items[i] != null)
+									{
+										op = document.createElement("OPTION");
+										op.innerHTML = items[i].itemName + " qty:" + items[i].quantity; //itemName should be here
+										op.value = items[i].itemId; //itemId should be here
+										op.id = items[i].itemName; //Should be the same as innerHTML
+										self.pharmacyOrderItemList.append(op);
+									}
+							}
+						}
+						else
+						{
+							op = document.createElement("OPTION");
+							op.innerHTML = "No appropriate Items in stock";
+							op.value = "";
+							op.id="_void";
+							self.pharmacyOrderItemList.append(op);
+						}						
+					});
+				});			
+
+				pform.find("#pharmacyorder_cancel").click(function()
+				{
+					self.del.show(); 
+					self.stop.show();
+					self.disp.show();
+					dform.hide();
+					sform.hide();
+					pform.hide();					
 				});
 				
+				
+				pform.find("#pharmacyorder_add").click(function()
+				{
+					//verify all pharmacyOrder data here
+					console.log("Adding a new pharmacy order for order:" + drugorder.orderId);	
+					
+					var units = pform.find("#pharmacyOrderQuantity_unit").val();
+					var quantity = pform.find("#pharmacyOrderQuantity").val();
+					var ddate = pform.find(".pharmacyOrder_form_date").val();
+					var itemId = pform.find("#pharmacyOrderItemList").val();					
+					var notes = pform.find("#pharmacyOrderNotes").val();
+
+
+					if (itemId == null || itemId == "")
+					{
+						alert("Please, select a valid item");
+						console.log("itemId is invalid");
+					}					
+					else
+						if (quantity == null || quantity == "")
+						{
+							alert("Please, enter valid quantity");
+							console.log("Quantity is invalid");
+						}
+						else
+							if (ddate == null || ddate == "")
+							{
+								alert("Please, select a valid date");
+								console.log("ddate is invalid");
+							}
+							else
+								if (units == null || units == "")
+								{
+									alert("Please, select valid units");
+									console.log("Units are invalid");
+								}
+								else
+									if (notes == null || notes == "")
+									{
+										console.log("notes field is empty");
+										notes = "";
+										DWRPharmacyOrderService.createPharmacyOrderFromParts(drugorder.orderId, "", itemId, quantity, units, ddate, notes, function () {regimentTables.refreshTables();});
+									}
+									else
+										DWRPharmacyOrderService.createPharmacyOrderFromParts(drugorder.orderId, "", itemId, quantity, units, ddate, notes, function () {regimentTables.refreshTables();});
+					//Update DrugOrderStatus - in sql
+					///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
+				});
 				
 				sform.find("#drugorder_stop_form_stop").click(function()
 				{
@@ -1406,27 +1483,6 @@
 					sform.hide();					
 				});
 				
-				pform.find("#pharmacyorder_cancel").click(function()
-				{
-					self.del.show(); 
-					self.stop.show();
-					self.disp.show();
-					dform.hide();
-					sform.hide();
-					pform.hide();					
-				});
-				
-				
-				pform.find("#pharmacyorder_add").click(function()
-				{
-					
-					//verify all pharmacyOrder data here
-					
-					console.log("Adding a new pharmacy order for order:" + drugorder.orderId);	
-					//Dispense drug
-					//Update DrugOrderStatus
-					///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
-				});
 				
 				var sel = sform.find("select");
 				

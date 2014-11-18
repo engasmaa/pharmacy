@@ -9,7 +9,7 @@ public class PharmacyConstants {
 	public static final String PHARMACYORDERTYPANAME = "Pharmacy Order";
 	public static final String PHARMACYENCOUNTERNAME = "Pharmacy Encounter";
 	
-	public static final String unitsStringList = "kg,grams,mg,liters,tablets,capsules,bottles,other";
+	public static final String unitsStringList = "kg,grams,mg,liters,tablets,capsules,bottles,other,IU";
 	public static final String unitsPropertyName = "icchange.pharmacy.drugs.units";
 	
 	public static Integer defaultOrdersAgeSearch = 6;

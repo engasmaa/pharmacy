@@ -24,6 +24,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.DrugOrder;
 import org.openmrs.Encounter;
+import org.openmrs.User;
 import org.openmrs.GlobalProperty;
 //import org.openmrs.Patient;
 import org.openmrs.api.APIException;
@@ -160,6 +161,9 @@ public class PharmacyOrderServiceImpl extends BaseOpenmrsService implements Phar
 	}
 	@Override
 	public PharmacyOrder savePharmacyOrder(PharmacyOrder pharmacyOrder) throws APIException {
+
+		User user = Context.getAuthenticatedUser();
+		pharmacyOrder.setCreator(user);
 		
 		if (pharmacyOrder == null)
 			throw new APIException("Pharmacy Order cannot be null.");

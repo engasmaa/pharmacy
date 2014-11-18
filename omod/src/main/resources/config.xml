@@ -49,9 +49,9 @@
 			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRPharmacyItem"/>
 			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.DWRPharmacyOrder" javascript="DWRPharmacyOrder" />
 			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.DWRDrugOrderHeader" javascript="DWRDrugOrderHeader" />
+		-->
 		
 			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRItem"/>
-		-->
 			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRPharmacyOrder"/>
 			<convert converter="bean" match="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRDrugOrderStatus"/>
 			
@@ -59,8 +59,9 @@
 				<param name="class" value="${project.parent.groupId}.${project.parent.artifactId}.web.dwr.DWRPharmacyOrderService"/>
 				<include method="getPharmacyOrdersByDrugOrderId"/>
 				<include method="savePharmacyOrder" />
+				<include method="createPharmacyOrderFromParts" />
 				<include method="createPharmacyOrder" />
-				<include method="getItemsByDrugId" />
+				<include method="listItemsByDrugId" />
 			</create>
 			
 				
@@ -88,7 +89,8 @@
 				DWRPharmacyOrderService.getPharmacyOrdersByDrugOrderId(Integer drugId);
 				DWRPharmacyOrderService.savePharmacyOrder(DWRPharmacyOrder order);
 				DWRPharmacyOrderService.createPharmacyOrder(Integer drugId);
-				DWRPharmacyOrderService.getItemsByDrugId(Integer drugId);
+				DWRPharmacyOrderService.createPharmacyOrderFromParts(Integer drugId, String itemName, Integer itemId, Integer quantity, String units, String dispenseDate, String notes);
+				DWRPharmacyOrderService.listItemsByDrugId(Integer drugId);
 			]]>
 		</signatures>	
 		<!--  Useless Garbage Imports

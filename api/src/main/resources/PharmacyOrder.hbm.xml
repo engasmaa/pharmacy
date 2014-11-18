@@ -5,7 +5,7 @@
 
 <hibernate-mapping package="org.openmrs.module.icchange.pharmacy">
 
-	<class name="PharmacyOrder" table="pharmacy_pharmacyorder_test" >
+	<class name="PharmacyOrder" table="pharmacy_pharmacyorders" >
 		<id name="id" type="int" column="pharmacyorder_id" unsaved-value="0">
 			<generator class="native" />
 		</id>
@@ -16,6 +16,12 @@
 		<property name="units" type="java.lang.String" column="units" length="255"/>
 		<property name="dispenseDate" type="java.util.Date" column="dispense_date" not-null="true" length="19" />
 		<property name="notes" type="java.lang.String" column="notes" length="255"/>
+		
+		<!-- bi-directional many-to-one association to User -->
+		<many-to-one name="creator" class="org.openmrs.User" not-null="true" column="creator" />
+		<property name="dateCreated" type="java.util.Date" column="date_created" not-null="true" length="19" />
+		<many-to-one name="changedBy" class="org.openmrs.User" column="changed_by" />
+		<property name="dateChanged" type="java.util.Date" column="date_changed" length="19" />
 		<property name="uuid" type="java.lang.String" column="uuid" length="38" unique="true" />
 	</class>
 	<!-- 

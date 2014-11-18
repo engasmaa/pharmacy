@@ -4,13 +4,14 @@ import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import org.openmrs.api.context.Context;
 
-//import org.openmrs.module.openhmis.inventory.api.model.Item;
+import org.openmrs.module.openhmis.inventory.api.model.Item;
+//import org.openmrs.module.icchange.pharmacy.inventory.Item;
 
 public class DWRItem {
 
 	private Integer itemId;
 	private String itemName;
-	private Integer itemStock;
+	private Integer quantity;
 	
 	public DWRItem () {}
 
@@ -18,7 +19,8 @@ public class DWRItem {
 	public DWRItem (Item item) {
 		this.itemId = item.getId();
 		this.itemName = item.getName();
-		this.itemStock = item.getStock();
+		this.quantity = 0;
+		//this.quantity = item.getQuantity();
 	}
 	
 	public String toJasonRepresentation () {
@@ -56,17 +58,17 @@ public class DWRItem {
 	public void setItemId(Integer itemId) {
 		this.itemId = itemId;
 	}
-	public String getName() {
+	public String getItemName() {
 		return itemName;
 	}
-	public void setName(String name) {
+	public void setItemName(String name) {
 		this.itemName = itemName;
 	}
 
-	public Integer getItemStock() {
-		return itemStock;
+	public Integer getQuantity() {
+		return quantity;
 	}
-	public void setItemStock(Integer itemStock) {
-		this.itemStock = itemStock;
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
 	}
 }

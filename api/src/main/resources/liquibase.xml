@@ -115,18 +115,108 @@
 			on o.order_id = pdos.order_id
 			where pdos.status is null;
 		</sql>
-	</changeSet><!-- 
+	</changeSet>
 	<changeSet id="icchange.pharmacy-v1.0.4" author="sLuchianov">
 	<preConditions onFail="MARK_RAN">
-	<tableExists tableName="pharmacy_drugorderstatus"/>
+	<foreignKeyConstraintExists foreignKeyName="pharmacy_drugorderstatus_drugorder_fk"/>
+	</preConditions>
+		<comment>This code drops foreign key constraint as data integrity will be ensured via triggers</comment>
+		 <dropForeignKeyConstraint baseTableName="pharmacy_drugorderstatus" constraintName="pharmacy_drugorderstatus_drugorder_fk"/>
+	</changeSet>	
+	<changeSet id="icchange.pharmacy-v1.0.5" author="sLuchianov">
+	<preConditions onFail="MARK_RAN">
+		<not>
+			<tableExists tableName="pharmacy_pharmacyorders"/>
+		</not>
 	</preConditions>
 		<comment>
-			1st Trigger This code creates a trigger that will generate DrugOrderStatus on a new drugOrder entry or 
-			2nd Trigger drugOrder status change.
+			This code creates a proper pharmacy orders table
+		</comment>
+		<sql>		
+			CREATE TABLE `pharmacy_pharmacyorders` (
+			  `pharmacyorder_id` int(11) NOT NULL AUTO_INCREMENT,
+			  `drugorder_id` int(11) NOT NULL DEFAULT '0',
+			  `item_id` int(11) NOT NULL,
+			  `quantity` int(11) DEFAULT NULL,
+			  `units` varchar(255) DEFAULT NULL,
+			  `dispense_date` datetime NOT NULL,
+			  `notes` varchar(255) DEFAULT NULL,
+			  `creator` int(11) NOT NULL,
+			  `date_created` datetime NOT NULL,
+			  `changed_by` int(11) DEFAULT NULL,
+			  `date_changed` datetime DEFAULT NULL,
+			  `voided` tinyint(1) NOT NULL DEFAULT '0',
+			  `voided_by` int(11) DEFAULT NULL,
+			  `retired` tinyint(1) NOT NULL DEFAULT '0',
+			  `retired_by` int(11) DEFAULT NULL,
+			  `date_voided` datetime DEFAULT NULL,
+			  `void_reason` varchar(255) DEFAULT NULL,
+			  `uuid` char(38) NOT NULL,
+			  PRIMARY KEY (`pharmacyorder_id`),
+			  UNIQUE KEY `uuid` (`uuid`),
+			  KEY `pharmacyorders_drugorder_fk` (`drugorder_id`),
+			  KEY `pharmacyorders_changed_by_fk` (`changed_by`),
+			  KEY `pharmacyorders_creator_fk` (`creator`),
+			  KEY `pharmacyorders_retired_by_fk` (`retired_by`),
+			  KEY `pharmacyorders_voided_by_fk` (`voided_by`),
+			  CONSTRAINT `pharmacyorders_drugorder_fk` FOREIGN KEY (`drugorder_id`) REFERENCES `drug_order` (`order_id`),
+			  CONSTRAINT `pharmacyorders_changed_by_fk` FOREIGN KEY (`changed_by`) REFERENCES `users` (`user_id`),
+			  CONSTRAINT `pharmacyorders_creator_fk` FOREIGN KEY (`creator`) REFERENCES `users` (`user_id`),
+			  CONSTRAINT `pharmacyorders_retired_by_fk` FOREIGN KEY (`retired_by`) REFERENCES `users` (`user_id`),
+			  CONSTRAINT `pharmacyorders_voided_by_fk` FOREIGN KEY (`voided_by`) REFERENCES `users` (`user_id`)
+			);
+		</sql>
+	</changeSet>
+	<!-- 
+	<changeSet id="icchange.pharmacy-v1.0.6" author="sLuchianov">
+	<preConditions onFail="MARK_RAN">
+		<and>
+			<tableExists tableName="pharmacy_pharmacyorders"/>
+			<tableExists tableName="pharmacy_drugorderstatus"/>
+		</and>
+	</preConditions>
+		<comment>
+			1st Trigger This code creates a trigger that will generate DrugOrderStatus on a new drugOrder entry
+			2nd Trigger will delete status if drugorder is deleted.
 			3rd Trigger Another trigger will update DrugOrderStatus to partially dispensed on any pharmacyOrder creation against that particular order
 		</comment>
 		<sql>
+			alter table pharmacy_drugorderstatus
+			change column status status varchar(255) default 'N/A';
 			
-		</sql>
-	</changeSet> -->
+			DROP trigger if exists drug_order_new_pharmacy_drugorderstatus_update;
+            CREATE trigger drug_order_new_pharmacy_drugorderstatus_update 
+            BEFORE INSERT on drug_order FOR EACH ROW 
+            INSERT INTO pharmacy_drugorderstatus
+            values (NEW.order_id, 'NOT DISPENSED', (SELECT orders.uuid FROM orders
+            where orders.order_id = NEW.order_id), '');
+            
+            DROP trigger if exists drug_order_delete_pharmacy_drugorderstatus_update; 
+            create trigger drug_order_delete_pharmacy_drugorderstatus_update 
+            BEFORE DELETE on drug_order FOR EACH ROW 
+            SET NEW.location_id = (SELECT user_property.property_value FROM user_property
+            where user_property.user_id = NEW.creator and user_property.property = 'defaultLocation');
+            
+            DROP trigger if exists pharmacy_pharmacyorders_new_pharmacy_drugorderstatus_update; 
+			create trigger pharmacy_pharmacyorders_new_pharmacy_drugorderstatus_update 
+            BEFORE INSERT on pharmacy_pharmacyorders FOR EACH ROW 
+            UPDATE pharmacy_drugorderstatus
+            SET status = 'PARTIALLY DISPENSED' where order_id = new.drugorder_id;
+            
+			DROP trigger if exists pharmacy_pharmacyorders_new_pharmacy_drugorderstatus_update; 
+				create trigger pharmacy_pharmacyorders_new_pharmacy_drugorderstatus_update 
+				AFTER INSERT on pharmacy_pharmacyorders FOR EACH ROW 
+				UPDATE pharmacy_drugorderstatus
+				SET status = (SELECT CASE 
+			WHEN SUM(pharmacy_pharmacyorders.quantity) is NULL THEN 'NOT DISPENSED'
+			WHEN drug_order.quantity is NULL THEN 'N/A'
+			WHEN SUM(pharmacy_pharmacyorders.quantity) > drug_order.quantity THEN 'COMPLETELY DISPENSED'
+			WHEN SUM(pharmacy_pharmacyorders.quantity) = drug_order.quantity THEN 'COMPLETELY DISPENSED'
+			ELSE 'PARTIALLY DISPENSED' END
+		from pharmacy_pharmacyorders, drug_order
+		where pharmacy_pharmacyorders.drugorder_id = drug_order.order_id AND order_id = new.drugorder_id) where order_id = new.drugorder_id;
+
+	 	</sql>
+	</changeSet>
+	 -->
 </databaseChangeLog>
