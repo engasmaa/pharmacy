@@ -1407,28 +1407,46 @@
 						{
 							alert("Please, enter valid quantity");
 							console.log("Quantity is invalid");
-						}
+						}												
 						else
-							if (ddate == null || ddate == "")
 							{
-								alert("Please, select a valid date");
-								console.log("ddate is invalid");
-							}
-							else
-								if (units == null || units == "")
+								var qty = 0;
+								qty = quantity;
+								if (qty < 0 || qty == 0)
 								{
-									alert("Please, select valid units");
-									console.log("Units are invalid");
+									alert("Please, enter valid quantity");
+									console.log("Quantity is less or equal to zero");
 								}
 								else
-									if (notes == null || notes == "")
+									if (ddate == null || ddate == "")
 									{
-										console.log("notes field is empty");
-										notes = "";
-										DWRPharmacyOrderService.createPharmacyOrderFromParts(drugorder.orderId, "", itemId, quantity, units, ddate, notes, function () {regimentTables.refreshTables();});
+										alert("Please, select a valid date");
+										console.log("ddate is invalid");
 									}
 									else
-										DWRPharmacyOrderService.createPharmacyOrderFromParts(drugorder.orderId, "", itemId, quantity, units, ddate, notes, function () {regimentTables.refreshTables();});
+										if (units == null || units == "")
+										{
+											alert("Please, select valid units");
+											console.log("Units are invalid");
+										}
+										else
+											if (notes == null || notes == "")
+											{
+												console.log("notes field is empty");
+												notes = "";
+												DWRPharmacyOrderService.createPharmacyOrderFromParts(drugorder.orderId, "", itemId, quantity, units, ddate, notes, function (response) {
+													if (response == null || response == "")
+														regimentTables.refreshTables();
+													else
+														alert("Error: " + response);});
+											}
+											else
+												DWRPharmacyOrderService.createPharmacyOrderFromParts(drugorder.orderId, "", itemId, quantity, units, ddate, notes, function (response) {
+													if (response == null || response == "")
+														regimentTables.refreshTables();
+													else
+														alert("Error: " + response);});
+							}
 					//Update DrugOrderStatus - in sql
 					///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
 				});

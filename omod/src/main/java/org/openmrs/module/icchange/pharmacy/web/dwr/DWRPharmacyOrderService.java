@@ -11,6 +11,7 @@ import java.lang.Boolean;
 import java.util.Vector;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import java.lang.String;
 
 import org.jfree.util.Log;
 import org.openmrs.Concept;
@@ -174,7 +175,7 @@ public class DWRPharmacyOrderService {
 		
 	}
 		
-	public void createPharmacyOrderFromParts(Integer drugId, String itemName, Integer itemId, Integer quantity, String units, String dispenseDate, String notes) throws Exception{//, Integer patientId) throws Exception{
+	public String createPharmacyOrderFromParts(Integer drugId, String itemName, Integer itemId, Integer quantity, String units, String dispenseDate, String notes) throws Exception{//, Integer patientId) throws Exception{
 		//Patient patient = Context.getPatientService().getPatient(patientId);
 		DrugOrder drugOrder =  Context.getOrderService().getDrugOrder(drugId);
 		
@@ -189,6 +190,7 @@ public class DWRPharmacyOrderService {
 		item.setName(itemName);
 		//item.setQuantity(quantity);
 		//item.setUnit(units);
+		String response = "";
 		
 		pharmacyOrder.setItem(item);
 		pharmacyOrder.setDrugOrder(drugOrder);
@@ -204,7 +206,9 @@ public class DWRPharmacyOrderService {
 			date = sdf.parse(dispenseDate);
 		}
 		catch (ParseException e) {
-			throw e;
+			//throw e;
+			response = e.getMessage(); 
+			return response;
 		}
 		pharmacyOrder.setDispenseDate(date);
 		pharmacyOrder.setNotes(notes);
@@ -217,10 +221,13 @@ public class DWRPharmacyOrderService {
 				service.savePharmacyOrder(pharmacyOrder);
 			}
 		} catch (Exception e) {
-			throw e;
+			//throw e;
+			response = e.getMessage(); 
+			return response;	
 		}
 		
 		Log.debug("Exit dwr save pharmacy order");
+		return response;
 	}
 	
 
